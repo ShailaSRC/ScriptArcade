@@ -85,9 +85,15 @@
         }
         .panel { min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--bg-panel); border: 2px solid var(--border-dark); box-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
 
-        .header-left { display: flex; flex-direction: row; align-items: center; gap: 10px; width: 100%; }
-        .settings-btn { color: var(--text-muted); font-size: var(--fs-title); cursor: pointer; transition: color 0.2s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-        .settings-btn:hover { color: var(--text-highlight); }
+        .header-left { display: flex; flex-direction: row; align-items: center; gap: 16px; width: 100%; }
+        .settings-btn { 
+            color: var(--text-normal); font-size: 1.5rem; cursor: pointer; transition: all 0.15s; 
+            flex-shrink: 0; display: flex; align-items: center; justify-content: center; 
+            width: 38px; height: 38px; background: var(--bg-app); border: 2px solid var(--border-dark); 
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.4); border-radius: 3px;
+        }
+        .settings-btn:hover { color: var(--accent-yellow); border-color: var(--border-light); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 rgba(0,0,0,0.5); }
+        .settings-btn:active { transform: translate(1px, 1px); box-shadow: none; }
         .title-area { display: flex; flex-direction: column; justify-content: center; position: relative; }
         .header-left h1 { margin: 0; font-size: var(--fs-head); color: var(--text-highlight); letter-spacing: 2px; font-weight: normal; line-height: 1.1; white-space: nowrap; }
         .header-left .day-text { font-size: var(--fs-subtitle); color: var(--text-muted); }
@@ -195,35 +201,31 @@
         }
         .btn-expand-paper { position: absolute; bottom: 15px; right: 15px; z-index: 50; }
 
-        /* Ukuran proporsional US Letter dengan margin skenario profesional */
         .paper-sheet { 
-            background: var(--paper-bg); width: 100%; max-width: 480px; min-height: 600px; height: auto;
+            background: var(--paper-bg); width: 100%; max-width: 480px; min-height: 100%; height: auto;
             border: 1px solid var(--paper-border); box-shadow: 4px 4px 0 rgba(0,0,0,0.5); 
             display: flex; flex-direction: column; color: var(--paper-text); 
-            padding: 24px 28px 28px 40px; /* Margin kiri lebih lebar seperti binding naskah standar */
+            padding: 22px 24px 24px 30px; 
             position: relative; flex-shrink: 0; 
         }
-        /* Pisahkan tipografi paper script dari UI game */
         .paper-sheet, .paper-sheet * {
             font-family: var(--font-script);
         }
 
         .paper-header { 
-            display: grid; grid-template-columns: 1fr auto 1fr; align-items: baseline;
-            font-size: 11px; color: #3a3832; margin-bottom: 16px; 
-            border-bottom: 1px solid rgba(0,0,0,0.18); padding-bottom: 6px; flex-shrink: 0; 
+            display: flex; justify-content: flex-end; align-items: baseline;
+            font-size: 12px; color: #3a3832; margin-bottom: 10px; 
+            padding-bottom: 4px; flex-shrink: 0; 
         }
-        .paper-header .rev-tag { text-align: left; font-size: 10px; color: #666154; letter-spacing: 0.5px; text-transform: uppercase; }
-        .paper-header .rev-tag.revised { color: #8c2d2d; font-weight: bold; }
-        .paper-header .title { text-align: center; font-weight: bold; letter-spacing: 1px; font-size: 12px; color: var(--paper-text); }
-        .paper-header .page-num { text-align: right; font-size: 11px; }
+        .paper-header.empty-header { display: none; }
+        .paper-header .page-num { text-align: right; font-size: 12px; font-weight: bold; }
 
         .slot-row { 
             display: flex; align-items: stretch; margin-bottom: 10px; min-height: 46px; width: 100%; position: relative;
         }
         .slot-number { 
-            width: 22px; font-family: var(--font-ui) !important; color: #7a7464; 
-            font-size: var(--fs-subtitle); padding-top: 6px; text-align: left; flex-shrink: 0; 
+            width: 22px; font-family: var(--font-script) !important; color: var(--paper-text); 
+            font-size: var(--sp-font-size); font-weight: 700; padding-top: 6px; text-align: left; flex-shrink: 0; 
             user-select: none;
         }
         .drop-slot { 
@@ -244,21 +246,16 @@
             font-size: 10px; opacity: 0.45; margin-bottom: 2px; letter-spacing: 0.5px;
         }
 
-        /* 1. SCENE HEADING (Slugline) + Nomor Adegan Kiri & Kanan */
+        /* 1. SCENE HEADING (Slugline) */
         .sp-slugline-row {
-            display: flex; align-items: flex-start; justify-content: space-between;
+            display: flex; align-items: flex-start; justify-content: flex-start;
             width: 100%; font-weight: 700; text-transform: uppercase;
             margin-top: 2px; margin-bottom: 2px; color: var(--paper-text);
             letter-spacing: 0.2px;
         }
-        .sp-scene-num {
-            font-weight: 700; color: #4a473e; font-size: 0.92em; flex-shrink: 0;
-        }
-        .sp-scene-num.left { margin-right: 10px; min-width: 18px; text-align: left; }
-        .sp-scene-num.right { margin-left: 10px; min-width: 18px; text-align: right; }
         .sp-slugline-text { flex: 1; text-align: left; font-weight: 700; text-transform: uppercase; }
 
-        /* 2. ACTION / Deskripsi Adegan (Rata Kiri, Lebar Penuh Area Teks) */
+        /* 2. ACTION / Deskripsi Adegan */
         .sp-action {
             width: 100%; text-align: left; font-weight: 400;
             margin: 2px 0; white-space: pre-wrap; word-wrap: break-word;
@@ -290,13 +287,7 @@
             font-weight: 700; margin-top: 4px; margin-bottom: 2px; color: var(--paper-text);
         }
 
-        /* 5. PENANDA REVISI DI MARGIN KANAN (*) */
-        .sp-rev-mark {
-            position: absolute; right: -16px; top: 50%; transform: translateY(-50%);
-            font-weight: bold; color: #8c2d2d; font-size: 14px; pointer-events: none;
-        }
-
-        /* Penampilan blok di dalam Inventory (tetap mudah dibaca & terstruktur) */
+        /* Penampilan blok di dalam Inventory */
         #block-container .sp-character { margin-left: 22%; width: 75%; }
         #block-container .sp-parenthetical { margin-left: 16%; width: 78%; }
         #block-container .sp-dialogue { margin-left: 8%; margin-right: 4%; width: 88%; }
@@ -411,8 +402,13 @@
             .main-menu-credit { top: 12px; right: 12px; }
         }
 
-        .ending-img-container { width: 100%; height: 200px; background: #111; border: 2px solid var(--border-light); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .ending-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        /* Rasio Ilustrasi Game Over Konsisten (16:9) & Tidak Terpotong */
+        .ending-img-container { 
+            width: 100%; max-width: 440px; aspect-ratio: 16 / 9; height: auto; margin: 0 auto 15px auto; 
+            background: #111; border: 2px solid var(--border-light); display: flex; align-items: center; 
+            justify-content: center; overflow: hidden; position: relative; 
+        }
+        .ending-img-container img { width: 100%; height: 100%; object-fit: contain; background: #111; }
         .ending-fallback-text { position: absolute; color: var(--text-muted); font-size: var(--fs-small); font-style: italic; padding: 10px; text-align: center; }
         
         #modal-preview-blocks .modal-content { max-width: 650px; width: auto; }
@@ -437,13 +433,13 @@
         @media (orientation: portrait) {
             #game-layout { max-width: none; height: 100dvh; padding: 6px; gap: 6px; }
             #game-header { min-height: 0; display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto; gap: 6px; padding: 6px 10px; position: relative; }
-            .header-left { grid-row: 1; grid-column: 1; justify-content: flex-start; gap: 6px; width: 100%; position: static; z-index: 1; }
+            .header-left { grid-row: 1; grid-column: 1; justify-content: flex-start; gap: 12px; width: 100%; position: static; z-index: 1; }
             .header-right { grid-row: 1; grid-column: 1; justify-content: flex-end; position: relative; right: auto; top: auto; gap: 6px; width: 100%; pointer-events: none; z-index: 2; }
             .header-right button { pointer-events: auto; }
             .header-center { grid-row: 2; grid-column: 1; justify-content: flex-start; align-items: center !important; flex-direction: row !important; flex-wrap: nowrap !important; }
             .title-area { flex-direction: row; align-items: baseline; gap: 6px; position: static !important; }
             .header-left h1 { position: absolute !important; left: 50% !important; top: 22px !important; transform: translate(-50%, -50%) !important; margin: 0 !important; font-weight: bold !important; white-space: nowrap !important; z-index: 10; font-size: var(--fs-head) !important; letter-spacing: 1px !important; }
-            .settings-btn { font-size: 18px !important; margin-right: 2px; }
+            .settings-btn { font-size: 20px !important; width: 30px !important; height: 28px !important; margin-right: 4px; }
             .retro-btn { padding: 0 8px !important; border-width: 1px !important; height: 26px !important; box-sizing: border-box !important; margin: 0 !important; }
             #btn-reset { width: 26px !important; padding: 0 !important; justify-content: center !important; }
             .avatar-wrapper { width: 38px !important; }
@@ -478,7 +474,7 @@
             .script-block { padding: 6px 8px !important; margin-bottom: 5px !important; border-width: 1px !important; }
             .center-scroll-area { padding: 8px 6px !important; }
             .btn-expand-paper { bottom: 10px !important; right: 10px !important; }
-            .paper-sheet { max-width: 750px !important; min-height: 100% !important; padding: 14px 18px 18px 26px !important; flex-shrink: 0; }
+            .paper-sheet { max-width: 750px !important; min-height: 100% !important; padding: 14px 18px 18px 24px !important; flex-shrink: 0; }
             .paper-header { margin-bottom: 8px !important; padding-bottom: 4px !important; }
             .slot-row { min-height: 38px !important; margin-bottom: 6px !important; }
             .drop-slot { min-height: 38px !important; }
@@ -591,10 +587,8 @@
             <div id="center-panel" class="panel">
                 <div class="center-scroll-area" id="center-scroll-area">
                     <div class="paper-sheet" id="script-paper">
-                        <div class="paper-header">
-                            <span class="rev-tag" id="paper-rev-tag">DRAFT PUTIH</span>
-                            <span class="title" id="paper-title">UNTITLED</span>
-                            <span class="page-num" id="page-number">1.</span>
+                        <div class="paper-header empty-header" id="paper-header-bar">
+                            <span class="page-num" id="page-number"></span>
                         </div>
                         <div id="slots-container"></div>
                     </div>
@@ -642,8 +636,8 @@
                 <p class="mb-4" style="font-size: var(--fs-text);">Setiap tipe blok memiliki peran penting. Perhatikan formatnya untuk menyusun alur yang benar.</p>
                 <div class="mb-4">
                     <strong style="color: var(--text-highlight); font-size: var(--fs-subtitle);">1. SCENE HEADING (Slugline)</strong><br>
-                    <span style="font-size: var(--fs-text);">Penanda awal adegan (Lokasi &amp; Waktu). Selalu kapital dengan nomor adegan di kiri-kanan.</span><br>
-                    <span style="color: var(--text-muted); font-style: italic; font-size: var(--fs-text);">Contoh: 1   INT. RUANG SIDANG - SIANG   1</span>
+                    <span style="font-size: var(--fs-text);">Penanda awal adegan (Lokasi &amp; Waktu). Selalu kapital. Setiap Scene Heading di kertas akan diberi nomor urut adegan (1, 2, dst.).</span><br>
+                    <span style="color: var(--text-muted); font-style: italic; font-size: var(--fs-text);">Contoh: INT. RUANG SIDANG - SIANG</span>
                 </div>
                 <div class="mb-4">
                     <strong style="color: var(--text-highlight); font-size: var(--fs-subtitle);">2. ACTION</strong><br>
@@ -678,11 +672,8 @@
                 </div>
             </div>
             <div class="flex justify-between items-center mt-2">
-                <button class="cursor-pointer hover:text-[var(--text-highlight)]" style="background:none; border:none; color:var(--text-muted); font-size:var(--fs-text);" onclick="resetSave()">[ RESET DATA ]</button>
-                <div style="display:flex; gap: 10px;">
-                    <button class="retro-btn" onclick="returnToMenuFromProfile()">MENU</button>
-                    <button class="retro-btn primary" id="btn-start-game" onclick="startGame()">MULAI KERJA</button>
-                </div>
+                <button class="retro-btn" onclick="returnToMenuFromProfile()">MENU</button>
+                <button class="retro-btn primary" id="btn-start-game" onclick="startGame()">MULAI KERJA</button>
             </div>
         </div>
     </div>
@@ -855,7 +846,7 @@
         const COFFEE_BOOST = 15;
         const PENALTY_TIME = 10;
         const MAX_COFFEE_PER_CASE = 3;
-        const MAX_UNITS_PER_PAGE = 14; 
+        const MAX_SLOTS_PER_PAGE = 8; // Hanya membuka halaman ke-2 jika jumlah slot naskah benar-benar banyak (> 8 slot)
 
         // --- GLOSSARY DB ---
         const glossaryDB = {
@@ -1057,31 +1048,14 @@
             return blocks.sort(() => Math.random() - 0.5);
         }
 
-        function estimateBlockUnits(block) {
-            if (!block) return 2.6;
-            const textLen = block.text.length;
-            if (block.type === 'SCENE HEADING') return 2.2;
-            if (block.type === 'TRANSITION') return 1.8;
-            if (block.type === 'DIALOGUE') {
-                const lines = block.text.split('\n');
-                return 2.6 + Math.ceil(lines.join(' ').length / 32) * 0.9;
-            }
-            return 2.2 + Math.ceil(textLen / 45) * 0.9;
-        }
-
+        // Pembagian halaman tetap stabil berdasarkan jumlah slot kasus (tidak melompat ke hal 2 saat diisi)
         function computeScriptPages() {
             const pages = [[]];
-            let currentUnits = 0;
             for (let i = 0; i < gameState.placedBlocks.length; i++) {
-                const bId = gameState.placedBlocks[i];
-                const block = bId ? gameState.currentBlocks.find(x => x.id === bId) : null;
-                const units = estimateBlockUnits(block);
-                if (currentUnits + units > MAX_UNITS_PER_PAGE && pages[pages.length - 1].length > 0) {
+                if (pages[pages.length - 1].length >= MAX_SLOTS_PER_PAGE) {
                     pages.push([i]);
-                    currentUnits = units;
                 } else {
                     pages[pages.length - 1].push(i);
-                    currentUnits += units;
                 }
             }
             gameState.totalPages = Math.max(1, pages.length);
@@ -1089,7 +1063,13 @@
             return pages;
         }
 
-        function getSceneNumberForSlot(slotIdx) {
+        // Menghitung nomor urut Scene Heading (1, 2, dst.) hanya untuk blok SCENE HEADING yang ditempatkan
+        function getSceneHeadingNumber(slotIdx) {
+            const currentId = gameState.placedBlocks[slotIdx];
+            if (!currentId) return "";
+            const currentBlock = gameState.currentBlocks.find(x => x.id === currentId);
+            if (!currentBlock || currentBlock.type !== 'SCENE HEADING') return "";
+
             let sceneCount = 0;
             for (let i = 0; i <= slotIdx; i++) {
                 const bId = gameState.placedBlocks[i];
@@ -1098,7 +1078,7 @@
                     if (b && b.type === 'SCENE HEADING') sceneCount++;
                 }
             }
-            return Math.max(1, sceneCount);
+            return sceneCount > 0 ? sceneCount : "";
         }
 
         function formatScreenplayContent(block, isPlaced = false, slotIdx = null) {
@@ -1106,10 +1086,6 @@
             const type = block.type;
             if (type === 'SCENE HEADING') {
                 const slugText = processTextForGlossary(block.text.toUpperCase());
-                if (isPlaced && slotIdx !== null) {
-                    const scNum = `${gameState.day}${String.fromCharCode(64 + getSceneNumberForSlot(slotIdx))}`;
-                    return `<div class="sp-slugline-row"><span class="sp-scene-num left">${scNum}</span><span class="sp-slugline-text">${slugText}</span><span class="sp-scene-num right">${scNum}</span></div>`;
-                }
                 return `<div class="sp-slugline-row"><span class="sp-slugline-text">${slugText}</span></div>`;
             }
             if (type === 'DIALOGUE' || type === 'CHARACTER') {
@@ -1163,18 +1139,6 @@
 
         function updateUI() {
             document.getElementById('level-display').innerText = `HARI 0${gameState.day}`;
-            document.getElementById('paper-title').innerText = `KASUS #0${gameState.day} — ${gameState.currentBible.genre}`;
-            
-            const revTag = document.getElementById('paper-rev-tag');
-            if (gameState.caseRevisions === 0) {
-                revTag.innerText = "DRAFT PUTIH";
-                revTag.classList.remove('revised');
-            } else {
-                const revNames = ["DRAFT PUTIH", "REV. BIRU", "REV. MERAH MUDA", "REV. KUNING"];
-                const rName = revNames[Math.min(gameState.caseRevisions, revNames.length - 1)];
-                revTag.innerText = `${rName} (#${gameState.caseRevisions})`;
-                revTag.classList.add('revised');
-            }
 
             let notes = gameState.currentBible.reqText; if (gameState.currentBible.formatText !== '') notes += ' ' + gameState.currentBible.formatText;
             document.getElementById('client-brief-content').innerHTML = `<div class="brief-line"><span class="label">GENRE</span><span class="value">: ${gameState.currentBible.genre}</span></div><div class="brief-line"><span class="label">TEMA</span><span class="value">: ${gameState.currentBible.theme}</span></div><div class="brief-line quote-line"><span class="value">"${notes}"</span></div>`;
@@ -1316,7 +1280,20 @@
 
         function returnToMenu() { closeModal('modal-gameover'); closeModal('modal-start'); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; pauseTimer(); }
         function returnToMenuFromProfile() { saveData(); closeModal('modal-start'); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; }
-        function openStartModal() { document.getElementById("main-menu").classList.remove("active"); document.getElementById("main-menu").style.display = "none"; if (loadData()) { document.getElementById('stat-day').innerText = gameState.day; document.getElementById('stat-cases').innerText = gameState.casesCompleted; document.getElementById('stat-score').innerText = gameState.casesCompleted > 0 ? Math.round(gameState.totalScore / gameState.casesCompleted) : 0; document.getElementById('profile-stats').classList.remove('hidden'); document.getElementById('btn-start-game').innerText = "LANJUTKAN"; document.getElementById('player-name').value = gameState.playerName !== "ANONIM" ? gameState.playerName : ""; } else { document.getElementById('profile-stats').classList.add('hidden'); document.getElementById('btn-start-game').innerText = "MULAI KERJA"; document.getElementById('player-name').value = ""; } document.getElementById('modal-start').classList.add('active'); }
+        
+        // Saat klik PLAY dari Main Menu, selalu mulai baru & hanya minta isi nama seperti biasa (tanpa opsi Lanjutkan)
+        function openStartModal() {
+            document.getElementById("main-menu").classList.remove("active");
+            document.getElementById("main-menu").style.display = "none";
+            localStorage.removeItem('edsave');
+            gameState.day = 1; gameState.casesCompleted = 0; gameState.totalScore = 0; gameState.mistakes = 0;
+            gameState.history = []; gameState.currentBible = null; gameState.currentBlocks = []; gameState.placedBlocks = [];
+            gameState.isGameActive = false;
+            document.getElementById('profile-stats').classList.add('hidden');
+            document.getElementById('btn-start-game').innerText = "MULAI KERJA";
+            document.getElementById('player-name').value = "";
+            document.getElementById('modal-start').classList.add('active');
+        }
         
         function startGame() {
             let nameInput = document.getElementById("player-name").value.trim().replace(/[^a-zA-Z0-9 ]/g, "");
@@ -1330,7 +1307,6 @@
 
         function saveData() { if(!gameState.isGameActive) return; localStorage.setItem('edsave', JSON.stringify({ sessId: gameState.sessionId, d: gameState.day, c: gameState.casesCompleted, s: gameState.totalScore, h: gameState.history, pName: gameState.playerName, tLeft: gameState.timeLeft, mTime: gameState.maxTime, cLeft: gameState.coffeesLeft, m: gameState.mistakes, cr: gameState.caseRevisions, rs: gameState.revisedSlots, b: gameState.currentBible, cb: gameState.currentBlocks, pb: gameState.placedBlocks })); }
         function loadData() { try { const sv = localStorage.getItem('edsave'); if (sv) { const d = JSON.parse(sv); gameState.sessionId = d.sessId || generateSessionId(); gameState.day = d.d; gameState.casesCompleted = d.c; gameState.totalScore = d.s; gameState.history = d.h || []; gameState.playerName = d.pName || "ANONIM"; gameState.timeLeft = d.tLeft || BASE_TIME; gameState.maxTime = d.mTime || BASE_TIME; gameState.coffeesLeft = d.cLeft !== undefined ? d.cLeft : MAX_COFFEE_PER_CASE; gameState.mistakes = d.m || 0; gameState.caseRevisions = d.cr || 0; gameState.revisedSlots = d.rs || []; if(d.b && d.cb && d.pb) { gameState.currentBible = d.b; gameState.currentBlocks = d.cb; gameState.placedBlocks = d.pb; } return true; } } catch(e) {} return false; }
-        function resetSave() { customConfirm("Hapus progress lokal Anda?", () => { localStorage.removeItem('edsave'); gameState.currentBlocks = []; gameState.currentBible = null; location.reload(); }); }
         function showProfile() { pauseTimer(); saveData(); document.getElementById('stat-day').innerText = gameState.day; document.getElementById('stat-cases').innerText = gameState.casesCompleted; document.getElementById('stat-score').innerText = gameState.casesCompleted > 0 ? Math.round(gameState.totalScore / gameState.casesCompleted) : 0; document.getElementById('profile-stats').classList.remove('hidden'); document.getElementById('modal-start').classList.add('active'); document.getElementById('btn-start-game').innerText = "LANJUTKAN"; if(gameState.playerName !== "ANONIM") document.getElementById('player-name').value = gameState.playerName; }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
@@ -1384,8 +1360,16 @@
             const pages = computeScriptPages();
             const currentSlots = pages[gameState.currentPage - 1] || [];
 
-            // Nomor halaman standar skenario di kanan atas
-            document.getElementById('page-number').innerText = `${gameState.currentPage}.`;
+            // Halaman pertama tidak menampilkan page number, halaman ke-2 dst baru menampilkan 2., 3., dst.
+            const headerBar = document.getElementById('paper-header-bar');
+            const pageNumEl = document.getElementById('page-number');
+            if (gameState.currentPage > 1) {
+                headerBar.classList.remove('empty-header');
+                pageNumEl.innerText = `${gameState.currentPage}.`;
+            } else {
+                headerBar.classList.add('empty-header');
+                pageNumEl.innerText = '';
+            }
 
             gameState.currentBlocks.forEach(b => {
                 if (!gameState.placedBlocks.includes(b.id)) bc.appendChild(createBlockEl(b, false));
@@ -1393,7 +1377,10 @@
 
             currentSlots.forEach(i => {
                 const row = document.createElement('div'); row.className = 'slot-row';
-                const num = document.createElement('div'); num.className = 'slot-number'; num.innerText = i + 1;
+                const num = document.createElement('div'); num.className = 'slot-number';
+                // Nomor hanya muncul apabila slot berisi blok SCENE HEADING
+                num.innerText = getSceneHeadingNumber(i);
+
                 const slot = document.createElement('div'); slot.className = 'drop-slot'; slot.dataset.index = i;
                 slot.addEventListener('dragover', handleDragOver);
                 slot.addEventListener('dragleave', handleDragLeave);
@@ -1406,13 +1393,6 @@
                     if (block) {
                         slot.appendChild(createBlockEl(block, true, i));
                         slot.classList.add('filled-slot');
-                        if (gameState.caseRevisions > 0 && gameState.revisedSlots.includes(i)) {
-                            const revMark = document.createElement('span');
-                            revMark.className = 'sp-rev-mark';
-                            revMark.title = 'Baris direvisi';
-                            revMark.innerText = '*';
-                            slot.appendChild(revMark);
-                        }
                     }
                 }
                 row.appendChild(num); row.appendChild(slot); sc.appendChild(row);
@@ -1438,17 +1418,74 @@
             return div;
         }
 
+        // Evaluasi Checklist secara independen & real-time bahkan ketika baru 1 blok yang dimasukkan
         function updateChecklist() {
-            const pIds = gameState.placedBlocks.filter(i => i !== null); const rCount = gameState.currentBlocks.filter(b => b.required).length;
-            const cBlocks = document.getElementById('chk-blocks'); const cTrans = document.getElementById('chk-trans'); const cLogic = document.getElementById('chk-logic'); const cProf = document.getElementById('chk-prof'); if (!cLogic || !cProf) return;
-            let placedReq = 0; gameState.currentBlocks.forEach(b => { if (b.required && pIds.includes(b.id)) placedReq++; });
-            if (placedReq >= rCount && pIds.length === gameState.placedBlocks.length) {
-                if (cBlocks) cBlocks.classList.add('done');
-                if (cTrans) { if (gameState.currentBible.formatId === 'NO_TRANS') { let hasTrans = pIds.some(id => gameState.currentBlocks.find(x => x.id === id).type === 'TRANSITION'); if (!hasTrans) cTrans.classList.add('done'); else cTrans.classList.remove('done'); } else { let hasCorrectTrans = pIds.some(id => { const b = gameState.currentBlocks.find(x => x.id === id); return b.type === 'TRANSITION' && b.isCorrect; }); if (hasCorrectTrans) cTrans.classList.add('done'); else cTrans.classList.remove('done'); } }
-                let sErr = false; let hErr = false; let lSeq = -1;
-                pIds.forEach(id => { const b = gameState.currentBlocks.find(x => x.id === id); if (b.sequenceOrder > 0) { if (b.sequenceOrder < lSeq) sErr = true; lSeq = b.sequenceOrder; } if (!b.isCorrect) hErr = true; });
-                if (!sErr) cLogic.classList.add('done'); else cLogic.classList.remove('done'); if (!hErr) cProf.classList.add('done'); else cProf.classList.remove('done');
-            } else { if (cBlocks) cBlocks.classList.remove('done'); if (cTrans) cTrans.classList.remove('done'); cLogic.classList.remove('done'); cProf.classList.remove('done'); }
+            const cBlocks = document.getElementById('chk-blocks');
+            const cTrans = document.getElementById('chk-trans');
+            const cLogic = document.getElementById('chk-logic');
+            const cProf = document.getElementById('chk-prof');
+            if (!cLogic || !cProf) return;
+
+            const placedEntries = [];
+            gameState.placedBlocks.forEach((id, slotIdx) => {
+                if (id) {
+                    const b = gameState.currentBlocks.find(x => x.id === id);
+                    if (b) placedEntries.push({ slotIdx, block: b });
+                }
+            });
+
+            if (placedEntries.length === 0) {
+                if (cBlocks) cBlocks.classList.remove('done');
+                if (cTrans) cTrans.classList.remove('done');
+                cLogic.classList.remove('done');
+                cProf.classList.remove('done');
+                return;
+            }
+
+            // 1. Sesuai plot klien: Tercapai bila blok plot/konflik (sequenceOrder === 4) sudah dimasukkan & tidak ada blok lokasi salah
+            if (cBlocks) {
+                const hasConflictPlot = placedEntries.some(e => e.block.sequenceOrder === 4 && e.block.isCorrect);
+                const hasWrongLocation = placedEntries.some(e => e.block.type === 'SCENE HEADING' && !e.block.isCorrect);
+                if (hasConflictPlot && !hasWrongLocation) cBlocks.classList.add('done');
+                else cBlocks.classList.remove('done');
+            }
+
+            // 2. Transisi sesuai instruksi / Tanpa transisi
+            if (cTrans) {
+                if (gameState.currentBible.formatId === 'NO_TRANS') {
+                    const hasAnyTrans = placedEntries.some(e => e.block.type === 'TRANSITION');
+                    if (!hasAnyTrans && placedEntries.length > 0) cTrans.classList.add('done');
+                    else cTrans.classList.remove('done');
+                } else {
+                    const lastSlotIdx = gameState.placedBlocks.length - 1;
+                    const hasCorrectTrans = placedEntries.some(e => e.block.type === 'TRANSITION' && e.block.isCorrect && e.slotIdx === lastSlotIdx);
+                    const hasWrongTrans = placedEntries.some(e => e.block.type === 'TRANSITION' && (!e.block.isCorrect || e.slotIdx !== lastSlotIdx));
+                    if (hasCorrectTrans && !hasWrongTrans) cTrans.classList.add('done');
+                    else cTrans.classList.remove('done');
+                }
+            }
+
+            // 3. Karakter sesuai profesi: Tercapai bila minimal 1 blok aksi/dialog profesi sudah masuk & tidak ada pelanggaran profesi
+            const profEntries = placedEntries.filter(e => e.block.sequenceOrder === 2 || e.block.sequenceOrder === 3 || (!e.block.isCorrect && e.block.type !== 'SCENE HEADING' && e.block.type !== 'TRANSITION'));
+            const hasValidProf = profEntries.some(e => e.block.isCorrect);
+            const hasInvalidProf = profEntries.some(e => !e.block.isCorrect);
+            if (hasValidProf && !hasInvalidProf) cProf.classList.add('done');
+            else cProf.classList.remove('done');
+
+            // 4. Urutan logis: Tercapai bila setiap blok yang dimasukkan berada pada slot yang sesuai dengan urutan sekuensnya
+            let logicOk = true;
+            let lastSeq = -1;
+            placedEntries.forEach(e => {
+                if (!e.block.isCorrect) {
+                    logicOk = false;
+                } else if (e.block.sequenceOrder > 0) {
+                    if (e.block.sequenceOrder - 1 !== e.slotIdx) logicOk = false;
+                    if (e.block.sequenceOrder < lastSeq) logicOk = false;
+                    lastSeq = e.block.sequenceOrder;
+                }
+            });
+            if (logicOk) cLogic.classList.add('done');
+            else cLogic.classList.remove('done');
         }
 
         let draggedId = null; let draggedFrom = null;
@@ -1495,16 +1532,16 @@
                 const sheet = document.createElement('div');
                 sheet.className = 'paper-sheet';
                 sheet.style.minHeight = 'auto';
+                const pNum = pIdx + 1;
                 sheet.innerHTML = `
-                    <div class="paper-header">
-                        <span class="rev-tag ${gameState.caseRevisions > 0 ? 'revised' : ''}">${document.getElementById('paper-rev-tag').innerText}</span>
-                        <span class="title">${document.getElementById('paper-title').innerText}</span>
-                        <span class="page-num">${pIdx + 1}.</span>
+                    <div class="paper-header ${pNum === 1 ? 'empty-header' : ''}">
+                        <span class="page-num">${pNum > 1 ? pNum + '.' : ''}</span>
                     </div>
                 `;
                 slotIndices.forEach(i => {
                     const row = document.createElement('div'); row.className = 'slot-row';
-                    const num = document.createElement('div'); num.className = 'slot-number'; num.innerText = i + 1;
+                    const num = document.createElement('div'); num.className = 'slot-number';
+                    num.innerText = getSceneHeadingNumber(i);
                     const slot = document.createElement('div'); slot.className = 'drop-slot';
                     const pId = gameState.placedBlocks[i];
                     if (pId) {
@@ -1551,7 +1588,7 @@
             { id: 'kamus-container', text: "KAMUS — Klik kata yang ditandai biru pada blok untuk memahami maknanya. Sangat berguna untuk riset!", pos: 'left' },
             { id: 'btn-preview-paper', text: "PREVIEW — Gunakan tombol ini untuk membaca keseluruhan naskah dengan jelas sebelum disubmit.", pos: 'top' },
             { id: 'btn-periksa', text: "SUBMIT — Kirim pekerjaanmu ke klien. Jika ada kesalahan, kamu harus merevisinya dan waktu akan dikurangi!", pos: 'bottom' },
-            { id: 'btn-settings', text: "SETTING — Buka menu ini untuk melihat profil, memantau progres kerja, atau mereset data permainan. Selamat bekerja!", pos: 'bottom' }
+            { id: 'btn-settings', text: "SETTING — Buka menu ini untuk melihat profil atau kembali ke menu utama. Selamat bekerja!", pos: 'bottom' }
         ];
 
         let tutStep = 0; let resizeListenerAttached = false;
