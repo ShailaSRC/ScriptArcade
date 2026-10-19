@@ -3,838 +3,2240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EDITOR SCRIPT: Arcade Edition</title>
+    <title>SCRIPT ARCADE</title>
+
     <!-- Polyfill untuk drag-and-drop di layar sentuh -->
     <script src="https://unpkg.com/drag-drop-touch"></script>
+
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+
     <style>
         /* ==================================================
-           VARIABEL WARNA RETRO
+           VARIABEL WARNA RETRO & TYPOGRAPHY STANDAR
            ================================================== */
         :root {
             --bg-app: #1e1e1c;
             --bg-panel: #2a2a28;
             --border-dark: #121211;
             --border-light: #4a4a47;
+
             --text-muted: #88867c;
             --text-normal: #b5b3a6;
             --text-highlight: #e0ddcc;
+
             --paper-bg: #e6dfc8;
             --paper-border: #b0a688;
             --paper-text: #2a2926;
             --paper-dashed: #b5aa8b;
+
             --block-bg: #d9d1ba;
             --block-border: #999075;
+
             --accent-yellow: #d6b054;
             --color-scene: #7fa37f;
             --color-char: #b56c6c;
-            --color-bonus: #5c9eb5; /* Biru untuk kopi */
-            --color-danger: #b54a4a;
+            --color-neutral: #5c5950;
+            --color-coffee-boost: #5a8ca8;
+
             --font-ui: 'VT323', monospace;
             --font-script: 'Courier Prime', monospace;
+
+            /* Varian Ukuran Font Baku (Landscape) */
+            --fs-head: 1.8rem;
+            --fs-title: 1.1rem;
+            --fs-subtitle: 0.9rem;
+            --fs-text: 0.85rem;
+            --fs-small: 0.75rem;
         }
 
-        /* ==================================================
-           RESET & GLOBAL
-           ================================================== */
-        * { box-sizing: border-box; }
-        html, body { 
-            width: 100%; height: 100%; margin: 0; padding: 0; 
-            overflow: hidden; background-color: var(--bg-app); 
-            color: var(--text-normal); font-family: var(--font-ui); 
-            user-select: none; overscroll-behavior: none; 
-        }
-        body::after { 
-            content: ""; display: block; position: absolute; inset: 0; 
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); 
-            background-size: 100% 4px; z-index: 9999; pointer-events: none; opacity: 0.3; 
-        }
-        
-        .hidden { display: none !important; }
-
-        /* ==================================================
-           MAIN MENU
-           ================================================== */
-        #screen-mainmenu {
-            position: fixed; inset: 0; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; z-index: 50;
-            background: var(--bg-app);
-        }
-        .mm-title { font-size: 4rem; color: var(--accent-yellow); margin-bottom: 0; text-shadow: 4px 4px 0 rgba(0,0,0,0.8); text-align: center; line-height: 1; }
-        .mm-subtitle { font-size: 1.5rem; color: var(--text-highlight); margin-bottom: 40px; letter-spacing: 2px; }
-        
-        .mm-btn {
-            background: var(--bg-panel); border: 2px solid var(--text-highlight);
-            color: var(--text-highlight); font-family: var(--font-ui); font-size: 2rem;
-            padding: 10px 40px; margin-bottom: 15px; cursor: pointer;
-            box-shadow: 4px 4px 0 rgba(0,0,0,0.8); transition: transform 0.1s, background 0.2s;
-            width: 250px; text-align: center;
-        }
-        .mm-btn:hover { background: var(--text-highlight); color: var(--bg-panel); }
-        .mm-btn:active { transform: translate(4px,4px); box-shadow: none; }
-
-        .mm-credit {
-            position: absolute; bottom: 15px; left: 15px;
-            font-size: 1rem; color: var(--text-muted);
-            letter-spacing: 1px;
+        /* Override Ukuran Font Portrait secara Global */
+        @media (orientation: portrait) {
+            :root {
+                --fs-head: 0.95rem;
+                --fs-title: 0.85rem;
+                --fs-subtitle: 0.75rem;
+                --fs-text: 0.7rem;
+                --fs-small: 0.65rem;
+            }
         }
 
-        /* ==================================================
-           GAME LAYOUT (3 Tiers)
-           ================================================== */
-        #screen-game { display: none; flex-direction: column; height: 100dvh; padding: 10px; gap: 10px; max-width: 900px; margin: 0 auto; position: relative; z-index: 10; }
-        .panel { background: var(--bg-panel); border: 2px solid var(--border-dark); box-shadow: 2px 2px 0 rgba(0,0,0,0.5); }
+        * {
+            box-sizing: border-box;
+            font-family: var(--font-ui); 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%; height: 100%; margin: 0; padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-normal);
+            font-size: var(--fs-subtitle);
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            overscroll-behavior: none;
+        }
+
+        body::after {
+            content: ""; display: block; position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px; z-index: 100;
+            pointer-events: none; opacity: 0.3;
+        }
+
+        #game-layout {
+            width: 100%; height: 100dvh; min-height: 0;
+            display: flex; flex-direction: column;
+            padding: 10px; gap: 10px; position: relative; z-index: 10;
+        }
+
+        #game-header {
+            flex: 0 0 auto; min-height: 90px;
+            display: grid; grid-template-columns: 250px minmax(0, 1fr) 250px;
+            gap: 10px; background: var(--bg-panel);
+            border: 2px solid var(--border-dark); padding: 10px;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.3); align-items: stretch;
+            position: relative;
+        }
+
+        #main-area {
+            flex: 1 1 auto; min-height: 0; display: grid;
+            grid-template-columns: 290px minmax(0, 1fr) 240px; gap: 10px;
+        }
+
+        .panel {
+            min-width: 0; min-height: 0; display: flex; flex-direction: column;
+            background: var(--bg-panel); border: 2px solid var(--border-dark);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+        }
+
+        .header-left { display: flex; flex-direction: row; align-items: center; gap: 10px; width: 100%; }
+
+        .settings-btn {
+            color: var(--text-muted); font-size: var(--fs-title); cursor: pointer; transition: color 0.2s;
+            flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        }
+        .settings-btn:hover { color: var(--text-highlight); }
+
+        .title-area { display: flex; flex-direction: column; justify-content: center; position: relative; }
+        .header-left h1 { margin: 0; font-size: var(--fs-head); color: var(--text-highlight); letter-spacing: 2px; font-weight: normal; line-height: 1.1; white-space: nowrap; }
+        .header-left .day-text { font-size: var(--fs-subtitle); color: var(--text-muted); }
+
+        .header-center { display: flex; gap: 10px; align-items: stretch; width: 100%; justify-content: center; }
         
-        /* TIER 1: CLIENT & DEADLINE */
-        #zone-client { flex: 0 0 auto; display: flex; flex-direction: column; padding: 10px; gap: 10px; }
-        .client-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--border-light); padding-bottom: 5px; }
-        .level-info { color: var(--accent-yellow); font-size: 1.4rem; letter-spacing: 1px; }
-        .player-info { color: var(--text-muted); font-size: 1rem; text-transform: uppercase; }
+        .avatar-wrapper { display: flex; flex-direction: column; align-items: center; gap: 2px; flex-shrink: 0; justify-content: center; width: 60px; }
+        .avatar-title { display: block; font-size: var(--fs-text); color: var(--text-highlight); text-align: center; line-height: 1; word-wrap: break-word; width: 100%; }
         
-        .client-body { display: flex; gap: 15px; align-items: stretch; }
-        .avatar-box { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .client-avatar { width: 60px; height: 60px; background: #3b3a36; border: 2px solid var(--border-dark); display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+        .client-avatar {
+            width: 60px; height: 60px; background: #3b3a36; border: 2px solid var(--border-dark);
+            border-radius: 4px; display: flex; align-items: flex-end; justify-content: center;
+            overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); flex-shrink: 0;
+        }
         .client-avatar svg { width: 85%; height: auto; margin-bottom: -5px; fill: #1c1c1a; }
-        .avatar-title { font-size: 0.8rem; color: var(--text-highlight); }
-        .brief-box { flex: 1; background: var(--bg-app); border: 2px solid var(--border-dark); padding: 8px 12px; font-size: 1.1rem; line-height: 1.3; color: var(--text-highlight); overflow-y: auto; display: flex; flex-direction: column; justify-content: center; }
+
+        .client-brief-box {
+            flex: 1; max-width: 500px; border: 2px solid var(--border-dark);
+            background: var(--bg-app); display: flex; flex-direction: column;
+            border-radius: 4px; overflow: hidden; min-height: 0;
+        }
+
+        .client-brief-box .brief-title { display: none !important; }
+        .client-brief-box .brief-content {
+            padding: 6px 10px; display: flex; flex-direction: column; justify-content: center; gap: 2px;
+            font-size: var(--fs-subtitle); text-transform: uppercase; color: var(--text-normal);
+            flex: 1; overflow-y: auto; overflow-x: hidden;
+        }
+
+        .brief-line { display: flex; align-items: flex-start; line-height: 1.2; }
+        .brief-line .label { color: var(--text-muted); margin-right: 8px; font-weight: bold; min-width: 50px; }
+        .brief-line .value { color: var(--text-highlight); flex: 1; word-wrap: break-word; white-space: normal; }
+
+        .brief-line.quote-line {
+            display: block !important; margin-top: 4px !important; width: 100% !important; text-align: center !important;
+        }
+        .brief-line.quote-line .value {
+            color: var(--accent-yellow); font-style: italic; text-transform: none; line-height: 1.3; display: block; width: 100%; text-align: center;
+        }
+
+        .deadline-area {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #1a1a1a; padding: 4px 8px; border-top: 2px solid var(--border-dark); flex-shrink: 0;
+        }
+        .timer-wrapper { flex: 1; display: flex; align-items: center; gap: 8px; position: relative; }
+        .timer-label { color: var(--text-highlight); font-size: var(--fs-subtitle); }
+        .progress-bar-container { flex: 1; height: 12px; background: #333; border: 1px solid var(--border-dark); position: relative; overflow: hidden; }
         
-        .deadline-area { display: flex; align-items: center; justify-content: space-between; background: #1a1a1a; padding: 6px 10px; border: 2px solid var(--border-dark); }
-        .timer-wrapper { flex: 1; display: flex; align-items: center; gap: 10px; }
-        .timer-label { color: var(--text-highlight); font-size: 1.2rem; }
+        #progress-bar { height: 100%; width: 100%; background: var(--color-scene); transition: width 0.1s linear, background-color 0.3s; position: absolute; left: 0; top: 0; z-index: 1;}
+        .coffee-boost-bar { height: 100%; background: var(--color-coffee-boost); position: absolute; left: 0; top: 0; z-index: 2; opacity: 0; transition: width 0.5s ease-out, background-color 1s ease-in-out, opacity 1s; pointer-events: none;}
         
-        /* Progress Bar Dual System */
-        .progress-bar-container { flex: 1; height: 18px; background: #111; border: 2px solid var(--border-dark); position: relative; display: flex; }
-        #bar-base { height: 100%; width: 50%; background: var(--color-scene); transition: width 1s linear, background-color 0.3s; }
-        #bar-bonus { height: 100%; width: 0%; background: var(--color-bonus); transition: width 1s linear; box-shadow: inset 2px 0 0 rgba(255,255,255,0.2); }
+        .time-text { font-size: var(--fs-subtitle); color: var(--text-highlight); min-width: 40px; text-align: right; }
         
-        .time-text { font-size: 1.2rem; color: var(--text-highlight); min-width: 50px; text-align: right; }
-        .coffee-area { display: flex; gap: 5px; margin-left: 15px; }
-        .coffee-btn { background: transparent; border: none; font-size: 1.5rem; cursor: pointer; transition: transform 0.1s; padding: 0; filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.8)); }
+        .coffee-area { display: flex; gap: 4px; margin-left: 10px; }
+        .coffee-btn {
+            background: transparent; border: none; font-size: var(--fs-subtitle); cursor: pointer;
+            filter: grayscale(0%); transition: transform 0.1s; padding: 0; line-height: 1;
+        }
         .coffee-btn:active { transform: scale(0.9); }
-        .coffee-btn.used { filter: grayscale(100%) opacity(0.2); pointer-events: none; }
+        .coffee-btn.used { filter: grayscale(100%); opacity: 0.3; pointer-events: none; }
 
-        /* TIER 2: SCRIPT WORKSPACE */
-        #zone-workspace { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; position: relative; background: #1c1c1b; overflow: hidden; }
-        .workspace-title { position: absolute; top: 0; left: 0; right: 0; text-align: center; font-size: 1rem; color: var(--text-muted); background: rgba(0,0,0,0.5); padding: 4px; z-index: 5; border-bottom: 2px solid var(--border-dark); }
-        .paper-scroll { flex: 1; overflow-y: auto; padding: 35px 20px 20px 20px; display: flex; justify-content: center; }
-        .paper-sheet { background: var(--paper-bg); width: 100%; max-width: 600px; height: max-content; min-height: 100%; border: 1px solid var(--paper-border); box-shadow: 4px 4px 0 rgba(0,0,0,0.5); padding: 20px; display: flex; flex-direction: column; color: var(--paper-text); }
+        .header-right { display: flex; align-items: center; justify-content: flex-end; gap: 10px; width: 100%; }
         
-        .slot-row { display: flex; margin-bottom: 8px; min-height: 45px; }
-        .slot-number { width: 25px; font-family: var(--font-script); color: #777; font-size: 0.9rem; padding-top: 8px; }
-        .drop-slot { flex: 1; border: 2px dashed var(--paper-dashed); background: rgba(0,0,0,0.02); display: flex; align-items: stretch; transition: all 0.2s; }
-        .drop-slot.drag-over { background: rgba(0,0,0,0.08); border-color: #555; }
-
-        /* TIER 3: INVENTORY & TOOLS */
-        #zone-inventory { flex: 0 0 auto; height: 180px; display: flex; flex-direction: column; position: relative; }
-        .inventory-header { display: flex; justify-content: space-between; align-items: center; padding: 4px 10px; background: rgba(0,0,0,0.2); border-bottom: 2px solid var(--border-dark); }
-        .inventory-title { color: var(--text-highlight); font-size: 1.1rem; }
-        
-        .inventory-body { display: flex; flex: 1; min-height: 0; }
-        .blocks-container { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
-        
-        /* Tools / Utilities Menu */
-        .tools-area { width: 120px; border-left: 2px solid var(--border-dark); display: flex; flex-direction: column; background: #222; }
-        .util-btn { flex: 1; background: transparent; border: none; border-bottom: 2px solid var(--border-dark); color: var(--text-muted); font-family: var(--font-ui); font-size: 1rem; cursor: pointer; transition: 0.1s; }
-        .util-btn:hover { color: var(--accent-yellow); background: rgba(255,255,255,0.05); }
-        .util-btn:active { background: rgba(0,0,0,0.5); }
-        
-        .submit-btn { background: var(--color-scene); color: #fff; border: none; flex: 1.5; font-family: var(--font-ui); font-size: 1.3rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.2); }
-        .submit-btn:active { background: #5a7d5a; }
-
-        /* SCRIPT BLOCKS */
-        .script-block { background: var(--block-bg); border: 2px solid var(--block-border); color: var(--paper-text); font-family: var(--font-script); font-size: 0.8rem; padding: 6px 8px; cursor: grab; box-shadow: 2px 2px 0 rgba(0,0,0,0.3); display: flex; flex-direction: column; width: 48%; position: relative; min-height: 45px; }
-        .script-block:active { cursor: grabbing; transform: translate(2px, 2px); box-shadow: none; }
-        .block-type-label { font-family: var(--font-ui); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 2px; opacity: 0.8; font-weight: bold; }
-        .block-text { line-height: 1.2; }
-        
-        /* Override di Drop Slot */
-        .drop-slot > .script-block { width: 100%; margin-bottom: 0 !important; box-shadow: none; background: transparent; border: 1px solid var(--paper-dashed); }
-        .drop-slot > .script-block[data-type="TRANSITION"] .block-text { text-align: right; }
-        .drop-slot > .script-block[data-type="CHARACTER"] .block-text { text-align: center; }
-
-        /* ==================================================
-           MODALS & OVERLAYS
-           ================================================== */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; display: none; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
-        .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--bg-panel); border: 2px solid var(--text-highlight); padding: 30px; max-width: 500px; width: 90%; box-shadow: 5px 5px 0 rgba(0,0,0,0.8); position: relative; }
-        
-        .retro-input { background: #1a1a1a; border: 2px solid var(--text-muted); color: var(--text-highlight); font-family: var(--font-ui); font-size: 1.5rem; padding: 10px; width: 100%; text-align: center; margin-bottom: 20px; text-transform: uppercase; }
-        .retro-input:focus { outline: none; border-color: var(--accent-yellow); }
-        
-        .retro-btn { background: var(--bg-panel); border: 2px solid var(--border-dark); color: var(--text-highlight); font-family: var(--font-ui); font-size: 1.2rem; padding: 8px 20px; cursor: pointer; box-shadow: 2px 2px 0 rgba(0,0,0,0.5); display: inline-block; }
+        .retro-btn {
+            background: var(--bg-panel); border: 2px solid var(--border-dark);
+            color: var(--text-highlight); font-size: var(--fs-subtitle);
+            padding: 6px 14px; cursor: pointer; text-transform: uppercase;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.5); transition: transform 0.1s, box-shadow 0.1s;
+            display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box;
+        }
         .retro-btn:active { transform: translate(2px,2px); box-shadow: none; }
-        .retro-btn.primary { background: var(--color-scene); color: #fff; }
+        .retro-btn.primary { background: #b56c6c; color: #fff; border-color: #5c2f2f; }
+        .retro-btn.disabled { opacity: 0.5; pointer-events: none; }
+        #btn-periksa { font-size: var(--fs-title); font-weight: bold; } 
 
-        /* Floating Feedback */
-        #floating-feedback { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--color-danger); color: white; padding: 15px 30px; font-size: 1.5rem; border: 2px solid #fff; box-shadow: 0 0 20px rgba(0,0,0,0.8); z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.2s; text-align: center; }
+        .retro-input {
+            background: #1a1a1a; border: 2px solid var(--text-muted); color: var(--text-highlight);
+            font-size: var(--fs-subtitle); padding: 10px; width: 100%;
+            text-align: center; margin-bottom: 20px; text-transform: uppercase;
+        }
+        .retro-input:focus { outline: none; border-color: var(--accent-yellow); }
+
+        #floating-feedback {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: var(--color-char); color: white; padding: 15px 30px; font-size: var(--fs-head);
+            border: 2px solid #fff; box-shadow: 0 0 20px rgba(0,0,0,0.8); z-index: 2000;
+            opacity: 0; pointer-events: none; transition: opacity 0.2s; text-align: center;
+            width: max-content; max-width: 90%; line-height: 1.2;
+        }
         #floating-feedback.show { opacity: 1; }
         #floating-feedback.success { background: var(--color-scene); }
+        #floating-feedback.neutral { background: var(--bg-panel); border-color: var(--color-neutral); color: var(--text-highlight); }
 
-        /* Utilities Modals (Hint, Kamus, Checklist) */
-        .util-modal-content { text-align: left; max-height: 70vh; overflow-y: auto; padding: 20px; }
-        .util-modal-content h2 { color: var(--accent-yellow); border-bottom: 2px solid var(--border-light); padding-bottom: 10px; margin-top: 0; }
-        .util-item { margin-bottom: 15px; border-bottom: 1px dashed var(--border-light); padding-bottom: 10px; }
-        .util-item:last-child { border-bottom: none; }
-
-        /* High Score Table */
-        .hs-table { width: 100%; text-align: left; border-collapse: collapse; margin-bottom: 20px; font-size: 1.2rem; }
-        .hs-table th, .hs-table td { padding: 8px; border-bottom: 1px dashed var(--border-light); }
+        .hs-table { width: 100%; text-align: left; border-collapse: collapse; margin-bottom: 20px; font-size: var(--fs-subtitle); }
+        .hs-table th, .hs-table td { padding: 5px; border-bottom: 1px dashed var(--border-light); }
         .hs-table th { color: var(--text-muted); }
-        
-        /* Ending Screen Custom */
-        .ending-image-container { width: 100%; height: 200px; background: #111; border: 2px solid var(--border-dark); margin-bottom: 15px; overflow: hidden; position: relative; }
-        .ending-image-container img { width: 100%; height: 100%; object-fit: cover; }
-        .ending-title { font-size: 2rem; color: var(--accent-yellow); margin: 0 0 10px 0; }
-        .ending-desc { font-family: sans-serif; font-size: 0.9rem; color: var(--text-normal); line-height: 1.4; margin-bottom: 15px; }
 
-        /* ==================================================
-           TUTORIAL OVERLAY
-           ================================================== */
-        #screen-tutorial { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 5000; display: none; }
-        .tut-highlight-box { position: absolute; border: 3px solid var(--accent-yellow); box-shadow: 0 0 15px var(--accent-yellow); pointer-events: none; transition: all 0.3s ease; }
-        .tut-dialog { position: absolute; background: var(--bg-panel); border: 2px solid var(--accent-yellow); padding: 15px; width: 280px; box-shadow: 4px 4px 0 rgba(0,0,0,0.8); transition: all 0.3s ease; display: flex; flex-direction: column; }
-        .tut-text { font-size: 1.1rem; line-height: 1.3; color: var(--text-highlight); margin-bottom: 15px; }
-        .tut-btn-area { display: flex; justify-content: space-between; }
-        .tut-arrow { position: absolute; font-size: 3rem; color: var(--accent-yellow); text-shadow: 2px 2px 0 #000; animation: bounce 1s infinite; pointer-events: none; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        /* Responsive */
-        @media (max-width: 600px) {
-            #zone-client { padding: 6px; gap: 6px; }
-            .brief-box { font-size: 0.9rem; padding: 6px; }
-            .script-block { width: 100%; } /* Blocks take full width on mobile inventory */
-            .mm-title { font-size: 3rem; }
-            .mm-subtitle { font-size: 1.2rem; }
-            .mm-btn { font-size: 1.5rem; width: 200px; }
+        .retro-scrollbar {
+            position: relative; width: 100%; height: 100%;
+            overflow-y: scroll !important; overflow-x: hidden;
+            overscroll-behavior: none; scrollbar-width: none; -ms-overflow-style: none; touch-action: pan-y;
         }
+        .retro-scrollbar::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+        .scroll-container { flex: 1; position: relative; min-height: 0; overflow: hidden; }
+        
+        .w95-scrollbar, .w95-scroll-track, .w95-scroll-thumb { touch-action: none !important; }
+        .w95-scrollbar {
+            position: absolute; top: 2px; right: 2px; bottom: 2px; width: 14px;
+            background: var(--bg-app); z-index: 50; box-sizing: border-box;
+            border-left: 2px solid var(--border-dark); pointer-events: auto;
+        }
+        .w95-scroll-track {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #161514; box-sizing: border-box; cursor: pointer;
+        }
+        .w95-scroll-track::before {
+            content: ""; position: absolute; inset: 0;
+            background-image: linear-gradient(45deg, #2a2a28 25%, transparent 25%, transparent 75%, #2a2a28 75%), linear-gradient(45deg, #2a2a28 25%, transparent 25%, transparent 75%, #2a2a28 75%);
+            background-size: 4px 4px; background-position: 0 0, 2px 2px; opacity: 0.5; pointer-events: none;
+        }
+        .w95-scroll-thumb {
+            position: absolute; left: 1px; right: 1px; top: 0; height: 40px; min-height: 40px;
+            background: var(--border-light); box-sizing: border-box; cursor: grab; z-index: 2;
+            border: 1px solid var(--border-dark); border-top: 1px solid #6a6a66; border-left: 1px solid #6a6a66;
+        }
+        .w95-scroll-thumb::before { content: ""; position: absolute; top: -25px; bottom: -25px; left: -25px; right: -25px; z-index: -1; }
+        .w95-scroll-thumb.dragging {
+            cursor: grabbing; background: #3b3a36; border-top: 1px solid var(--border-dark);
+            border-left: 1px solid var(--border-dark); border-right: 1px solid #6a6a66; border-bottom: 1px solid #6a6a66;
+        }
+        .w95-scroll-thumb::after {
+            content: ""; position: absolute; left: 2px; right: 2px; top: 50%; height: 2px;
+            transform: translateY(-50%); background: var(--bg-panel);
+            box-shadow: 0 -2px 0 var(--border-dark), 0 2px 0 var(--border-dark); pointer-events: none;
+        }
+        .w95-scrollbar.disabled { opacity: 0.3; }
+        .w95-scrollbar.disabled .w95-scroll-thumb { cursor: default; }
+
+        #block-container { padding: 10px; padding-right: 28px; }
+        @media (pointer: coarse) {
+            .w95-scrollbar { width: 18px; } .w95-scroll-thumb { min-height: 50px; }
+            #block-container { padding-right: 32px; }
+        }
+
+        .panel-header {
+            padding: 10px 15px; border-bottom: 2px solid var(--border-dark); background: rgba(0,0,0,0.2);
+            flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;
+        }
+        .panel-header-text { display: flex; flex-direction: column; }
+        .panel-title { font-size: var(--fs-title); color: var(--text-highlight); letter-spacing: 1px; margin: 0; }
+        .panel-subtitle { font-size: var(--fs-text); color: var(--text-muted); }
+        
+        .btn-expand {
+            padding: 0 !important; width: 28px !important; height: 28px !important; font-size: var(--fs-subtitle) !important;
+            display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; line-height: 1;
+        }
+
+        .script-block {
+            background: var(--block-bg); border: 2px solid var(--block-border); color: var(--paper-text);
+            font-family: var(--font-script); font-size: var(--fs-subtitle); margin-bottom: 10px;
+            display: flex; flex-direction: column; cursor: grab; box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+            transition: transform 0.1s; width: 100%; position: relative; z-index: 1; padding: 8px 10px; box-sizing: border-box;
+        }
+        .script-block:last-child { margin-bottom: 0; }
+        .script-block:active { cursor: grabbing; transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(0,0,0,0.3); }
+
+        .block-type-label { font-family: var(--font-ui); font-size: var(--fs-text); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px; opacity: 0.8; font-weight: bold; color: var(--paper-text); }
+        .block-text { line-height: 1.3; text-align: left; }
+
+        #center-panel { background: #1c1c1b; position: relative; padding: 0; overflow: hidden; }
+        
+        .center-scroll-area {
+            width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden;
+            padding: 15px; display: flex; flex-direction: column; align-items: center;
+        }
+        
+        .btn-expand-paper { position: absolute; bottom: 15px; right: 15px; z-index: 50; }
+
+        .paper-sheet {
+            background: var(--paper-bg); width: 100%; max-width: 750px; height: auto; min-height: 100%;
+            border: 1px solid var(--paper-border); box-shadow: 4px 4px 0 rgba(0,0,0,0.5); display: flex;
+            flex-direction: column; color: var(--paper-text); padding: 20px 25px; position: relative; flex-shrink: 0;
+        }
+
+        .paper-header {
+            display: flex; justify-content: space-between; font-size: var(--fs-subtitle);
+            color: #333; margin-bottom: 15px; border-bottom: 2px solid rgba(0,0,0,0.1); padding-bottom: 4px; flex-shrink: 0;
+        }
+        .paper-header .title { flex: 1; text-align: center; font-weight: bold; }
+        .paper-header .page-num { width: 60px; text-align: right; }
+
+        .slot-row { display: flex; align-items: stretch; margin-bottom: 8px; min-height: 45px; width: 100%; }
+        .slot-number { width: 25px; font-family: var(--font-script); color: #777; font-size: var(--fs-subtitle); padding-top: 8px; text-align: left; flex-shrink: 0; }
+
+        .drop-slot {
+            flex: 1; border: 2px dashed var(--paper-dashed); display: flex; align-items: stretch;
+            transition: background 0.2s, border-color 0.2s; min-height: 45px; background: rgba(0,0,0,0.02); width: 100%;
+        }
+        .drop-slot.drag-over { background: rgba(0,0,0,0.08); border-color: #555; }
+        .drop-slot > .script-block { margin-bottom: 0 !important; width: 100%; box-shadow: none; background: transparent; border: 1px solid var(--paper-dashed); padding: 6px 8px; }
+        .drop-slot > .script-block .block-text { text-align: justify; }
+        .drop-slot > .script-block[data-type="TRANSITION"] .block-text { text-align: right !important; }
+
+        #right-panel { padding: 15px; }
+        .right-panel-content {
+            flex: 1 1 0; overflow-y: auto; display: flex; flex-direction: column; min-height: 0; padding-bottom: 10px; max-width: 100%; overflow-x: hidden;
+        }
+
+        .right-section-title {
+            font-size: var(--fs-title); color: var(--text-highlight); margin-bottom: 10px; border-bottom: 2px solid var(--border-light);
+            padding-bottom: 4px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+        }
+
+        .checklist-item { display: flex; align-items: flex-start; margin-bottom: 8px; color: var(--text-muted); font-size: var(--fs-subtitle); width: 100%; box-sizing: border-box; }
+        .checklist-box {
+            width: 12px; height: 12px; border: 2px solid var(--text-muted); margin-right: 8px; margin-top: 2px; position: relative; flex-shrink: 0; background: #1a1a1a;
+        }
+        .checklist-item.done .checklist-box::after { content: "✔"; color: var(--color-scene); position: absolute; top: -5px; left: 0px; font-size: 12px; }
+        .checklist-item.done { color: var(--text-normal); }
+
+        .hint-section { margin: 10px 0; width: 100%; display: block; flex-shrink: 0; box-sizing: border-box; }
+        .hint-btn-style {
+            width: 100%; display: flex; justify-content: center; align-items: center; font-size: var(--fs-title); padding: 8px; border: 2px solid var(--border-light);
+            background: rgba(0,0,0,0.25); color: var(--text-highlight); letter-spacing: 1px; position: relative; cursor: pointer; transition: background 0.1s, color 0.1s; box-sizing: border-box;
+        }
+        .hint-btn-style:hover:not(.hint-disabled) { background: rgba(255,255,255,0.05); color: #fff; }
+        .hint-btn-style:active:not(.hint-disabled) { transform: translate(1px,1px); }
+
+        .notification-badge {
+            position: absolute; top: -3px; right: 2px; background: var(--color-char); color: white; border-radius: 50%;
+            width: 16px; height: 16px; font-size: var(--fs-text); display: flex; align-items: center; justify-content: center;
+            border: 2px solid var(--bg-panel); font-weight: bold; box-shadow: 1px 1px 0 rgba(0,0,0,0.5); pointer-events: none;
+        }
+        .hint-disabled { opacity: 0.3; pointer-events: none; border-style: solid !important; }
+
+        .glossary-term-link { color: #5a8ca8; cursor: pointer; text-decoration: none; font-weight: bold; border-bottom: 1px dotted #5a8ca8; }
+        .glossary-term-link:hover { background: rgba(90,140,168,0.2); }
+
+        .kamus-tab-container { display: flex; flex-direction: column; width: 100%; margin-top: 5px; flex-shrink: 0; flex: 1; box-sizing: border-box; }
+        .kamus-tab-title {
+            background: rgba(255,255,255,0.05); border: 2px solid var(--border-light); border-bottom: none; border-radius: 6px 6px 0 0; padding: 2px 10px;
+            display: inline-block; width: max-content; font-size: var(--fs-title); margin-bottom: 0; color: var(--accent-yellow); 
+        }
+        .kamus-tab-content { border: 2px solid var(--border-light); background: rgba(0,0,0,0.15); border-radius: 0 6px 6px 6px; padding: 8px; flex: 1; display: flex; flex-direction: column; width: 100%; box-sizing: border-box; }
+
+        #glossary-content { display: flex; flex-direction: column; color: var(--text-normal); }
+        .g-term-title { color: #5a8ca8; font-size: var(--fs-subtitle); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px; border-bottom: 1px solid #5a8ca8; padding-bottom: 2px; }
+        .g-def-text { font-size: var(--fs-subtitle); line-height: 1.3; margin-bottom: 8px; }
+        .g-example-title { color: #5a8ca8; font-size: var(--fs-text); letter-spacing: 1px; margin-bottom: 2px; }
+        .g-example-text { color: var(--text-muted); font-style: italic; background: rgba(0,0,0,0.2); padding: 4px; border-left: 2px solid #5a8ca8; font-size: var(--fs-text); }
+
+        .pagination-area { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: auto; padding-top: 10px; border-top: 2px dashed var(--border-light); flex-shrink: 0; width: 100%; box-sizing: border-box; }
+        .nav-arrow { width: 26px; height: 26px; background: var(--bg-panel); border: 2px solid var(--border-dark); display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; font-size: var(--fs-subtitle); }
+        .nav-arrow:hover { color: var(--text-highlight); }
+        .page-thumb-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; }
+        .page-thumb { width: 30px; height: 38px; background: #8e8877; border: 2px solid var(--border-dark); display: flex; align-items: flex-start; padding: 2px 4px; font-size: var(--fs-text); color: #333; cursor: pointer; box-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
+        .page-thumb.active { background: var(--paper-bg); box-shadow: none; transform: translate(1px,1px); }
+        .page-indicator { position: absolute; top: -6px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 4px solid var(--accent-yellow); display: none; }
+        .page-thumb.active + .page-indicator { display: block; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 1000;
+            display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .modal-content {
+            background: var(--bg-panel); border: 2px solid var(--text-highlight); padding: 25px; max-width: 550px; width: 90%;
+            color: var(--text-highlight); text-align: center; box-shadow: 5px 5px 0 rgba(0,0,0,0.5); position: relative;
+            max-height: 90vh; overflow-y: auto;
+        }
+
+        .modal-content h1 { font-size: var(--fs-head) !important; color: var(--accent-yellow); margin-top: 0; margin-bottom: 10px; }
+        .modal-content h2 { font-size: var(--fs-title); color: var(--accent-yellow); margin-top: 0; margin-bottom: 10px; }
+        .modal-content p, .modal-content div { font-size: var(--fs-text); }
+
+        .modal-close-x {
+            position: absolute; top: -10px; right: -10px; background: var(--color-char); color: #fff;
+            border: 2px solid #5c2f2f; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center;
+            font-size: var(--fs-title); font-weight: bold; cursor: pointer; box-shadow: 2px 2px 0 rgba(0,0,0,0.5); z-index: 101; padding: 0;
+        }
+        .modal-close-x:active { transform: translate(2px,2px); box-shadow: none; }
+
+        /* Main Menu Specifics */
+        #main-menu {
+            z-index: 2000; flex-direction: column;
+            background: radial-gradient(circle at center, #2e2d2a 0%, var(--bg-app) 80%);
+            position: fixed; inset: 0;
+        }
+        #main-menu::before {
+            content: ""; position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 32px 32px; pointer-events: none;
+        }
+        .main-menu-credit {
+            position: absolute; top: 18px; right: 24px;
+            font-size: var(--fs-subtitle); color: var(--text-muted);
+            letter-spacing: 1.5px; z-index: 5;
+            background: rgba(0,0,0,0.35); padding: 4px 10px;
+            border: 1px solid var(--border-light);
+        }
+        .main-menu-card {
+            background: var(--bg-panel); border: 2px solid var(--border-dark);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.6), inset 0 0 0 2px var(--border-light);
+            padding: 35px 40px; display: flex; flex-direction: column; align-items: center;
+            max-width: 90%; width: 420px; position: relative; z-index: 2;
+        }
+        .main-menu-badge {
+            background: var(--border-dark); color: var(--color-scene);
+            font-size: var(--fs-small); padding: 3px 10px; letter-spacing: 2px;
+            border: 1px solid var(--border-light); margin-bottom: 12px;
+        }
+        .main-menu-title {
+            font-size: 3.4rem; color: var(--accent-yellow); letter-spacing: 4px;
+            text-shadow: 4px 4px 0 var(--border-dark); margin: 0 0 6px 0; text-align: center; line-height: 1;
+        }
+        .main-menu-subtitle {
+            font-size: var(--fs-subtitle); color: var(--text-normal); letter-spacing: 2px;
+            margin-bottom: 28px; text-align: center; border-bottom: 1px dashed var(--border-light);
+            padding-bottom: 10px; width: 100%;
+        }
+        .main-menu-buttons { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+        .main-menu-btn { font-size: var(--fs-head); padding: 12px 15px; text-align: center; width: 100%; letter-spacing: 2px; }
+        .main-menu-btn:hover { filter: brightness(1.1); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 rgba(0,0,0,0.6); }
+
+        /* Tutorial Specifics */
+        #tutorial-overlay {
+            z-index: 2500; background: transparent; cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none; -webkit-user-select: none; outline: none;
+        }
+        .tutorial-spotlight {
+            position: fixed; pointer-events: none; border: 2px solid var(--accent-yellow);
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.82);
+            transition: top 0.25s cubic-bezier(0.22, 1, 0.36, 1), left 0.25s cubic-bezier(0.22, 1, 0.36, 1), width 0.25s cubic-bezier(0.22, 1, 0.36, 1), height 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: top, left, width, height;
+            border-radius: 4px; z-index: 2500;
+        }
+        .tutorial-dialog {
+            position: fixed; background: var(--bg-panel); border: 2px solid var(--accent-yellow);
+            padding: 14px 16px; color: var(--text-highlight); width: 290px; max-width: 90vw;
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.85);
+            transition: top 0.25s cubic-bezier(0.22, 1, 0.36, 1), left 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: top, left;
+            z-index: 2501; display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+        }
+        .tutorial-dialog-text { font-size: var(--fs-subtitle); line-height: 1.4; text-align: left; }
+        /* Full Window Highscore (Full Screen Dedicated Window) */
+        #modal-highscore {
+            z-index: 3000;
+            background: var(--bg-app);
+            padding: 0;
+            align-items: stretch;
+            justify-content: stretch;
+        }
+        .hs-window-frame {
+            width: 100vw; height: 100dvh; max-width: none; max-height: none;
+            background: var(--bg-app); border: none;
+            box-shadow: none; display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        .hs-window-bar {
+            background: var(--bg-panel); color: var(--accent-yellow); padding: 12px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--border-dark); flex-shrink: 0;
+        }
+        .hs-window-title { font-size: var(--fs-head); letter-spacing: 2px; font-weight: normal; color: var(--text-highlight); }
+        .hs-window-body {
+            flex: 1; overflow-y: auto; padding: 20px; background: var(--bg-app);
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+        }
+        .hs-content-wrapper {
+            width: 100%; max-width: 850px; display: flex; flex-direction: column; gap: 20px;
+        }
+        /* Satu Kotak Spesial untuk Top 1 - 3 */
+        .hs-top3-box {
+            background: linear-gradient(180deg, rgba(214, 176, 84, 0.1) 0%, var(--bg-panel) 100%);
+            border: 2px solid var(--accent-yellow);
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+            padding: 16px; width: 100%; display: flex; flex-direction: column; gap: 10px;
+        }
+        .hs-top3-header {
+            font-size: var(--fs-title); color: var(--accent-yellow); letter-spacing: 2px;
+            border-bottom: 2px solid var(--border-light); padding-bottom: 6px; margin-bottom: 4px;
+            display: flex; justify-content: space-between; align-items: center; font-weight: bold;
+        }
+        .hs-top3-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 14px; background: rgba(0,0,0,0.25);
+            border: 1px solid var(--border-light); gap: 12px;
+        }
+        .hs-top3-row.rank-1 { border-left: 4px solid var(--accent-yellow); background: rgba(214, 176, 84, 0.12); }
+        .hs-top3-row.rank-2 { border-left: 4px solid #c0c0c0; }
+        .hs-top3-row.rank-3 { border-left: 4px solid #cd7f32; }
+        .hs-top3-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .hs-podium-badge {
+            font-size: var(--fs-subtitle); font-weight: bold;
+            padding: 2px 8px; border: 1px solid var(--border-dark); background: rgba(0,0,0,0.4);
+            white-space: nowrap;
+        }
+        .rank-1 .hs-podium-badge { color: var(--accent-yellow); border-color: var(--accent-yellow); }
+        .rank-2 .hs-podium-badge { color: #e0e0e0; border-color: #c0c0c0; }
+        .rank-3 .hs-podium-badge { color: #e69d53; border-color: #cd7f32; }
+        .hs-podium-name {
+            font-size: var(--fs-title); color: var(--text-highlight); font-weight: bold;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .hs-top3-right {
+            display: flex; align-items: center; gap: 16px; flex-shrink: 0;
+        }
+        .hs-podium-meta {
+            font-size: var(--fs-text); color: var(--text-muted); display: flex; gap: 10px;
+        }
+        .hs-podium-score {
+            font-size: var(--fs-title); color: var(--accent-yellow); font-weight: bold; letter-spacing: 1px;
+            min-width: 80px; text-align: right;
+        }
+        .hs-list-container {
+            background: var(--bg-panel); border: 2px solid var(--border-dark);
+            padding: 15px; box-shadow: 4px 4px 0 rgba(0,0,0,0.4); width: 100%;
+        }
+        .hs-section-divider {
+            font-size: var(--fs-title); color: var(--text-muted); letter-spacing: 1px;
+            border-bottom: 2px solid var(--border-light); padding-bottom: 6px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        @media (orientation: portrait) {
+            .hs-top3-row { flex-direction: column; align-items: flex-start; gap: 6px; padding: 8px 10px; }
+            .hs-top3-right { width: 100%; justify-content: space-between; border-top: 1px dashed var(--border-light); padding-top: 4px; }
+            .hs-window-bar { padding: 10px 14px; }
+            .hs-window-body { padding: 12px; }
+            .main-menu-card { padding: 25px 20px; }
+            .main-menu-credit { top: 12px; right: 12px; }
+        }
+
+        /* Game Over / Endings Overrides */
+        .ending-img-container { width: 100%; height: 200px; background: #111; border: 2px solid var(--border-light); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .ending-img-container img { width: 100%; height: 100%; object-fit: cover; }
+        .ending-fallback-text { position: absolute; color: var(--text-muted); font-size: var(--fs-small); font-style: italic; }
+        
+        #modal-preview-blocks .modal-content { max-width: 650px; width: auto; }
+        #preview-blocks-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding-top: 10px; max-height: none; }
+        #preview-blocks-grid .script-block { width: 100%; flex-shrink: 0; cursor: pointer; font-size: var(--fs-text) !important; padding: 8px !important; margin-bottom: 0 !important; }
+        
+        @media (orientation: landscape) {
+            #preview-blocks-grid { grid-template-columns: repeat(3, 190px); justify-content: center; }
+            .btn-expand-paper { display: none !important; }
+        }
+
+        #preview-script-container {
+            width: 100%; height: 65vh; display: flex; justify-content: center; align-items: flex-start; overflow-x: hidden; overflow-y: auto; background: #1c1c1b; border: 1px solid var(--border-light);
+        }
+
+        #selected-block-popup {
+            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 350px; background: var(--bg-panel);
+            border: 2px solid var(--accent-yellow); padding: 8px 12px; z-index: 900; box-shadow: 4px 4px 0 rgba(0,0,0,0.6); display: none; flex-direction: column; gap: 4px; pointer-events: auto;
+        }
+        #selected-block-popup.active { display: flex; }
+
+        @media (max-height: 550px) and (orientation: landscape) {
+            #game-header { grid-template-columns: 210px minmax(0,1fr) 210px; padding: 6px 10px; min-height: 60px; }
+            #main-area { grid-template-columns: 250px minmax(0,1fr) 205px; }
+            .client-avatar { width: 50px; height: 50px; }
+            .client-brief-box .brief-content { padding: 4px; }
+            .retro-btn { padding: 4px 8px; }
+            .hide-mobile { display: none; }
+            #right-panel { padding: 10px; }
+            .right-section-title { margin-bottom: 8px; }
+            .deadline-area { padding: 2px 4px; }
+            .main-menu-title { font-size: 2rem; margin-bottom: 20px; }
+        }
+
+        @media (orientation: portrait) {
+            #game-layout { height: 100dvh; padding: 6px; gap: 6px; }
+
+            #game-header {
+                min-height: 0; display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto;
+                gap: 6px; padding: 6px 10px; position: relative;
+            }
+
+            .header-left { grid-row: 1; grid-column: 1; justify-content: flex-start; gap: 6px; width: 100%; position: static; z-index: 1; }
+            .header-right {
+                grid-row: 1; grid-column: 1; justify-content: flex-end; position: relative; right: auto; top: auto;
+                gap: 6px; width: 100%; pointer-events: none; z-index: 2;
+            }
+            .header-right button { pointer-events: auto; }
+            .header-center {
+                grid-row: 2; grid-column: 1; justify-content: flex-start; align-items: center !important;
+                flex-direction: row !important; flex-wrap: nowrap !important;
+            }
+
+            .title-area { flex-direction: row; align-items: baseline; gap: 6px; position: static !important; }
+            .header-left h1 {
+                position: absolute !important; left: 50% !important; top: 22px !important; transform: translate(-50%, -50%) !important;
+                margin: 0 !important; font-weight: bold !important; white-space: nowrap !important; z-index: 10;
+                font-size: var(--fs-head) !important; letter-spacing: 1px !important;
+            }
+            
+            .settings-btn { font-size: 18px !important; margin-right: 2px; }
+            .retro-btn { padding: 0 8px !important; border-width: 1px !important; height: 26px !important; box-sizing: border-box !important; margin: 0 !important; }
+            #btn-reset { width: 26px !important; padding: 0 !important; justify-content: center !important; }
+
+            .avatar-wrapper { width: 38px !important; }
+            .client-avatar { width: 38px !important; height: 38px !important; border-width: 1px !important; border-radius: 2px; align-self: center; }
+            .avatar-title { display: block !important; margin-top: 2px; font-size: var(--fs-small) !important; }
+            
+            .client-brief-box { max-height: none; overflow: hidden; border-width: 1px !important; justify-content: flex-start; }
+            .client-brief-box .brief-title { display: none !important; }
+            .client-brief-box .brief-content { display: flex !important; flex-direction: column !important; padding: 4px 6px !important; gap: 2px !important; }
+            .brief-line { line-height: 1.1 !important; align-items: flex-start !important; margin-bottom: 0 !important; width: 100% !important; }
+            .brief-line .label { min-width: 48px !important; margin-right: 4px !important; display: inline-block !important; }
+
+            .deadline-area { padding: 2px 4px !important; border-top-width: 1px !important; margin-top: auto; }
+            .progress-bar-container { height: 8px !important; }
+
+            .hide-mobile { display: none !important; }
+
+            #main-area {
+                flex: 1 1 auto; min-height: 0; display: grid; gap: 6px;
+                grid-template-columns: 1.25fr 1fr; grid-template-rows: 1fr 1fr;
+            }
+
+            #center-panel { grid-column: 1 / -1; grid-row: 1; }
+            #left-panel { grid-column: 1; grid-row: 2; position: relative; }
+            #right-panel { grid-column: 2; grid-row: 2; display: flex; position: relative; padding: 6px !important; }
+
+            #block-container { padding: 5px !important; padding-right: 21px !important; }
+
+            .right-section-title { margin-bottom: 4px !important; padding-bottom: 2px !important; }
+            .checklist-item { margin-bottom: 4px !important; line-height: 1.2 !important; }
+            .checklist-box { width: 12px !important; height: 12px !important; margin-right: 6px !important; border-width: 1px !important; }
+            .checklist-item.done .checklist-box::after { font-size: 12px !important; top: -4px !important; left: 0px !important; }
+            
+            .hint-section { margin: 6px 0 !important; }
+            .hint-btn-style { padding: 6px !important; border-width: 1px !important; }
+            .notification-badge { width: 14px !important; height: 14px !important; border-width: 1px !important; top: -2px !important; right: 2px !important; }
+            
+            .kamus-tab-title { padding: 2px 6px !important; }
+            .kamus-tab-content { padding: 6px !important; }
+            .g-term-title { margin-bottom: 2px !important; }
+            .g-def-text { margin-bottom: 4px !important; line-height: 1.2 !important; }
+            .g-example-text { padding: 4px !important; }
+            
+            #left-panel .panel-header { padding: 6px 10px !important; border-bottom-width: 1px !important; }
+            .script-block { padding: 6px 8px !important; margin-bottom: 5px !important; border-width: 1px !important; }
+            
+            .center-scroll-area { padding: 10px 5px !important; }
+            .btn-expand-paper { bottom: 10px !important; right: 10px !important; }
+            .paper-sheet { padding: 12px 16px !important; flex-shrink: 0; }
+            .paper-header { margin-bottom: 8px !important; padding-bottom: 4px !important; }
+            .slot-row { min-height: 40px !important; margin-bottom: 6px !important; }
+            .drop-slot { min-height: 40px !important; }
+            .slot-number { width: 20px !important; padding-top: 6px !important; }
+            
+            .pagination-area { padding-top: 6px !important; margin-top: auto !important; border-top-width: 1px !important; }
+            .nav-arrow { width: 24px !important; height: 24px !important; }
+            .page-thumb { width: 26px !important; height: 32px !important; padding: 2px 4px !important; }
+            
+            #modal-preview-blocks .modal-content { padding: 12px !important; width: 90% !important; }
+            #preview-blocks-grid { gap: 6px !important; padding-top: 6px !important; }
+            #modal-preview-script .modal-content { padding: 12px !important; width: 95% !important; }
+            #preview-script-container { height: 55vh !important; }
+            
+            .main-menu-title { font-size: 2.2rem; }
+        }
+
+        @media (orientation: portrait) and (pointer: coarse) {
+            #block-container { padding-right: 25px !important; }
+        }
+
+        /* Helpers */
+        .hidden { display: none !important; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        .font-bold { font-weight: 700; }
+        .flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .items-center { align-items: center; }
+        .grid { display: grid; }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .gap-2 { gap: 0.5rem; }
+        .p-3 { padding: 0.75rem; }
+        .pb-2 { padding-bottom: 0.5rem; }
+        .border-b { border-bottom-width: 1px; border-style: solid; }
+        .border-t { border-top-width: 1px; border-style: solid; }
+        .border { border-width: 1px; border-style: solid; }
+        .cursor-pointer { cursor: pointer; }
+        .hover\:text-\[var\(--text-highlight\)\]:hover { color: var(--text-highlight); }
     </style>
 </head>
+
 <body>
 
-    <!-- ==================================================
-         SCREEN: MAIN MENU
-         ================================================== -->
-    <div id="screen-mainmenu">
-        <h1 class="mm-title">EDITOR SCRIPT</h1>
-        <div class="mm-subtitle">ARCADE EDITION</div>
-        
-        <button class="mm-btn" onclick="showNameInput()">PLAY</button>
-        <button class="mm-btn" onclick="showHighscoreMenu()">HIGHSCORE</button>
-        <button class="mm-btn" onclick="startTutorial()">TUTORIAL</button>
-        
-        <div class="mm-credit">CREDIT BY SHAILA SHAVIKA RHADIVA CRINATA</div>
-    </div>
-
-    <!-- MODAL: NAME INPUT -->
-    <div id="modal-name" class="modal-overlay">
-        <div class="modal-content" style="max-width: 350px;">
-            <h2 style="text-align: center;">MASUKKAN NAMA</h2>
-            <input type="text" id="player-name" class="retro-input" placeholder="NAMA EDITOR" maxlength="12" autocomplete="off">
-            <div style="display: flex; justify-content: space-between;">
-                <button class="retro-btn" onclick="hideModal('modal-name')">BATAL</button>
-                <button class="retro-btn primary" onclick="startGame()">MULAI SHIFT</button>
+    <div id="main-menu" class="modal-overlay active" style="display: flex;">
+        <div class="main-menu-credit">credit by SSRC</div>
+        <div class="main-menu-card">
+            <div class="main-menu-badge">● SYSTEM READY ●</div>
+            <div class="main-menu-title">SCRIPT ARCADE</div>
+            <div class="main-menu-subtitle">STORY CONTINUITY &amp; SCRIPT EDITING DESK</div>
+            <div class="main-menu-buttons">
+                <button class="retro-btn primary main-menu-btn" onclick="openStartModal()">▶ PLAY</button>
+                <button class="retro-btn main-menu-btn" onclick="showHighscores()">★ HIGHSCORE</button>
+                <button class="retro-btn main-menu-btn" onclick="startTutorial()">? TUTORIAL</button>
             </div>
         </div>
     </div>
 
-    <!-- ==================================================
-         SCREEN: GAME
-         ================================================== -->
-    <div id="screen-game">
-        <!-- TIER 1: CLIENT -->
-        <div id="zone-client" class="panel">
-            <div class="client-header">
-                <div class="level-info" id="ui-level">DAY 01 — JOB #01</div>
-                <div class="player-info" id="ui-player">EDITOR: -</div>
+    <div id="game-layout" style="display: none;">
+        <header id="game-header">
+            <div class="header-left">
+                <div class="settings-btn" id="btn-settings" onclick="showProfile()" title="Profil & Progress">⚙</div>
+                <div class="title-area">
+                    <h1>SCRIPT ARCADE</h1>
+                    <div class="day-text" id="level-display">HARI 01</div>
+                </div>
             </div>
-            <div class="client-body">
-                <div class="avatar-box" id="tut-avatar">
+
+            <div class="header-center">
+                <div class="avatar-wrapper">
                     <div class="client-avatar">
-                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/><circle cx="9" cy="9" r="1.5" fill="#3b3a36"/><circle cx="15" cy="9" r="1.5" fill="#3b3a36"/><path d="M8 8.5h2M14 8.5h2M10.5 12h3" stroke="#3b3a36" stroke-width="1.5"/></svg>
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            <circle cx="9" cy="9" r="1.5" fill="#3b3a36"/>
+                            <circle cx="15" cy="9" r="1.5" fill="#3b3a36"/>
+                            <path d="M8 8.5h2M14 8.5h2M10.5 12h3" stroke="#3b3a36" stroke-width="1.5"/>
+                        </svg>
                     </div>
-                    <span class="avatar-title">CLIENT</span>
+                    <div class="avatar-title">CLIENT BRIEF</div>
                 </div>
-                <div class="brief-box" id="ui-brief">Loading brief...</div>
-            </div>
-            <div class="deadline-area">
-                <div class="timer-wrapper" id="tut-timer">
-                    <span class="timer-label">DEADLINE</span>
-                    <div class="progress-bar-container">
-                        <div id="bar-base"></div>
-                        <div id="bar-bonus"></div>
+                <div class="client-brief-box" id="client-brief-box">
+                    <div class="brief-title">CLIENT BRIEF</div>
+                    <div class="brief-content" id="client-brief-content"></div>
+                    <div class="deadline-area">
+                        <div class="timer-wrapper">
+                            <span class="timer-label">DEADLINE</span>
+                            <div class="progress-bar-container">
+                                <div id="progress-bar"></div>
+                                <div class="coffee-boost-bar" id="coffee-boost-bar"></div>
+                            </div>
+                            <span class="time-text" id="ui-time">00:00</span>
+                        </div>
+                        <div class="coffee-area" id="ui-coffee"></div>
                     </div>
-                    <span class="time-text" id="ui-time">00:00</span>
-                </div>
-                <div class="coffee-area" id="ui-coffee">
-                    <!-- Coffees -->
                 </div>
             </div>
-        </div>
 
-        <!-- TIER 2: WORKSPACE -->
-        <div id="zone-workspace" class="panel">
-            <div class="workspace-title">SCRIPT WORKSPACE</div>
-            <div class="paper-scroll" id="tut-paper">
-                <div class="paper-sheet" id="script-paper">
-                    <!-- Slots -->
+            <div class="header-right">
+                <button id="btn-reset" class="retro-btn" onclick="clearBoard()" title="Kembalikan semua blok ke inventory">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    <span class="hide-mobile">RESET</span>
+                </button>
+                <button id="btn-periksa" class="retro-btn primary" onclick="checkScript()">SUBMIT</button>
+            </div>
+        </header>
+
+        <div id="main-area">
+            <!-- PANEL KIRI -->
+            <div id="left-panel" class="panel">
+                <div class="panel-header">
+                    <div class="panel-header-text">
+                        <h2 class="panel-title">SCRIPT BLOCKS</h2>
+                        <div class="panel-subtitle" style="font-size: var(--fs-text);">(TARIK KE HALAMAN)</div>
+                    </div>
+                    <button class="retro-btn btn-expand" id="btn-preview-blocks" onclick="openPreviewBlocks()" title="Lihat semua block">➚</button>
+                </div>
+                <div class="scroll-container">
+                    <div class="retro-scrollbar" id="block-container" ondragover="handleDragOverPanel(event)" ondrop="handleDropToPanel(event)"></div>
+                    <div class="w95-scrollbar" id="script-scrollbar">
+                        <div class="w95-scroll-track">
+                            <div class="w95-scroll-thumb"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- TIER 3: INVENTORY & TOOLS -->
-        <div id="zone-inventory" class="panel">
-            <div class="inventory-header">
-                <span class="inventory-title">SCRIPT BLOCKS</span>
-                <span style="color:var(--text-muted); font-size:0.8rem;">Tarik dari dan ke Workspace</span>
-            </div>
-            <div class="inventory-body">
-                <div class="blocks-container" id="blocks-inventory" ondragover="handleDragOver(event)" ondrop="handleDropToInventory(event)">
-                    <!-- Blocks -->
+            <!-- PANEL TENGAH -->
+            <div id="center-panel" class="panel">
+                <div class="center-scroll-area">
+                    <div class="paper-sheet" id="script-paper">
+                        <div class="paper-header">
+                            <span class="title">UNTITLED</span>
+                            <span class="page-num" id="page-number"></span>
+                        </div>
+                        <div id="slots-container"></div>
+                    </div>
                 </div>
-                <div class="tools-area" id="tut-tools">
-                    <button class="util-btn" onclick="showModal('modal-checklist')">✔ CHECKLIST</button>
-                    <button class="util-btn" onclick="showModal('modal-kamus')">📖 KAMUS</button>
-                    <button class="util-btn" onclick="useHint()">💡 HINT (-10s)</button>
-                    <button class="submit-btn" id="btn-submit" onclick="submitScript()">PERIKSA<br><span style="font-size:0.8rem">NASKAH</span></button>
+                <button class="retro-btn btn-expand btn-expand-paper" id="btn-preview-paper" onclick="openPreviewScript()" title="Perbesar Halaman">➚</button>
+            </div>
+
+            <!-- PANEL KANAN -->
+            <div id="right-panel" class="panel">
+                <div class="right-panel-content">
+                    <div class="right-section-title">CHECKLIST</div>
+                    <div id="checklist-container"></div>
+
+                    <div class="hint-section">
+                        <button id="btn-open-hint" class="hint-btn-style" onclick="openHint()">
+                            <span>HINT</span>
+                            <div id="hint-badge" class="notification-badge">1</div>
+                        </button>
+                    </div>
+
+                    <div class="kamus-tab-container" id="kamus-container">
+                        <div class="kamus-tab-title">KAMUS</div>
+                        <div class="kamus-tab-content">
+                            <div id="glossary-empty" class="text-center" style="color: var(--text-muted); margin-top: 10px; font-size: var(--fs-text);">
+                                Klik kata biru pada naskah untuk melihat definisi.
+                            </div>
+                            <div id="glossary-content" class="hidden">
+                                <div class="g-term-title" id="glossary-title">ISTILAH</div>
+                                <p class="g-def-text" id="glossary-def">Definisi akan muncul di sini.</p>
+                                <div class="g-example-title">CONTOH</div>
+                                <p class="g-example-text" id="glossary-ex">"Contoh kalimat."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pagination-area">
+                    <div class="nav-arrow">◄</div>
+                    <div class="page-thumb-wrapper">
+                        <div class="page-thumb active">1</div>
+                        <div class="page-indicator"></div>
+                    </div>
+                    <div class="page-thumb-wrapper" style="opacity: 0.4; pointer-events:none;">
+                        <div class="page-thumb">2</div>
+                    </div>
+                    <div class="nav-arrow">►</div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- ==================================================
-         TUTORIAL OVERLAY
-         ================================================== -->
-    <div id="screen-tutorial">
-        <div class="tut-highlight-box" id="tut-box"></div>
-        <div class="tut-arrow" id="tut-arrow">⬇</div>
-        <div class="tut-dialog" id="tut-dialog">
-            <div class="tut-text" id="tut-text">Teks Tutorial</div>
-            <div class="tut-btn-area">
-                <button class="retro-btn" style="padding: 4px 10px; font-size:1rem;" onclick="endTutorial()">SKIP</button>
-                <button class="retro-btn primary" style="padding: 4px 10px; font-size:1rem;" onclick="nextTutorialStep()">NEXT ➡</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==================================================
-         MODALS (UTILITIES)
-         ================================================== -->
-    <!-- KAMUS -->
-    <div id="modal-kamus" class="modal-overlay">
-        <div class="modal-content util-modal-content">
-            <h2>📖 KAMUS ANATOMI</h2>
-            <div class="util-item"><strong>SCENE HEADING (Slugline)</strong><br>Penanda awal adegan (Lokasi & Waktu). Selalu kapital. <i>Cth: INT. KELAS - SIANG</i></div>
-            <div class="util-item"><strong>ACTION</strong><br>Deskripsi kejadian fisik yang terlihat di layar. Jangan mendeskripsikan perasaan.</div>
-            <div class="util-item"><strong>CHARACTER</strong><br>Nama tokoh yang akan bicara, ditulis kapital di tengah.</div>
-            <div class="util-item"><strong>DIALOGUE</strong><br>Ucapan tokoh.</div>
-            <div class="util-item"><strong>TRANSITION</strong><br>Instruksi penyuntingan di akhir adegan (Rata kanan). <i>Cth: CUT TO:</i></div>
-            <button class="retro-btn" style="width:100%; margin-top:10px;" onclick="hideModal('modal-kamus')">TUTUP</button>
-        </div>
-    </div>
-
-    <!-- CHECKLIST -->
-    <div id="modal-checklist" class="modal-overlay">
-        <div class="modal-content util-modal-content">
-            <h2>✔ CHECKLIST PEKERJAAN</h2>
-            <div class="util-item" id="chk-structure">⬜ Struktur Naskah (Scene -> Action -> Char -> Dialog) terurut.</div>
-            <div class="util-item" id="chk-req">⬜ Sesuai dengan instruksi Client Brief.</div>
-            <div class="util-item" id="chk-logic">⬜ Logika adegan dapat divisualisasikan.</div>
-            <button class="retro-btn" style="width:100%; margin-top:10px;" onclick="hideModal('modal-checklist')">TUTUP</button>
-        </div>
-    </div>
-
-    <!-- BLOCK INFO (Selected Pop-up) -->
-    <div id="modal-block-info" class="modal-overlay">
-        <div class="modal-content" style="max-width: 350px;">
-            <h2 id="bi-type" style="margin-bottom:10px;">TYPE</h2>
-            <div id="bi-text" style="font-family: var(--font-script); background: var(--paper-bg); color: var(--paper-text); padding: 10px; border: 1px solid var(--paper-border); margin-bottom: 20px; font-size:0.9rem;">Text</div>
-            <button class="retro-btn primary" style="width:100%;" onclick="hideModal('modal-block-info')">TUTUP</button>
-        </div>
-    </div>
-
-    <!-- ==================================================
-         ENDING & HIGHSCORE MODALS
-         ================================================== -->
-    <div id="modal-ending" class="modal-overlay">
-        <div class="modal-content" style="max-width: 500px; padding: 20px;">
-            <div class="ending-image-container">
-                <!-- Using a placeholder service for aesthetic retro feeling -->
-                <img id="end-img" src="https://placehold.co/600x300/1e1e1c/d6b054?text=IMAGE+GENERATING...&font=VT323" alt="Ending Image">
-            </div>
-            <h1 class="ending-title" id="end-title">TITLE</h1>
-            <p class="ending-desc" id="end-desc">Deskripsi perjalanan kariermu.</p>
-            
-            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-light); padding: 10px; margin-bottom: 20px;">
-                <table class="hs-table" style="margin: 0; font-size: 1rem;">
-                    <tr><th>NAMA</th><td id="end-name" style="text-align: right; color: var(--text-highlight);">EDITOR</td></tr>
-                    <tr><th>LEVEL</th><td id="end-level" style="text-align: right; color: var(--text-highlight);">0</td></tr>
-                    <tr><th>SCORE</th><td id="end-score" style="text-align: right; color: var(--accent-yellow); font-size: 1.2rem;">0</td></tr>
-                </table>
-            </div>
-            
-            <div id="end-hs-notice" style="color: var(--color-scene); font-size: 1.2rem; margin-bottom:15px; display:none; animation: bounce 1s infinite;">★ NEW HIGH SCORE ★</div>
-            
-            <div style="display: flex; gap: 10px; justify-content: center;">
-                <button class="retro-btn" onclick="backToMenu()">MAIN MENU</button>
-                <button class="retro-btn primary" onclick="showHighscoreMenu(true)">HIGH SCORES</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-highscore" class="modal-overlay">
-        <div class="modal-content" style="max-width: 450px; padding: 20px;">
-            <h2 style="text-align:center; margin-bottom: 15px;">TOP 100 EDITORS</h2>
-            <div style="max-height: 50vh; overflow-y: auto; border: 2px solid var(--border-dark); background: #1a1a1a; margin-bottom: 15px; padding: 10px;">
-                <table class="hs-table" id="hs-table-body" style="margin:0; font-size:1rem;">
-                    <!-- Populated via JS -->
-                </table>
-            </div>
-            <button class="retro-btn" style="width:100%;" onclick="closeHighscore()">KEMBALI</button>
         </div>
     </div>
 
     <div id="floating-feedback"></div>
 
-    <!-- ==================================================
-         JAVASCRIPT
-         ================================================== -->
+    <div id="selected-block-popup">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 4px;">
+            <span style="color: var(--accent-yellow); font-size: var(--fs-subtitle);">SELECTED</span>
+            <button class="retro-btn" style="padding: 0; width: 24px; height: 24px; font-size: var(--fs-small); display: flex; justify-content: center; align-items: center;" onclick="deselectBlock()">X</button>
+        </div>
+        <div class="script-block" style="margin-bottom: 0; border: none; box-shadow: none; background: transparent; padding: 4px;">
+            <div class="block-type-label" id="selected-popup-type" style="color: var(--text-highlight);"></div>
+            <div class="block-text" id="selected-popup-text" style="color: var(--text-normal);"></div>
+        </div>
+    </div>
+
+    <!-- Info Modals -->
+    <div id="modal-preview-blocks" class="modal-overlay">
+        <div class="modal-content" style="min-width: 300px;">
+            <div style="position: relative; margin-bottom: 15px;">
+                <h2>AVAILABLE BLOCKS</h2>
+                <button class="modal-close-x" onclick="closeModal('modal-preview-blocks')">X</button>
+            </div>
+            <div id="preview-blocks-grid"></div>
+            <div style="color: var(--text-muted); margin-top: 10px; font-size: var(--fs-text);">Klik blok untuk memilih, lalu letakkan di Script.</div>
+        </div>
+    </div>
+
+    <div id="modal-preview-script" class="modal-overlay">
+        <div class="modal-content" style="max-width: 95%; display: flex; flex-direction: column;">
+            <div style="position: relative; margin-bottom: 15px;">
+                <h2>SCRIPT PREVIEW</h2>
+                <button class="modal-close-x" onclick="closeModal('modal-preview-script')">X</button>
+            </div>
+            <div id="preview-script-container"></div>
+        </div>
+    </div>
+
+    <div id="modal-hint" class="modal-overlay">
+        <div class="modal-content" style="max-width: 650px; text-align: left;">
+            <h2 class="mb-4 border-b pb-2" style="border-color: var(--border-light); text-align: center;">ANATOMI NASKAH</h2>
+            <div style="color: var(--text-normal); line-height: 1.6; max-height: 65vh; padding-right: 15px; overflow-y: auto;">
+                <p class="mb-4" style="font-size: var(--fs-text);">Setiap tipe blok memiliki peran penting. Perhatikan formatnya untuk menyusun alur yang benar.</p>
+                <div class="mb-4">
+                    <strong style="color: var(--text-highlight); font-size: var(--fs-subtitle);">1. SCENE HEADING (Slugline)</strong><br>
+                    <span style="font-size: var(--fs-text);">Penanda awal adegan (Lokasi & Waktu). Selalu kapital.</span><br>
+                    <span style="color: var(--text-muted); font-style: italic; font-size: var(--fs-text);">Contoh: INT. RUANG SIDANG - SIANG</span>
+                </div>
+                <div class="mb-4">
+                    <strong style="color: var(--text-highlight); font-size: var(--fs-subtitle);">2. ACTION</strong><br>
+                    <span style="font-size: var(--fs-text);">Deskripsi kejadian/tindakan fisik karakter yang terlihat di layar.</span><br>
+                    <span style="color: var(--text-muted); font-style: italic; font-size: var(--fs-text);">Contoh: Seorang Hakim mengetuk palu.</span>
+                </div>
+                <div class="mb-4">
+                    <strong style="color: var(--text-highlight); font-size: var(--fs-subtitle);">3. DIALOGUE / CHARACTER</strong><br>
+                    <span style="font-size: var(--fs-text);">Ucapan tokoh. Nama tokoh selalu kapital di atas dialog.</span><br>
+                    <span style="color: var(--text-muted); font-style: italic; font-size: var(--fs-text);">JAKSA<br>Saya keberatan!</span>
+                </div>
+                <div class="mb-4">
+                    <strong style="color: var(--text-highlight); font-size: var(--fs-subtitle);">4. TRANSITION</strong><br>
+                    <span style="font-size: var(--fs-text);">Instruksi penyuntingan (kamera). Selalu di rata kanan.</span><br>
+                    <span style="color: var(--text-muted); font-style: italic; font-size: var(--fs-text);">Contoh: CUT TO:</span>
+                </div>
+            </div>
+            <div class="flex justify-center mt-6">
+                <button class="retro-btn primary" onclick="closeHint()">SAYA MENGERTI (TUTUP)</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-start" class="modal-overlay">
+        <div class="modal-content">
+            <h1 class="mb-2">PROFIL EDITOR</h1>
+            <p class="mb-4" style="color: var(--text-muted); font-size: var(--fs-text);">
+                Setiap cerita memiliki masalah. Tugasmu memastikan setiap bagian memiliki alasan yang logis. Waktu terus berjalan!
+            </p>
+            
+            <input type="text" id="player-name" class="retro-input" placeholder="MASUKKAN NAMA" maxlength="10">
+
+            <div id="profile-stats" class="mb-6 hidden border p-3 text-left" style="color: var(--text-normal); border-color: var(--border-light);">
+                <div class="grid grid-cols-2 gap-2" style="font-size: var(--fs-text);">
+                    <div>Hari Dicapai:</div><div id="stat-day" class="text-right" style="color: var(--text-highlight);">1</div>
+                    <div>Kasus Selesai:</div><div id="stat-cases" class="text-right" style="color: var(--text-highlight);">0</div>
+                    <div>Rata-rata Skor:</div><div id="stat-score" class="text-right" style="color: var(--text-highlight);">0</div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mt-2">
+                <button class="cursor-pointer hover:text-[var(--text-highlight)]" style="background:none; border:none; color:var(--text-muted); font-size:var(--fs-text);" onclick="resetSave()">[ RESET DATA ]</button>
+                <div style="display:flex; gap: 10px;">
+                    <button class="retro-btn" onclick="returnToMenuFromProfile()">MENU</button>
+                    <button class="retro-btn primary" id="btn-start-game" onclick="startGame()">MULAI KERJA</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-msg" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px;">
+            <h2 id="msg-title" class="mb-4 border-b pb-2" style="border-color: var(--border-light);">INFO</h2>
+            <p id="msg-body" class="mb-6 text-center" style="line-height: 1.5; color: var(--text-normal); font-size: var(--fs-text);"></p>
+            <div class="flex justify-center gap-4">
+                <button class="retro-btn" id="btn-msg-cancel" style="display:none;" onclick="closeModal('modal-msg')">BATAL</button>
+                <button class="retro-btn primary" id="btn-msg-ok" onclick="closeModal('modal-msg')">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-gameover" class="modal-overlay">
+        <div class="modal-content" style="max-width: 550px;">
+            <h1 id="go-title" style="color: var(--accent-yellow); border-bottom: 2px solid var(--border-light); padding-bottom: 10px; margin-bottom: 15px; margin-top:0;">GAME OVER</h1>
+            
+            <div class="ending-img-container">
+                <img id="go-img" src="" alt="Ending Illustration" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="ending-fallback-text" style="display:none;">[ILUSTRASI ENDING]</div>
+            </div>
+            
+            <p id="go-epilog" style="margin-bottom: 20px; font-size: var(--fs-text); line-height: 1.4; color: var(--text-normal); font-style: italic;"></p>
+            
+            <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); padding: 15px; margin-bottom: 20px; text-align: left;">
+                <div style="color: var(--text-highlight); font-size: var(--fs-subtitle); margin-bottom: 10px; text-align: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 5px;">
+                    HASIL KARIER: <span id="go-player" style="color: var(--accent-yellow);"></span>
+                </div>
+                <table class="hs-table" style="margin-bottom:0;">
+                    <tr><th>SKOR AKHIR</th><td id="go-score" style="text-align: right; color: var(--text-highlight);">0</td></tr>
+                    <tr><th>HARI TERTINGGI</th><td id="go-level" style="text-align: right; color: var(--text-highlight);">0</td></tr>
+                    <tr><th>KASUS SELESAI</th><td id="go-jobs" style="text-align: right; color: var(--text-highlight);">0</td></tr>
+                </table>
+            </div>
+            <p id="go-rank-msg" style="font-size: var(--fs-small); color: var(--color-scene); margin-top: -10px; margin-bottom: 15px; text-align: center; font-weight: bold;"></p>
+            
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button class="retro-btn" onclick="showHighscores()">HIGHSCORE</button>
+                <button class="retro-btn" onclick="returnToMenu()">MAIN MENU</button>
+                <button class="retro-btn primary" onclick="restartGame()">COBA LAGI</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-highscore" class="modal-overlay">
+        <div class="hs-window-frame">
+            <div class="hs-window-bar">
+                <span class="hs-window-title">🏆 LEADERBOARD — TOP 100 EDITORS</span>
+                <button class="retro-btn" style="padding: 4px 12px; background: var(--color-char); color: #fff; border-color: #5c2f2f; font-size: var(--fs-title); font-weight: bold;" onclick="closeHighscores()">X</button>
+            </div>
+            <div class="hs-window-body">
+                <div class="hs-content-wrapper">
+                    <!-- Area Spesial Top 3 dalam 1 Kotak -->
+                    <div id="hs-top3-container" class="hs-top3-box"></div>
+
+                    <!-- Area Peringkat 4 - 100 -->
+                    <div class="hs-list-container" id="hs-others-wrapper">
+                        <div class="hs-section-divider">
+                            <span>PERINGKAT #4 — #100</span>
+                            <span style="font-size: var(--fs-small);">LOCAL RECORD</span>
+                        </div>
+                        <table class="hs-table" id="hs-table-body" style="margin-bottom: 0;">
+                            <tr><th>NO</th><th>NAMA</th><th>SKOR</th><th>HARI</th><th style="text-align:right;">KASUS</th></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tutorial-overlay" class="modal-overlay" onclick="nextTutorialStep()">
+        <div class="tutorial-spotlight" id="tutorial-spotlight"></div>
+        <div class="tutorial-dialog" id="tutorial-dialog">
+            <div class="tutorial-arrow" id="tutorial-arrow"></div>
+            <div class="tutorial-dialog-text" id="tutorial-text">Teks Tutorial</div>
+            <div class="tutorial-tap-prompt" id="tut-tap-prompt">[ KLIK DI MANA SAJA UNTUK LANJUT ]</div>
+        </div>
+    </div>
+
     <script>
-        /* --- STATE & CONFIG --- */
-        let state = {
-            name: "",
-            level: 1,
-            score: 0,
-            jobs: 0,
-            mistakes: 0,
-            coffeesUsed: 0,
-            baseTime: 0,
-            bonusTime: 0,
-            maxBaseTime: 90,
-            coffeesLeft: 3,
-            timerInterval: null,
-            brief: "",
-            blocks: [],
-            slots: [],
-            isPlaying: false
+        // --- CONSTANTS ---
+        const BASE_TIME = 30; // Revised Base Time per case
+        const COFFEE_BOOST = 15;
+        const PENALTY_TIME = 10;
+        const MAX_COFFEE_PER_CASE = 3;
+
+        // --- GLOSSARY DB ---
+        const glossaryDB = {
+            "JAKSA": { def: "Pejabat yang berwenang mengajukan tuntutan/dakwaan terhadap terdakwa di pengadilan.", ex: "\"Jaksa membacakan dakwaan di sidang.\"" },
+            "ALIBI": { def: "Keterangan bukti bahwa tersangka berada di tempat lain saat kejadian kriminal terjadi.", ex: "\"Tersangka memiliki alibi kuat berupa rekaman CCTV.\"" },
+            "KLINIS": { def: "Pemeriksaan berdasarkan observasi langsung pada kondisi fisik pasien.", ex: "\"Pemeriksaan klinis menunjukkan hasil stabil.\"" },
+            "STETOSKOP": { def: "Alat medis untuk mendengarkan detak jantung dan paru-paru.", ex: "\"Dokter memeriksa detak jantungnya dengan stetoskop.\"" },
+            "GARIS POLISI": { def: "Pita peringatan untuk mengamankan TKP, hanya berwenang dipasang oleh Polisi.", ex: "\"Warga dilarang melewati batas garis polisi.\"" },
+            "IRONIS": { def: "Kejadian yang bertentangan 180 derajat dengan harapan atau pengetahuan karakter.", ex: "\"Sangat ironis, sang penipu justru tertipu.\"" },
+            "AUTOPSI": { def: "Pemeriksaan bedah pada mayat untuk mengetahui penyebab kematian.", ex: "\"Laporan autopsi membuktikan ada racun.\"" },
+            "PLEDOI": { def: "Nota pembelaan yang dibacakan oleh terdakwa/pengacaranya di pengadilan.", ex: "\"Pengacara mengajukan pledoi tebal.\"" },
+            "BARANG BUKTI": { def: "Benda dari tindak pidana yang disita secara hukum.", ex: "\"Pistol itu diamankan sebagai barang bukti utama.\"" },
+            "CLIFFHANGER": { def: "Akhir cerita yang menggantung dan menegangkan tanpa penyelesaian.", ex: "\"Film itu berakhir cliffhanger.\"" },
+            "RESEP": { def: "Catatan resmi dari dokter untuk apoteker mengenai obat.", ex: "\"Dokter menuliskan resep antibiotik.\"" }
         };
 
-        const THEMES = [
-            { prof: "SISWA", loc: "RUANG KELAS", act: "menemukan dompet di dalam laci mejanya", dial: "Ini bukan punya saya." },
-            { prof: "POLISI", loc: "GANG GELAP", act: "menemukan pistol yang dibuang pelaku", dial: "Jangan sentuh apapun di area ini." },
-            { prof: "DOKTER", loc: "RUANG RAWAT", act: "memeriksa rekam medis pasien yang memburuk", dial: "Kita harus operasi sekarang!" },
-            { prof: "JAKSA", loc: "RUANG SIDANG", act: "mengangkat selembar foto sebagai bukti", dial: "Alibi Anda tidak masuk akal." }
+        // --- STORY TEMPLATES ---
+        const storyTemplates = [
+            { genre: "HOROR", theme: "Ketakutan pada yang tak terlihat", reqText: "Buat akhir cerita menjadi ironis.", protagonists: ["POLISI", "DOKTER"], locations: ["RUMAH SAKIT KOSONG", "GUDANG TUA", "RUMAH TUA"], conflicts: ["terdengar langkah kaki mendekat perlahan", "semua lampu berkedip dan mati"], ending: "IRONIS" },
+            { genre: "DRAMA KRIMINAL", theme: "Keadilan yang terhalang kebohongan", reqText: "Pastikan kewenangan hukum karakter tidak dilanggar.", protagonists: ["JAKSA"], locations: ["RUANG SIDANG"], conflicts: ["saksi ahli tiba-tiba mengubah kesaksiannya", "alibi terdakwa dipalsukan"], ending: "PENYELESAIAN TUNTUTAN" },
+            { genre: "THRILLER MEDIS", theme: "Berpacu dengan waktu melawan kematian", reqText: "Buat tensi naskah memuncak di akhir cerita (Cliffhanger).", protagonists: ["DOKTER"], locations: ["RUANG OPERASI", "KLINIK DARURAT"], conflicts: ["kondisi korban memburuk dalam hitungan detik", "pasien kejang hebat"], ending: "CLIFFHANGER" },
+            { genre: "MISTERI", theme: "Kebenaran bersembunyi di detail kecil", reqText: "Pastikan tokoh utama mengamankan area TKP.", protagonists: ["POLISI"], locations: ["TKP PENEMUAN KORBAN", "GANG GELAP"], conflicts: ["sebuah BARANG BUKTI hilang", "tersangka menolak bicara"], ending: "TERBUKA (AMBIGU)" }
         ];
 
-        /* --- ENDING ENGINE (Pre-generated concepts for now) --- */
-        const ENDINGS = [
-            { id: "S", title: "THE SCRIPT STAR", desc: "Namamu meroket di industri perfilman. Klien berebut mempekerjakanmu. Kamu pensiun sebagai legenda.", img: "https://placehold.co/600x300/1e1e1c/d6b054?text=AWARD+CEREMONY&font=VT323" },
-            { id: "A", title: "INDUSTRY PROFESSIONAL", desc: "Kamu membangun studio editing naskahmu sendiri dan memiliki klien tetap yang solid.", img: "https://placehold.co/600x300/1e1e1c/d6b054?text=PROFESSIONAL+STUDIO&font=VT323" },
-            { id: "B", title: "FREELANCE SURVIVOR", desc: "Kamu bertahan sebagai freelancer. Tidak terlalu terkenal, tapi pekerjaan selalu ada.", img: "https://placehold.co/600x300/1e1e1c/d6b054?text=HOME+DESK&font=VT323" },
-            { id: "C", title: "BURNOUT EDITOR", desc: "Kamu berhasil menyelesaikan banyak pekerjaan, tetapi terus mengandalkan kopi. Tidurmu kini hanya legenda.", img: "https://placehold.co/600x300/1e1e1c/d6b054?text=TIRED+COFFEE+MUGS&font=VT323" },
-            { id: "D", title: "FIRED", desc: "Terlalu banyak kesalahan membuat klien kehilangan kepercayaan. Kariermu terhenti di sini.", img: "https://placehold.co/600x300/1e1e1c/b54a4a?text=EMPTY+DESK&font=VT323" }
+        // --- ENDINGS CATALOG ---
+        const endingCatalog = [
+            { id: 'INDUSTRY_STAR', title: 'INDUSTRY STAR', epilog: 'Berkat dedikasi dan kecepatanmu, kamu kini dikenal sebagai legenda hidup di industri perfilman.', img: 'assets/endings/industry-star.webp', check: (s) => s.totalScore >= 1000 && s.day >= 10 },
+            { id: 'CLIENT_MAGNET', title: 'CLIENT MAGNET', epilog: 'Klien selalu kembali padamu. Pekerjaan menumpuk, tetapi dompetmu tebal.', img: 'assets/endings/client-magnet.webp', check: (s) => s.casesCompleted >= 15 && s.mistakes < 5 },
+            { id: 'ESTABLISHED_EDITOR', title: 'ESTABLISHED EDITOR', epilog: 'Sebuah studio besar mengontrakmu secara eksklusif. Kariermu stabil dan aman.', img: 'assets/endings/established-editor.webp', check: (s) => s.totalScore >= 500 && s.day >= 5 },
+            { id: 'FREELANCE_SURVIVOR', title: 'FREELANCE SURVIVOR', epilog: 'Kamu bertahan hidup dari komisi ke komisi. Cukup untuk makan, tapi kurang untuk liburan.', img: 'assets/endings/freelance-survivor.webp', check: (s) => s.day >= 3 },
+            { id: 'BURNOUT', title: 'BURNOUT', epilog: 'Terlalu banyak revisi dan deadline ketat membuatmu menyerah pada profesi ini.', img: 'assets/endings/burnout.webp', check: (s) => s.mistakes > 10 && s.day > 2 },
+            { id: 'FIRED', title: 'FIRED', epilog: 'Klien marah besar karena naskahmu berantakan. Reputasimu hancur.', img: 'assets/endings/fired.webp', check: (s) => s.mistakes > 5 && s.day <= 3 },
+            { id: 'BANKRUPT', title: 'BANKRUPT', epilog: 'Kamu gagal di hari pertama. Tagihan menumpuk dan studio kecilmu disita.', img: 'assets/endings/bankrupt.webp', check: (s) => s.day === 1 }
         ];
 
-        /* --- UI MODALS --- */
-        function showModal(id) { document.getElementById(id).classList.add('active'); }
-        function hideModal(id) { document.getElementById(id).classList.remove('active'); }
-        function showNameInput() { showModal('modal-name'); document.getElementById('player-name').focus(); }
-        function showHighscoreMenu(fromEnding = false) {
-            renderHighscores();
-            showModal('modal-highscore');
-            document.getElementById('modal-highscore').dataset.fromEnding = fromEnding;
-        }
-        function closeHighscore() {
-            hideModal('modal-highscore');
-            if(document.getElementById('modal-highscore').dataset.fromEnding === "true") {
-                // Do nothing, goes back to ending modal
+        // --- STREAMING_CHUNK: Leaderboard Architecture (Firebase Ready) ---
+        // This acts as a wrapper. It currently uses LocalStorage but is architected to be replaced with Firebase calls.
+        const LeaderboardManager = {
+            storageKey: 'es_arcade_hs_top100',
+            
+            async saveScore(record) {
+                // In future: await firebase.firestore().collection('leaderboard').add(record);
+                let scores = JSON.parse(localStorage.getItem(this.storageKey)) || [];
+                scores.push(record);
+                // Sort by score DESC, then by level DESC, then by jobs DESC
+                scores.sort((a, b) => b.score - a.score || b.level - a.level || b.jobs - a.jobs);
+                scores = scores.slice(0, 100); // Keep top 100
+                localStorage.setItem(this.storageKey, JSON.stringify(scores));
+                
+                // Return rank
+                const rank = scores.findIndex(s => s.sessionId === record.sessionId) + 1;
+                return rank > 0 ? rank : null; 
+            },
+            
+            async getTop100() {
+                // In future: return await firebase.firestore().collection('leaderboard').orderBy('score', 'desc').limit(100).get();
+                return JSON.parse(localStorage.getItem(this.storageKey)) || [];
             }
-        }
-        function backToMenu() {
-            hideModal('modal-ending');
-            document.getElementById('screen-game').style.display = 'none';
-            document.getElementById('screen-mainmenu').style.display = 'flex';
-        }
+        };
 
-        /* --- GAME INIT --- */
-        function startGame(isTutorial = false) {
-            let pName = document.getElementById('player-name').value.trim().toUpperCase();
-            if(!pName && !isTutorial) { alert("Masukkan nama!"); return; }
-            if(isTutorial) pName = "TRAINEE";
+        // --- STREAMING_CHUNK: State Management ---
+        let gameState = {
+            sessionId: '',
+            day: 1,
+            casesCompleted: 0,
+            totalScore: 0,
+            mistakes: 0, // Track for endings
+            history: [],
+            currentBible: null,
+            currentBlocks: [],
+            placedBlocks: [],
+            selectedBlockId: null,
+            hintUsed: false,
+            playerName: "ANONIM",
+            timeLeft: BASE_TIME,
+            maxTime: BASE_TIME,
+            coffeesLeft: MAX_COFFEE_PER_CASE,
+            isGameActive: false
+        };
 
-            hideModal('modal-name');
-            document.getElementById('screen-mainmenu').style.display = 'none';
-            document.getElementById('screen-game').style.display = 'flex';
+        let timerState = {
+            endTime: 0,
+            interval: null,
+            isPaused: false,
+            pausedTimeLeft: 0
+        };
 
-            state = {
-                name: pName.substring(0, 12), level: 1, score: 0, jobs: 0, mistakes: 0, coffeesUsed: 0,
-                baseTime: 90, bonusTime: 0, maxBaseTime: 90, coffeesLeft: 3, timerInterval: null,
-                isPlaying: true
-            };
-            
-            document.getElementById('ui-player').innerText = `EDITOR: ${state.name}`;
-            
-            if(isTutorial) {
-                setupLevel(true); // create dummy level
-                runTutorial();
-            } else {
-                setupLevel();
-            }
-        }
+        let selectedFromPreview = false;
+        let isSubmitting = false;
 
-        /* --- LEVEL GENERATOR --- */
-        function setupLevel(isDummy = false) {
-            const t = THEMES[Math.floor(Math.random() * THEMES.length)];
-            
-            state.brief = `Saya butuh adegan tentang seorang ${t.prof} di ${t.loc}. Ia ${t.act}.`;
-            if (state.level >= 3) state.brief += ` Harus ada dialog yang menegaskan masalah.`;
-            if (state.level >= 5) state.brief += ` Akhiri dengan CUT TO:.`;
+        // Utility
+        function generateSessionId() { return 'sess_' + Math.random().toString(36).substr(2, 9); }
+        function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-            let bId = 1;
-            const cb = (type, text, req, seq, err) => ({ id: `bl_${bId++}`, type, text, req, seq, err });
-            
-            let reqBlocks = [
-                cb("SCENE HEADING", `INT. ${t.loc} - SIANG`, true, 1),
-                cb("ACTION", `Seorang ${t.prof} ${t.act}.`, true, 2),
-                cb("CHARACTER", t.prof, true, 3),
-                cb("DIALOGUE", `"${t.dial}"`, true, 4)
-            ];
-            if (state.level >= 5 || isDummy) reqBlocks.push(cb("TRANSITION", "CUT TO:", true, 5));
-
-            let distractors = [];
-            if(state.level >= 2 || isDummy) distractors.push(cb("CHARACTER", "KUCING", false, 0, "Kucing bukan subjek utama."));
-            if(state.level >= 4) distractors.push(cb("ACTION", `${t.prof} merasa sangat sedih di dalam batinnya.`, false, 0, "Action harus visual, bukan perasaan."));
-            if(state.level >= 6) distractors.push(cb("SCENE HEADING", `EXT. ${t.loc} - MALAM`, false, 0, "Perhatikan format waktu/lokasi yang tepat."));
-
-            state.blocks = [...reqBlocks, ...distractors].sort(() => Math.random() - 0.5);
-            state.slots = new Array(reqBlocks.length).fill(null);
-
-            // Time scaling
-            if(!isDummy && state.level > 1) {
-                state.baseTime = Math.min(120, state.baseTime + Math.max(20, 60 - (state.level*2)));
-                state.maxBaseTime = Math.max(state.maxBaseTime, state.baseTime);
-            }
-
-            updateUI();
-            if(!isDummy) startTimer();
-        }
-
-        /* --- TIMER & COFFEE --- */
+        // --- STREAMING_CHUNK: Timer & Coffee Mechanics using Timestamps ---
         function startTimer() {
-            clearInterval(state.timerInterval);
-            state.timerInterval = setInterval(() => {
-                if(state.bonusTime > 0) state.bonusTime--;
-                else state.baseTime--;
+            if (!gameState.isGameActive) return;
+            clearInterval(timerState.interval);
+            
+            if (timerState.isPaused) {
+                gameState.timeLeft = timerState.pausedTimeLeft;
+                timerState.isPaused = false;
+            }
+            
+            timerState.endTime = Date.now() + (gameState.timeLeft * 1000);
+            
+            timerState.interval = setInterval(() => {
+                const now = Date.now();
+                const remaining = (timerState.endTime - now) / 1000;
                 
-                updateTimerUI();
-                
-                if(state.baseTime <= 0) triggerGameOver();
-            }, 1000);
+                if (remaining <= 0) {
+                    gameState.timeLeft = 0;
+                    clearInterval(timerState.interval);
+                    updateTimerUI();
+                    triggerGameOver("Waktu habis! Klien membatalkan pekerjaan ini karena melebihi deadline.");
+                } else {
+                    gameState.timeLeft = remaining;
+                    updateTimerUI();
+                }
+            }, 100); // 100ms for smooth progress bar updates
+        }
+
+        function pauseTimer() {
+            if (timerState.interval) {
+                clearInterval(timerState.interval);
+                timerState.pausedTimeLeft = gameState.timeLeft;
+                timerState.isPaused = true;
+            }
         }
 
         function updateTimerUI() {
-            let total = state.baseTime + state.bonusTime;
-            const m = Math.floor(Math.max(0, total) / 60).toString().padStart(2, '0');
-            const s = (Math.max(0, total) % 60).toString().padStart(2, '0');
+            const m = Math.floor(Math.max(0, gameState.timeLeft) / 60).toString().padStart(2, '0');
+            const s = Math.floor(Math.max(0, gameState.timeLeft) % 60).toString().padStart(2, '0');
             document.getElementById("ui-time").innerText = `${m}:${s}`;
-
-            const basePct = Math.min(100, (Math.max(0, state.baseTime) / state.maxBaseTime) * 100);
-            const bonusPct = Math.min(100 - basePct, (state.bonusTime / state.maxBaseTime) * 100);
-
-            const baseBar = document.getElementById('bar-base');
-            baseBar.style.width = `${basePct}%`;
             
-            // Urgency colors for Base Time
-            if (basePct > 50) baseBar.style.backgroundColor = "var(--color-scene)";
-            else if (basePct > 20) baseBar.style.backgroundColor = "var(--accent-yellow)";
-            else baseBar.style.backgroundColor = "var(--color-danger)";
-
-            const bonusBar = document.getElementById('bar-bonus');
-            bonusBar.style.width = `${bonusPct}%`;
+            const pct = Math.max(0, Math.min(100, (gameState.timeLeft / gameState.maxTime) * 100));
+            const bar = document.getElementById("progress-bar");
+            bar.style.width = `${pct}%`;
+            
+            if (gameState.timeLeft > 15) bar.style.backgroundColor = "var(--color-scene)";
+            else if (gameState.timeLeft > 5) bar.style.backgroundColor = "var(--accent-yellow)";
+            else bar.style.backgroundColor = "var(--color-char)";
         }
 
         function useCoffee() {
-            if(state.coffeesLeft > 0 && state.isPlaying) {
-                state.coffeesLeft--;
-                state.coffeesUsed++;
-                state.bonusTime += 15;
-                showFeedback("+15 SEC!", true);
-                updateTimerUI();
+            if (gameState.coffeesLeft > 0 && gameState.timeLeft > 0 && gameState.isGameActive && !timerState.isPaused) {
+                gameState.coffeesLeft--;
+                
+                // Animate coffee boost
+                const boostBar = document.getElementById('coffee-boost-bar');
+                const mainBar = document.getElementById('progress-bar');
+                
+                // Calculate current width percentage
+                const currentPct = (gameState.timeLeft / gameState.maxTime) * 100;
+                // Add boost to max time if it exceeds it, else just add time
+                gameState.timeLeft += COFFEE_BOOST;
+                if(gameState.timeLeft > gameState.maxTime) {
+                    gameState.maxTime = gameState.timeLeft;
+                }
+                
+                const boostPct = (COFFEE_BOOST / gameState.maxTime) * 100;
+                
+                // Setup visual boost bar starting at current width
+                boostBar.style.transition = 'none';
+                boostBar.style.left = `${currentPct}%`;
+                boostBar.style.width = `0%`;
+                boostBar.style.backgroundColor = 'var(--color-coffee-boost)';
+                boostBar.style.opacity = '1';
+                
+                // Force reflow
+                void boostBar.offsetWidth; 
+                
+                // Animate expansion
+                boostBar.style.transition = 'width 0.5s ease-out, background-color 1s ease-in-out, opacity 1s';
+                boostBar.style.width = `${Math.min(100 - currentPct, boostPct)}%`;
+                
+                // Extend real timer
+                timerState.endTime += (COFFEE_BOOST * 1000);
+                
+                showFloatingFeedback(`+${COFFEE_BOOST} DETIK!`, "success");
                 renderCoffee();
+                
+                // Turn green and fade out
+                setTimeout(() => {
+                    boostBar.style.backgroundColor = 'var(--color-scene)';
+                }, 500);
+                setTimeout(() => {
+                    boostBar.style.opacity = '0';
+                    updateTimerUI(); // main bar catches up visually
+                }, 1000);
             }
-        }
-
-        function useHint() {
-            if(!state.isPlaying) return;
-            if(state.baseTime + state.bonusTime <= 10) { showFeedback("WAKTU TIDAK CUKUP!"); return; }
-            
-            // Deduct time
-            if(state.bonusTime >= 10) state.bonusTime -= 10;
-            else {
-                let rem = 10 - state.bonusTime;
-                state.bonusTime = 0;
-                state.baseTime -= rem;
-            }
-            
-            updateTimerUI();
-            
-            // Find a mistake or empty slot
-            let missing = [];
-            state.blocks.forEach(b => {
-                if(b.req && !state.slots.includes(b.id)) missing.push(b.type);
-            });
-            if(missing.length > 0) showFeedback(`HINT: Naskah butuh ${missing[0]}`);
-            else showFeedback(`HINT: Cek urutan atau distractor.`);
-        }
-
-        /* --- DRAG & DROP LOGIC --- */
-        let dragId = null, dragSrcIdx = null;
-        
-        function handleDragStart(e, id, srcIdx) {
-            dragId = id; dragSrcIdx = srcIdx;
-            e.dataTransfer.setData("text/plain", id);
-            setTimeout(() => e.target.style.opacity = "0.5", 0);
-        }
-        function handleDragEnd(e) { e.target.style.opacity = "1"; dragId = null; dragSrcIdx = null; }
-        function handleDragOver(e) { e.preventDefault(); e.currentTarget.classList.add("drag-over"); }
-        function handleDragLeave(e) { e.currentTarget.classList.remove("drag-over"); }
-        
-        function handleDropToSlot(e, slotIdx) {
-            e.preventDefault(); e.currentTarget.classList.remove("drag-over");
-            if(!dragId) return;
-            
-            const existingId = state.slots[slotIdx];
-            if(dragSrcIdx !== null) state.slots[dragSrcIdx] = existingId;
-            state.slots[slotIdx] = dragId;
-            updateWorkspaces();
-        }
-
-        function handleDropToInventory(e) {
-            e.preventDefault();
-            if(dragId && dragSrcIdx !== null) {
-                state.slots[dragSrcIdx] = null;
-                updateWorkspaces();
-            }
-        }
-
-        function blockClick(block) {
-            document.getElementById('bi-type').innerText = block.type;
-            document.getElementById('bi-text').innerHTML = block.text;
-            showModal('modal-block-info');
-        }
-
-        /* --- RENDERING --- */
-        function updateUI() {
-            document.getElementById('ui-level').innerText = `DAY ${String(Math.floor((state.level-1)/3)+1).padStart(2,'0')}—JOB#${String(state.level).padStart(2,'0')}`;
-            document.getElementById('ui-brief').innerHTML = `"${state.brief}"`;
-            renderCoffee();
-            updateWorkspaces();
-            updateTimerUI();
         }
 
         function renderCoffee() {
-            const c = document.getElementById('ui-coffee'); c.innerHTML = "";
-            for(let i=0; i<3; i++) {
-                let b = document.createElement('button');
-                b.className = `coffee-btn ${i >= state.coffeesLeft ? 'used' : ''}`;
-                b.innerText = "☕";
-                b.onclick = useCoffee;
-                c.appendChild(b);
+            const container = document.getElementById("ui-coffee");
+            container.innerHTML = "";
+            for (let i = 0; i < MAX_COFFEE_PER_CASE; i++) {
+                const btn = document.createElement("button");
+                btn.className = `coffee-btn ${i >= gameState.coffeesLeft ? 'used' : ''}`;
+                btn.innerText = "☕";
+                btn.onclick = useCoffee;
+                container.appendChild(btn);
             }
         }
 
-        function createBlockEl(block, srcIdx) {
-            const div = document.createElement("div");
-            div.className = "script-block"; div.draggable = true; div.dataset.type = block.type;
-            div.innerHTML = `<div class="block-type-label">${block.type}</div><div class="block-text">${block.text}</div>`;
-            div.addEventListener("dragstart", e => handleDragStart(e, block.id, srcIdx));
-            div.addEventListener("dragend", handleDragEnd);
-            div.addEventListener("click", () => blockClick(block));
+        // --- STREAMING_CHUNK: Core Game Logic & Content Generation ---
+        function generateStoryBible() {
+            let available = storyTemplates;
+            if (gameState.history.length > 0 && available.length > 1) {
+                const lastGen = gameState.history[gameState.history.length - 1].genre;
+                available = available.filter(t => t.genre !== lastGen);
+            }
+            if (available.length === 0) available = storyTemplates;
+
+            const t = pickRandom(available);
+            const formats = [
+                { id: 'CUT_TO', text: "Gunakan transisi CUT TO: di akhir." },
+                { id: 'FADE_OUT', text: "Gunakan transisi FADE OUT. di akhir." },
+                { id: 'NO_TRANS', text: "Tidak perlu instruksi transisi." },
+                { id: 'ANY_TRANS', text: "" }
+            ];
+            const chosenFormat = pickRandom(formats);
+
+            return {
+                genre: t.genre, theme: t.theme, reqText: t.reqText, protagonist: pickRandom(t.protagonists), location: pickRandom(t.locations), conflict: pickRandom(t.conflicts), ending: t.ending, formatId: chosenFormat.id, formatText: chosenFormat.text
+            };
+        }
+
+        function generateBlocksForBible(bible) {
+            let blocks = [];
+            let cid = 1;
+            const cb = (type, text, isCorrect, seq, req, err, hint) => ({
+                id: 'blk_' + cid++, type, text, isCorrect, sequenceOrder: seq, required: req, errorReason: err, hint
+            });
+
+            blocks.push(cb('SCENE HEADING', `INT. ${bible.location} - SIANG`, true, 1, true));
+
+            if (gameState.day >= 4) {
+                blocks.push(cb('SCENE HEADING', `EXT. JALAN RAYA - MALAM`, false, 0, false, "Lokasi Salah", "Perhatikan lokasi relevan sesuai profesi di kasus ini."));
+                blocks.push(cb('SCENE HEADING', `INT. RESTORAN CEPAT SAJI - PAGI`, false, 0, false, "Lokasi Salah", "Konteks adegan tidak terjadi di restoran."));
+            }
+
+            if (bible.protagonist === 'JAKSA') {
+                blocks.push(cb('ACTION', `Seorang JAKSA merapikan berkas di meja dengan gugup.`, true, 2, true));
+                blocks.push(cb('DIALOGUE', `JAKSA\nKita harus periksa ALIBI terdakwa dengan saksama.`, true, 3, true));
+                blocks.push(cb('ACTION', `JAKSA mengetuk palu dan memutuskan vonis penjara.`, false, 0, false, "Kewenangan", "Periksa batas wewenang profesi Jaksa di pengadilan."));
+                blocks.push(cb('DIALOGUE', `JAKSA\nSaya akan melakukan AUTOPSI sekarang juga.`, false, 0, false, "Kewenangan", "Jaksa bukan tenaga forensik."));
+                blocks.push(cb('ACTION', `Hakim menyuruh JAKSA membacakan PLEDOI.`, false, 0, false, "Kewenangan", "Pledoi adalah tugas terdakwa/pengacara pembela."));
+            } else if (bible.protagonist === 'DOKTER') {
+                blocks.push(cb('ACTION', `DOKTER memeriksa kondisi KLINIS pasien secara manual.`, true, 2, true));
+                blocks.push(cb('ACTION', `Ia mengambil STETOSKOP dan menarik napas panjang.`, true, 3, true));
+                blocks.push(cb('ACTION', `DOKTER mengeluarkan pistol dan memborgol pelaku.`, false, 0, false, "Kewenangan", "Dokter sipil tidak berwenang menangkap."));
+                blocks.push(cb('ACTION', `DOKTER memasang GARIS POLISI di sekitar ranjang.`, false, 0, false, "Kewenangan", "Tindakan ini wewenang kepolisian."));
+                blocks.push(cb('DIALOGUE', `DOKTER\nSaya akan mengajukan PLEDOI untuk pasien ini.`, false, 0, false, "Konteks", "Istilah hukum tak lazim dalam medis. Ia harusnya menulis RESEP."));
+            } else {
+                blocks.push(cb('ACTION', `POLISI merunduk di bawah GARIS POLISI.`, true, 2, true));
+                blocks.push(cb('DIALOGUE', `POLISI\nArea ini steril. Amankan BARANG BUKTI!`, true, 3, true));
+                blocks.push(cb('ACTION', `POLISI melakukan pembedahan KLINIS pada mayat.`, false, 0, false, "Kewenangan", "Pembedahan ranah forensik (Autopsi)."));
+                blocks.push(cb('ACTION', `POLISI membacakan PLEDOI di depan saksi.`, false, 0, false, "Kewenangan", "Ini tugas pengacara di persidangan."));
+                blocks.push(cb('ACTION', `POLISI menuliskan RESEP untuk korban luka.`, false, 0, false, "Kewenangan", "Hanya dokter yang berhak meresepkan."));
+            }
+
+            blocks.push(cb('ACTION', `Tiba-tiba, ${bible.conflict}.`, true, 4, true));
+
+            let reqTrans = bible.formatId;
+            if (reqTrans === 'CUT_TO') {
+                blocks.push(cb('TRANSITION', `CUT TO:`, true, 5, true));
+                if (gameState.day >= 4) blocks.push(cb('TRANSITION', `FADE OUT.`, false, 0, false, "Format Transisi", "Klien meminta CUT TO: secara spesifik."));
+            } else if (reqTrans === 'FADE_OUT') {
+                blocks.push(cb('TRANSITION', `FADE OUT.`, true, 5, true));
+                if (gameState.day >= 4) blocks.push(cb('TRANSITION', `CUT TO:`, false, 0, false, "Format Transisi", "Klien meminta FADE OUT secara spesifik."));
+            } else if (reqTrans === 'NO_TRANS') {
+                if (gameState.day >= 4) {
+                    blocks.push(cb('TRANSITION', `CUT TO:`, false, 0, false, "Format Transisi", "Naskah ini diminta tanpa transisi di akhir."));
+                    blocks.push(cb('TRANSITION', `FADE OUT.`, false, 0, false, "Format Transisi", "Naskah ini diminta tanpa transisi di akhir."));
+                }
+            } else if (reqTrans === 'ANY_TRANS') {
+                blocks.push(cb('TRANSITION', pickRandom([`CUT TO:`, `FADE OUT.`]), true, 5, true));
+                if (gameState.day >= 4) blocks.push(cb('TRANSITION', `DISSOLVE TO:`, false, 0, false, "Format Transisi", "Gunakan transisi standar yang lazim seperti CUT TO atau FADE OUT."));
+            }
+
+            return blocks.sort(() => Math.random() - 0.5);
+        }
+
+        // --- STREAMING_CHUNK: Setup and Flow functions ---
+        function setupNewCase(isNewGame = false) {
+            gameState.currentBible = generateStoryBible();
+            gameState.currentBlocks = generateBlocksForBible(gameState.currentBible);
+            const reqCount = gameState.currentBlocks.filter(b => b.required).length;
+            gameState.placedBlocks = new Array(reqCount).fill(null);
+            
+            deselectBlock();
+            gameState.hintUsed = false;
+            
+            document.getElementById('hint-badge').style.display = 'flex';
+            document.getElementById('btn-open-hint').classList.remove('hint-disabled');
+            document.getElementById('glossary-empty').classList.remove('hidden');
+            document.getElementById('glossary-content').classList.add('hidden');
+            
+            if (isNewGame) {
+                gameState.sessionId = generateSessionId();
+                gameState.maxTime = BASE_TIME;
+                gameState.timeLeft = BASE_TIME;
+                gameState.coffeesLeft = MAX_COFFEE_PER_CASE;
+                gameState.mistakes = 0;
+            } else {
+                // progressive time mechanic
+                let timeBonus = Math.max(20, 45 - (gameState.day * 2)); 
+                gameState.timeLeft = Math.min(150, gameState.timeLeft + timeBonus); 
+                gameState.maxTime = Math.max(gameState.timeLeft, gameState.maxTime);
+            }
+            
+            gameState.isGameActive = true;
+            isSubmitting = false;
+            updateUI();
+            startTimer();
+        }
+
+        function updateUI() {
+            document.getElementById('level-display').innerText = `HARI 0${gameState.day}`;
+            document.getElementById('page-number').innerText = gameState.day === 1 ? "" : `HAL ${gameState.day}.`;
+
+            let notes = gameState.currentBible.reqText;
+            if (gameState.currentBible.formatText !== '') {
+                notes += ' ' + gameState.currentBible.formatText;
+            }
+
+            document.getElementById('client-brief-content').innerHTML = `
+                <div class="brief-line"><span class="label">GENRE</span><span class="value">: ${gameState.currentBible.genre}</span></div>
+                <div class="brief-line"><span class="label">TEMA</span><span class="value">: ${gameState.currentBible.theme}</span></div>
+                <div class="brief-line quote-line"><span class="value">"${notes}"</span></div>
+            `;
+
+            let checklistHTML = '';
+            if (gameState.currentBible.reqText !== "") checklistHTML += `<div class="checklist-item" id="chk-blocks"><span class="checklist-box"></span>Sesuai plot klien</div>`;
+            if (gameState.currentBible.formatId === 'NO_TRANS') checklistHTML += `<div class="checklist-item" id="chk-trans"><span class="checklist-box"></span>Tanpa transisi</div>`;
+            else if (gameState.currentBible.formatId === 'CUT_TO' || gameState.currentBible.formatId === 'FADE_OUT') checklistHTML += `<div class="checklist-item" id="chk-trans"><span class="checklist-box"></span>Transisi sesuai instruksi</div>`;
+            
+            checklistHTML += `
+                <div class="checklist-item" id="chk-logic"><span class="checklist-box"></span>Urutan logis</div>
+                <div class="checklist-item" id="chk-prof"><span class="checklist-box"></span>Karakter sesuai profesi</div>
+            `;
+
+            document.getElementById('checklist-container').innerHTML = checklistHTML;
+            if (gameState.hintUsed) {
+                document.getElementById('hint-badge').style.display = 'none';
+                document.getElementById('btn-open-hint').classList.add('hint-disabled');
+            }
+
+            renderCoffee();
+            updateTimerUI();
+            renderBlocksAndSlots();
+            updateChecklist();
+        }
+
+        // --- STREAMING_CHUNK: Evaluation and Game Over Logic ---
+        function evaluateScript(pIds) {
+            let scoreSt = 100, scoreLg = 100, scoreCh = 100;
+            let msgs = [], allReq = true, lastSeq = -1, hasErr = false, seqErr = false;
+
+            gameState.currentBlocks.filter(b => b.required).forEach(rb => {
+                if (!pIds.includes(rb.id)) allReq = false;
+            });
+            if (!allReq) { scoreSt -= 30; msgs.push("Kekurangan adegan kunci."); }
+
+            pIds.forEach(id => {
+                const b = gameState.currentBlocks.find(x => x.id === id);
+                if (b) {
+                    if (b.sequenceOrder > 0) {
+                        if (b.sequenceOrder < lastSeq) seqErr = true;
+                        lastSeq = b.sequenceOrder;
+                    }
+                    if (!b.isCorrect) {
+                        hasErr = true; scoreCh -= 40; scoreLg -= 20;
+                        msgs.push(b.hint);
+                    }
+                }
+            });
+
+            if (seqErr) { scoreLg -= 30; msgs.push("Urutan adegan/struktur salah."); }
+            
+            scoreSt = Math.max(0, scoreSt); scoreLg = Math.max(0, scoreLg); scoreCh = Math.max(0, scoreCh);
+            let finalScore = Math.round((scoreSt + scoreLg + scoreCh + (allReq ? 100 : 0)) / 4);
+            
+            // Check Transition specific rule
+            if(allReq && !hasErr) {
+               if(gameState.currentBible.formatId === 'NO_TRANS') {
+                   if(pIds.some(id => gameState.currentBlocks.find(x=>x.id===id).type === 'TRANSITION')) {
+                       msgs.push("Klien meminta tanpa transisi di akhir."); finalScore -= 20; hasErr = true;
+                   }
+               }
+            }
+
+            return { isPass: (finalScore >= 80 && !hasErr && allReq && !seqErr), msgs: msgs, score: finalScore };
+        }
+
+        function checkScript() {
+            if (isSubmitting || !gameState.isGameActive) return;
+            isSubmitting = true;
+
+            const pIds = gameState.placedBlocks.filter(i => i !== null);
+            if (pIds.length === 0 || pIds.length < gameState.placedBlocks.length) {
+                showFloatingFeedback("SCRIPT BELUM LENGKAP!", "neutral");
+                const ws = document.getElementById("center-panel");
+                ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)";
+                setTimeout(() => ws.style.transform = "translateX(-5px)", 50);
+                setTimeout(() => ws.style.transform = "translateX(5px)", 100);
+                setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150);
+                isSubmitting = false;
+                return; 
+            }
+
+            const evalResult = evaluateScript(pIds);
+            updateChecklist();
+
+            if (evalResult.isPass) {
+                clearInterval(timerState.interval);
+                gameState.isGameActive = false;
+                showFloatingFeedback("CLIENT MENERIMA!<br>+WAKTU", "success");
+                
+                gameState.casesCompleted++;
+                gameState.totalScore += evalResult.score;
+                gameState.history.push({ genre: gameState.currentBible.genre });
+                saveData();
+                
+                setTimeout(() => { isSubmitting = false; nextDay(); }, 2000);
+            } else {
+                gameState.mistakes++;
+                let subtract = PENALTY_TIME;
+                gameState.timeLeft -= subtract;
+                
+                if (gameState.timeLeft <= 0) {
+                    gameState.timeLeft = 0;
+                } else {
+                    // deduct actual timer visually and logically
+                    timerState.endTime -= (subtract * 1000);
+                }
+
+                let firstErr = evalResult.msgs.length > 0 ? evalResult.msgs[0] : "KONTINUITAS SALAH";
+                showFloatingFeedback(`REVISI! -${subtract}s<br><span style="font-size:var(--fs-text);">${firstErr}</span>`, "error");
+                updateTimerUI();
+                
+                const ws = document.getElementById("center-panel");
+                ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)";
+                setTimeout(() => ws.style.transform = "translateX(-5px)", 50);
+                setTimeout(() => ws.style.transform = "translateX(5px)", 100);
+                setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150);
+
+                if (gameState.timeLeft <= 0) {
+                    setTimeout(() => { isSubmitting = false; triggerGameOver("Waktu habis saat melakukan revisi."); }, 500);
+                } else {
+                    isSubmitting = false;
+                }
+            }
+        }
+
+        // --- STREAMING_CHUNK: Endings & Game Over Flow ---
+        function determineEnding(state) {
+            for (let i = 0; i < endingCatalog.length; i++) {
+                if (endingCatalog[i].check(state)) {
+                    return endingCatalog[i];
+                }
+            }
+            return endingCatalog[3]; // Default fallback: Freelance Survivor
+        }
+
+        async function triggerGameOver(msg) {
+            gameState.isGameActive = false;
+            clearInterval(timerState.interval);
+            gameState.timeLeft = 0;
+            updateTimerUI();
+            
+            const ending = determineEnding(gameState);
+            
+            document.getElementById("go-title").innerText = gameState.day === 1 && gameState.casesCompleted === 0 ? "GAME OVER" : "KARIER SELESAI";
+            document.getElementById("go-epilog").innerText = msg + "\n\n" + ending.epilog;
+            document.getElementById("go-player").innerText = gameState.playerName;
+            document.getElementById("go-score").innerText = gameState.totalScore;
+            document.getElementById("go-level").innerText = gameState.day;
+            document.getElementById("go-jobs").innerText = gameState.casesCompleted;
+            
+            document.getElementById("go-img").src = ending.img;
+
+            // Submit to Leaderboard (Firebase ready)
+            const record = {
+                sessionId: gameState.sessionId,
+                name: gameState.playerName,
+                score: gameState.totalScore,
+                level: gameState.day,
+                jobs: gameState.casesCompleted,
+                mistakes: gameState.mistakes,
+                date: new Date().toISOString(),
+                endingId: ending.id
+            };
+            
+            const rank = await LeaderboardManager.saveScore(record);
+            const rankMsgEl = document.getElementById("go-rank-msg");
+            if (rank) {
+                rankMsgEl.innerText = `Luar Biasa! Kamu masuk TOP 100 di Peringkat #${rank}`;
+            } else {
+                rankMsgEl.innerText = "Terus berlatih untuk menembus leaderboard Top 100!";
+            }
+
+            localStorage.removeItem('edsave');
+            document.getElementById("modal-gameover").classList.add("active");
+        }
+
+        // --- STREAMING_CHUNK: Highscores ---
+        async function showHighscores() {
+            const scores = await LeaderboardManager.getTop100();
+            const top3Container = document.getElementById("hs-top3-container");
+            const othersWrapper = document.getElementById("hs-others-wrapper");
+            const tbody = document.getElementById("hs-table-body");
+
+            top3Container.innerHTML = "";
+            tbody.innerHTML = "<tr><th>NO</th><th>NAMA</th><th>SKOR</th><th>HARI</th><th style='text-align:right;'>KASUS</th></tr>";
+            
+            if (scores.length === 0) {
+                top3Container.style.display = "none";
+                othersWrapper.style.display = "block";
+                tbody.innerHTML += "<tr><td colspan='5' style='text-align:center; padding: 30px; color: var(--text-muted);'>Belum ada catatan rekor. Jadilah yang pertama!</td></tr>";
+            } else {
+                top3Container.style.display = "flex";
+                const top3 = scores.slice(0, 3);
+                const medals = ["👑 TOP #1", "🥈 TOP #2", "🥉 TOP #3"];
+
+                let top3HTML = `
+                    <div class="hs-top3-header">
+                        <span>★ HALL OF FAME — TOP 3 EDITORS</span>
+                        <span style="font-size: var(--fs-small); color: var(--text-muted); font-weight: normal;">PODIUM UTAMA</span>
+                    </div>
+                `;
+
+                for (let i = 0; i < 3; i++) {
+                    const s = top3[i];
+                    if (s) {
+                        let nameSafe = (s.name || "ANONIM").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        let jobsCount = s.jobs !== undefined ? s.jobs : 0;
+                        top3HTML += `
+                            <div class="hs-top3-row rank-${i + 1}">
+                                <div class="hs-top3-left">
+                                    <span class="hs-podium-badge">${medals[i]}</span>
+                                    <span class="hs-podium-name">${nameSafe}</span>
+                                </div>
+                                <div class="hs-top3-right">
+                                    <div class="hs-podium-meta">
+                                        <span>HARI 0${s.level}</span>
+                                        <span>•</span>
+                                        <span>${jobsCount} KASUS</span>
+                                    </div>
+                                    <div class="hs-podium-score">${s.score} PTS</div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        top3HTML += `
+                            <div class="hs-top3-row rank-${i + 1}" style="opacity: 0.45;">
+                                <div class="hs-top3-left">
+                                    <span class="hs-podium-badge">${medals[i]}</span>
+                                    <span class="hs-podium-name">---</span>
+                                </div>
+                                <div class="hs-top3-right">
+                                    <div class="hs-podium-meta">
+                                        <span>BELUM ADA REKOR</span>
+                                    </div>
+                                    <div class="hs-podium-score">0 PTS</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+                top3Container.innerHTML = top3HTML;
+
+                const restScores = scores.slice(3, 100);
+                if (restScores.length === 0) {
+                    tbody.innerHTML += "<tr><td colspan='5' style='text-align:center; padding: 20px; color: var(--text-muted);'>Belum ada peringkat #4 dan seterusnya.</td></tr>";
+                } else {
+                    restScores.forEach((s, idx) => {
+                        const rankNum = idx + 4;
+                        let nameSafe = (s.name || "ANONIM").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                        let jobsCount = s.jobs !== undefined ? s.jobs : 0;
+                        tbody.innerHTML += `<tr>
+                            <td>#${rankNum}</td>
+                            <td style="color:var(--text-highlight); font-weight:bold;">${nameSafe}</td>
+                            <td style="color:var(--accent-yellow);">${s.score}</td>
+                            <td>HARI 0${s.level}</td>
+                            <td style="text-align:right;">${jobsCount} Kasus</td>
+                        </tr>`;
+                    });
+                }
+            }
+            document.getElementById("modal-highscore").classList.add("active");
+        }
+
+        function closeHighscores() { document.getElementById("modal-highscore").classList.remove("active"); }
+
+        // --- STREAMING_CHUNK: Menu & Navigation Flow ---
+        function returnToMenu() {
+            closeModal('modal-gameover');
+            closeModal('modal-start');
+            document.getElementById("game-layout").style.display = "none";
+            document.getElementById("main-menu").classList.add("active");
+            document.getElementById("main-menu").style.display = "flex";
+            pauseTimer();
+        }
+
+        function returnToMenuFromProfile() {
+            closeModal('modal-start');
+            document.getElementById("game-layout").style.display = "none";
+            document.getElementById("main-menu").classList.add("active");
+            document.getElementById("main-menu").style.display = "flex";
+        }
+
+        function openStartModal() {
+            document.getElementById("main-menu").classList.remove("active");
+            document.getElementById("main-menu").style.display = "none";
+            
+            if (loadData()) {
+                document.getElementById('stat-day').innerText = gameState.day;
+                document.getElementById('stat-cases').innerText = gameState.casesCompleted;
+                document.getElementById('stat-score').innerText = gameState.casesCompleted > 0 ? Math.round(gameState.totalScore / gameState.casesCompleted) : 0;
+                document.getElementById('profile-stats').classList.remove('hidden');
+                document.getElementById('btn-start-game').innerText = "LANJUTKAN";
+                document.getElementById('player-name').value = gameState.playerName !== "ANONIM" ? gameState.playerName : "";
+            } else {
+                document.getElementById('profile-stats').classList.add('hidden');
+                document.getElementById('btn-start-game').innerText = "MULAI KERJA";
+                document.getElementById('player-name').value = "";
+            }
+            document.getElementById('modal-start').classList.add('active');
+        }
+
+        function startGame() {
+            let nameInput = document.getElementById("player-name").value.trim();
+            // Basic sanitization
+            nameInput = nameInput.replace(/[^a-zA-Z0-9 ]/g, "");
+            if (nameInput) gameState.playerName = nameInput.substring(0, 10);
+            else gameState.playerName = "ANONIM";
+
+            document.getElementById('modal-start').classList.remove('active');
+            document.getElementById("game-layout").style.display = "flex";
+
+            if (gameState.currentBlocks.length === 0) {
+                setupNewCase(true); 
+            } else {
+                gameState.isGameActive = true;
+                startTimer();
+            }
+            initW95Scrollbars();
+        }
+
+        function nextDay() {
+            gameState.day++;
+            setupNewCase(false);
+            saveData();
+        }
+
+        function restartGame() {
+            closeModal('modal-gameover');
+            gameState.day = 1;
+            gameState.casesCompleted = 0;
+            gameState.totalScore = 0;
+            gameState.mistakes = 0;
+            gameState.history = [];
+            localStorage.removeItem('edsave');
+            setupNewCase(true);
+        }
+
+        // --- STREAMING_CHUNK: Storage & Settings ---
+        function saveData() {
+            if(!gameState.isGameActive) return;
+            localStorage.setItem('edsave', JSON.stringify({
+                sessId: gameState.sessionId, d: gameState.day, c: gameState.casesCompleted, s: gameState.totalScore, 
+                h: gameState.history, pName: gameState.playerName, tLeft: gameState.timeLeft, 
+                mTime: gameState.maxTime, cLeft: gameState.coffeesLeft, m: gameState.mistakes,
+                b: gameState.currentBible, cb: gameState.currentBlocks, pb: gameState.placedBlocks
+            }));
+        }
+
+        function loadData() {
+            try {
+                const sv = localStorage.getItem('edsave');
+                if (sv) {
+                    const d = JSON.parse(sv);
+                    gameState.sessionId = d.sessId || generateSessionId();
+                    gameState.day = d.d; gameState.casesCompleted = d.c; gameState.totalScore = d.s; 
+                    gameState.history = d.h || []; gameState.playerName = d.pName || "ANONIM"; 
+                    gameState.timeLeft = d.tLeft || BASE_TIME; gameState.maxTime = d.mTime || BASE_TIME; 
+                    gameState.coffeesLeft = d.cLeft !== undefined ? d.cLeft : MAX_COFFEE_PER_CASE;
+                    gameState.mistakes = d.m || 0;
+                    if(d.b && d.cb && d.pb) {
+                        gameState.currentBible = d.b; gameState.currentBlocks = d.cb; gameState.placedBlocks = d.pb;
+                    }
+                    return true;
+                }
+            } catch(e) { console.error("Error loading save data:", e); }
+            return false;
+        }
+
+        function resetSave() {
+            customConfirm("Hapus progress?", () => {
+                localStorage.removeItem('edsave');
+                location.reload();
+            });
+        }
+
+        function showProfile() {
+            pauseTimer();
+            document.getElementById('stat-day').innerText = gameState.day;
+            document.getElementById('stat-cases').innerText = gameState.casesCompleted;
+            document.getElementById('stat-score').innerText = gameState.casesCompleted > 0 ? Math.round(gameState.totalScore / gameState.casesCompleted) : 0;
+            document.getElementById('profile-stats').classList.remove('hidden');
+            document.getElementById('modal-start').classList.add('active');
+            document.getElementById('btn-start-game').innerText = "LANJUTKAN";
+            if(gameState.playerName !== "ANONIM") document.getElementById('player-name').value = gameState.playerName;
+        }
+
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // --- STREAMING_CHUNK: Glossary & Highlights ---
+        function openHint() {
+            if (gameState.hintUsed || !gameState.isGameActive) return;
+            document.getElementById('modal-hint').classList.add('active');
+        }
+
+        function closeHint() {
+            document.getElementById('modal-hint').classList.remove('active');
+            gameState.hintUsed = true;
+            document.getElementById('hint-badge').style.display = 'none';
+            document.getElementById('btn-open-hint').classList.add('hint-disabled');
+            updateChecklist();
+        }
+
+        function processTextForGlossary(text) {
+            let p = text;
+            for (const key in glossaryDB) {
+                const r = new RegExp(`\\b(${key})\\b`, 'gi');
+                p = p.replace(r, `<span class="glossary-term-link" onclick="event.stopPropagation(); openGlossary('${key}')">$&</span>`);
+            }
+            return p;
+        }
+
+        function openGlossary(term) {
+            const key = term.toUpperCase();
+            if (glossaryDB[key]) {
+                document.getElementById('glossary-empty').classList.add('hidden');
+                document.getElementById('glossary-content').classList.remove('hidden');
+                document.getElementById('glossary-title').innerText = key;
+                document.getElementById('glossary-def').innerText = glossaryDB[key].def;
+                document.getElementById('glossary-ex').innerText = glossaryDB[key].ex;
+            }
+        }
+
+        // --- STREAMING_CHUNK: DOM Renderers for Blocks & Checklist ---
+        function renderBlocksAndSlots() {
+            const bc = document.getElementById('block-container');
+            const sc = document.getElementById('slots-container');
+            bc.innerHTML = ''; sc.innerHTML = '';
+
+            gameState.currentBlocks.forEach(b => {
+                if (!gameState.placedBlocks.includes(b.id)) bc.appendChild(createBlockEl(b, false));
+            });
+
+            for (let i = 0; i < gameState.placedBlocks.length; i++) {
+                const row = document.createElement('div'); row.className = 'slot-row';
+                const num = document.createElement('div'); num.className = 'slot-number'; num.innerText = i + 1;
+                const slot = document.createElement('div'); slot.className = 'drop-slot'; slot.dataset.index = i;
+
+                slot.addEventListener('dragover', handleDragOver);
+                slot.addEventListener('dragleave', handleDragLeave);
+                slot.addEventListener('drop', handleDrop);
+                slot.addEventListener('click', () => handleSlotClick(i));
+
+                const pId = gameState.placedBlocks[i];
+                if (pId) {
+                    const block = gameState.currentBlocks.find(x => x.id === pId);
+                    if (block) {
+                        slot.appendChild(createBlockEl(block, true, i));
+                        slot.style.borderStyle = 'none'; slot.style.background = 'transparent';
+                    }
+                }
+                row.appendChild(num); row.appendChild(slot); sc.appendChild(row);
+            }
+            requestAnimationFrame(() => { const container = document.getElementById('block-container'); if (container) container.dispatchEvent(new Event('scroll')); });
+        }
+
+        function createBlockEl(b, isPlaced = false, slotIdx = null) {
+            const div = document.createElement('div'); div.className = 'script-block';
+            if (gameState.selectedBlockId === b.id) { div.style.borderColor = 'var(--accent-yellow)'; div.style.boxShadow = '0 0 6px var(--accent-yellow)'; }
+            div.draggable = true; div.id = b.id; div.dataset.type = b.type;
+            div.innerHTML = `<div class="block-type-label">${b.type}</div><div class="block-text">${processTextForGlossary(b.text.replace(/\n/g, '<br>'))}</div>`;
+            div.addEventListener('dragstart', e => handleDragStart(e, b.id, isPlaced, slotIdx));
+            div.addEventListener('dragend', handleDragEnd);
+            div.addEventListener('click', e => { if (!e.target.classList.contains('glossary-term-link')) handleBlockClick(b.id, false); });
             return div;
         }
 
-        function updateWorkspaces() {
-            const p = document.getElementById("script-paper"); p.innerHTML = "";
-            for(let i=0; i<state.slots.length; i++) {
-                const r = document.createElement("div"); r.className = "slot-row";
-                const n = document.createElement("div"); n.className = "slot-number"; n.innerText = i+1;
-                const s = document.createElement("div"); s.className = "drop-slot";
-                s.addEventListener("dragover", handleDragOver); s.addEventListener("dragleave", handleDragLeave);
-                s.addEventListener("drop", e => handleDropToSlot(e, i));
-                
-                const bId = state.slots[i];
-                if(bId) {
-                    const blk = state.blocks.find(x => x.id === bId);
-                    if(blk) { s.appendChild(createBlockEl(blk, i)); s.style.borderStyle="none"; s.style.background="transparent"; }
+        function updateChecklist() {
+            const pIds = gameState.placedBlocks.filter(i => i !== null);
+            const rCount = gameState.currentBlocks.filter(b => b.required).length;
+            const cBlocks = document.getElementById('chk-blocks');
+            const cTrans = document.getElementById('chk-trans');
+            const cLogic = document.getElementById('chk-logic');
+            const cProf = document.getElementById('chk-prof');
+            if (!cLogic || !cProf) return;
+
+            let placedReq = 0;
+            gameState.currentBlocks.forEach(b => { if (b.required && pIds.includes(b.id)) placedReq++; });
+
+            if (placedReq >= rCount && pIds.length === gameState.placedBlocks.length) {
+                if (cBlocks) cBlocks.classList.add('done');
+                if (cTrans) {
+                    if (gameState.currentBible.formatId === 'NO_TRANS') {
+                        let hasTrans = pIds.some(id => gameState.currentBlocks.find(x => x.id === id).type === 'TRANSITION');
+                        if (!hasTrans) cTrans.classList.add('done'); else cTrans.classList.remove('done');
+                    } else {
+                        let hasCorrectTrans = pIds.some(id => { const b = gameState.currentBlocks.find(x => x.id === id); return b.type === 'TRANSITION' && b.isCorrect; });
+                        if (hasCorrectTrans) cTrans.classList.add('done'); else cTrans.classList.remove('done');
+                    }
                 }
-                r.appendChild(n); r.appendChild(s); p.appendChild(r);
-            }
-
-            const inv = document.getElementById("blocks-inventory"); inv.innerHTML = "";
-            state.blocks.forEach(b => {
-                if(!state.slots.includes(b.id)) inv.appendChild(createBlockEl(b, null));
-            });
-        }
-
-        /* --- VALIDATION & PROGRESSION --- */
-        function showFeedback(msg, isSuccess=false) {
-            const fb = document.getElementById("floating-feedback");
-            fb.innerHTML = msg; fb.className = isSuccess ? "show success" : "show";
-            setTimeout(() => fb.className = "", 2000);
-        }
-
-        function submitScript() {
-            if(!state.isPlaying) return;
-            if(state.slots.includes(null)) { showFeedback("NASKAH BELUM LENGKAP!"); return; }
-
-            let err = null, lastSeq = -1;
-            for(let i=0; i<state.slots.length; i++) {
-                const b = state.blocks.find(x => x.id === state.slots[i]);
-                if(!b.req) { err = b.err || "Blok tidak sesuai konteks brief."; break; }
-                if(b.seq < lastSeq) { err = "Urutan logika naskah salah."; break; }
-                lastSeq = b.seq;
-            }
-
-            if(err) {
-                state.mistakes++;
-                if(state.bonusTime >= 10) state.bonusTime -= 10;
-                else {
-                    let rem = 10 - state.bonusTime;
-                    state.bonusTime = 0;
-                    state.baseTime -= rem;
-                }
-                
-                let errMsg = state.level < 4 ? err : "Klien menemukan kejanggalan dalam naskah.";
-                showFeedback(`REVISI (-10s)<br><span style="font-size:1rem">${errMsg}</span>`);
-                updateTimerUI();
-                
-                const w = document.getElementById("zone-workspace");
-                w.style.transform = "translateX(5px)";
-                setTimeout(() => w.style.transform = "translateX(-5px)", 50);
-                setTimeout(() => w.style.transform = "translateX(0)", 100);
-                
-                if(state.baseTime <= 0) triggerGameOver();
+                let sErr = false; let hErr = false; let lSeq = -1;
+                pIds.forEach(id => {
+                    const b = gameState.currentBlocks.find(x => x.id === id);
+                    if (b.sequenceOrder > 0) { if (b.sequenceOrder < lSeq) sErr = true; lSeq = b.sequenceOrder; }
+                    if (!b.isCorrect) hErr = true;
+                });
+                if (!sErr) cLogic.classList.add('done'); else cLogic.classList.remove('done');
+                if (!hErr) cProf.classList.add('done'); else cProf.classList.remove('done');
             } else {
-                state.jobs++;
-                // Calculate score addition
-                let pts = (state.level * 1000) + 500;
-                state.score += pts;
-                state.level++;
-                
-                showFeedback(`CLIENT PUAS!<br>+${pts} PTS`, true);
-                clearInterval(state.timerInterval);
-                setTimeout(() => setupLevel(), 1500);
+                if (cBlocks) cBlocks.classList.remove('done');
+                if (cTrans) cTrans.classList.remove('done');
+                cLogic.classList.remove('done'); cProf.classList.remove('done');
             }
         }
 
-        /* --- GAME OVER & ENDING ENGINE --- */
-        function triggerGameOver() {
-            state.isPlaying = false;
-            clearInterval(state.timerInterval);
-            state.baseTime = 0; state.bonusTime = 0; updateTimerUI();
-            
-            // Calculate final deductions
-            let finalScore = state.score - (state.mistakes * 100) - (state.coffeesUsed * 50);
-            state.score = Math.max(0, finalScore);
+        // --- STREAMING_CHUNK: Interactivity (Drag/Drop/Click) ---
+        let draggedId = null; let draggedFrom = null;
 
-            // Determine Ending
-            let endId = "D"; // Fired
-            if (state.score > 15000 && state.coffeesUsed < 5) endId = "S";
-            else if (state.score > 10000) endId = "A";
-            else if (state.score > 5000 && state.coffeesUsed > 5) endId = "C";
-            else if (state.score > 3000) endId = "B";
+        function handleDragStart(e, id, isPlaced, idx) {
+            draggedId = id; draggedFrom = isPlaced ? idx : null;
+            e.dataTransfer.setData('text/plain', id);
+            setTimeout(() => { e.target.style.opacity = '0.5'; }, 0);
+        }
+        function handleDragEnd(e) { e.target.style.opacity = '1'; draggedId = null; draggedFrom = null; }
+        function handleDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+        function handleDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+        function handleDrop(e) {
+            e.preventDefault(); e.currentTarget.classList.remove('drag-over');
+            moveBlock(draggedId, parseInt(e.currentTarget.dataset.index), draggedFrom);
+        }
+        function handleDragOverPanel(e) { e.preventDefault(); }
+        function handleDropToPanel(e) { e.preventDefault(); if (draggedId && draggedFrom !== null) moveBlock(draggedId, null, draggedFrom); }
 
-            const ending = ENDINGS.find(e => e.id === endId);
-            document.getElementById('end-img').src = ending.img;
-            document.getElementById('end-title').innerText = ending.title;
-            document.getElementById('end-desc').innerText = ending.desc;
-            
-            document.getElementById('end-name').innerText = state.name;
-            document.getElementById('end-level').innerText = state.level;
-            document.getElementById('end-score').innerText = state.score.toLocaleString();
+        function handleBlockClick(id, fromPreview = false) {
+            if (gameState.selectedBlockId === id) { gameState.selectedBlockId = null; selectedFromPreview = false; }
+            else { gameState.selectedBlockId = id; selectedFromPreview = fromPreview; }
+            renderBlocksAndSlots(); updateSelectedPopup();
+        }
+        function deselectBlock() { gameState.selectedBlockId = null; selectedFromPreview = false; renderBlocksAndSlots(); updateSelectedPopup(); }
 
-            const isHigh = saveHighscore();
-            document.getElementById('end-hs-notice').style.display = isHigh ? "block" : "none";
-            
-            setTimeout(() => showModal('modal-ending'), 1000);
+        function handleSlotClick(idx) {
+            if (gameState.selectedBlockId) {
+                let fromIdx = gameState.placedBlocks.indexOf(gameState.selectedBlockId);
+                moveBlock(gameState.selectedBlockId, idx, fromIdx !== -1 ? fromIdx : null);
+                deselectBlock();
+            } else if (gameState.placedBlocks[idx]) {
+                // If clicking an occupied slot without a selection, put the block back in inventory
+                // But Prompt rule: "Pemain harus dapat mengembalikan blok dari slot ke inventory." 
+                // OR "mengganti blok di slot"
+                // Selecting it acts as pick-up, so they can drop it elsewhere or click inventory to return.
+                gameState.selectedBlockId = gameState.placedBlocks[idx];
+                selectedFromPreview = false;
+                renderBlocksAndSlots(); updateSelectedPopup();
+            }
         }
 
-        /* --- HIGHSCORE SYSTEM (Local for Arcade feeling) --- */
-        function saveHighscore() {
-            let hs = JSON.parse(localStorage.getItem('es_arcade_hs')) || [];
-            hs.push({
-                name: state.name, score: state.score, level: state.level, date: new Date().toLocaleDateString()
+        function moveBlock(bId, toIdx, fromIdx) {
+            if (!bId) return;
+            if (toIdx === null) {
+                if (fromIdx !== null) gameState.placedBlocks[fromIdx] = null;
+            } else {
+                const ex = gameState.placedBlocks[toIdx];
+                if (fromIdx !== null) { gameState.placedBlocks[fromIdx] = ex; gameState.placedBlocks[toIdx] = bId; }
+                else {
+                    // if target has existing block, it gets pushed back to inventory since fromIdx is null
+                    gameState.placedBlocks[toIdx] = bId;
+                }
+            }
+            gameState.selectedBlockId = null; selectedFromPreview = false;
+            renderBlocksAndSlots(); updateChecklist(); updateSelectedPopup();
+        }
+
+        function clearBoard() { gameState.placedBlocks.fill(null); deselectBlock(); renderBlocksAndSlots(); updateChecklist(); }
+
+        // Preview popups
+        function updateSelectedPopup() {
+            const popup = document.getElementById('selected-block-popup');
+            if (!gameState.selectedBlockId || !selectedFromPreview) { popup.classList.remove('active'); return; }
+            const b = gameState.currentBlocks.find(x => x.id === gameState.selectedBlockId);
+            if (b) {
+                document.getElementById('selected-popup-type').innerText = b.type;
+                document.getElementById('selected-popup-text').innerHTML = processTextForGlossary(b.text.replace(/\n/g, '<br>'));
+                popup.classList.add('active');
+            }
+        }
+        function openPreviewBlocks() {
+            const grid = document.getElementById('preview-blocks-grid'); grid.innerHTML = '';
+            const unplaced = gameState.currentBlocks.filter(b => !gameState.placedBlocks.includes(b.id));
+            unplaced.forEach(b => {
+                const div = document.createElement('div'); div.className = 'script-block'; div.draggable = true;
+                if (gameState.selectedBlockId === b.id) { div.style.borderColor = 'var(--accent-yellow)'; div.style.boxShadow = '0 0 6px var(--accent-yellow)'; }
+                div.innerHTML = `<div class="block-type-label">${b.type}</div><div class="block-text">${processTextForGlossary(b.text.replace(/\n/g, '<br>'))}</div>`;
+                div.addEventListener('click', (e) => { e.stopPropagation(); closeModal('modal-preview-blocks'); handleBlockClick(b.id, true); });
+                div.addEventListener('dragstart', (e) => { handleDragStart(e, b.id, false, null); setTimeout(() => closeModal('modal-preview-blocks'), 50); });
+                grid.appendChild(div);
             });
-            hs.sort((a,b) => b.score - a.score);
-            const isTop = hs.findIndex(x => x.score === state.score && x.name === state.name) < 100;
-            hs = hs.slice(0, 100);
-            localStorage.setItem('es_arcade_hs', JSON.stringify(hs));
-            return isTop && state.score > 0;
+            document.getElementById('modal-preview-blocks').classList.add('active');
+        }
+        function openPreviewScript() {
+            const container = document.getElementById('preview-script-container'); container.innerHTML = '';
+            const clone = document.getElementById('script-paper').cloneNode(true);
+            clone.style.width = '100%'; clone.style.minHeight = '100%'; clone.style.margin = '0'; clone.style.boxShadow = 'none'; clone.style.transform = 'none'; 
+            container.appendChild(clone); document.getElementById('modal-preview-script').classList.add('active');
         }
 
-        function renderHighscores() {
-            let hs = JSON.parse(localStorage.getItem('es_arcade_hs')) || [];
-            const tbody = document.getElementById('hs-table-body');
-            tbody.innerHTML = "<tr><th>NO</th><th>NAMA</th><th>LVL</th><th style='text-align:right;'>SCORE</th></tr>";
-            if(hs.length === 0) tbody.innerHTML += "<tr><td colspan='4' style='text-align:center;'>Belum ada record.</td></tr>";
-            hs.forEach((s, i) => {
-                tbody.innerHTML += `<tr><td>${String(i+1).padStart(2,'0')}</td><td>${s.name}</td><td>${s.level}</td><td style="text-align:right; color:var(--text-highlight);">${s.score.toLocaleString()}</td></tr>`;
+        // --- STREAMING_CHUNK: Custom Alert & Dialogs ---
+        function customAlert(text) {
+            document.getElementById('msg-title').innerText = "PERHATIAN"; document.getElementById('msg-body').innerText = text;
+            document.getElementById('btn-msg-cancel').style.display = "none"; document.getElementById('btn-msg-ok').onclick = () => closeModal('modal-msg');
+            document.getElementById('modal-msg').classList.add('active');
+        }
+        function customConfirm(text, onConfirm) {
+            document.getElementById('msg-title').innerText = "KONFIRMASI"; document.getElementById('msg-body').innerText = text;
+            document.getElementById('btn-msg-cancel').style.display = "block";
+            document.getElementById('btn-msg-ok').onclick = () => { closeModal('modal-msg'); if(onConfirm) onConfirm(); };
+            document.getElementById('modal-msg').classList.add('active');
+        }
+
+        function showFloatingFeedback(msg, type = "error") {
+            const fb = document.getElementById("floating-feedback"); fb.innerHTML = msg; fb.className = "";
+            if (type === "success") fb.classList.add("show", "success");
+            else if (type === "neutral") fb.classList.add("show", "neutral");
+            else fb.classList.add("show");
+            setTimeout(() => { fb.className = ""; }, 2000);
+        }
+
+        // --- STREAMING_CHUNK: W95 Scrollbar System ---
+        function initW95Scrollbars() {
+            const container = document.getElementById('block-container');
+            const scrollbar = document.getElementById('script-scrollbar');
+            if (!container || !scrollbar) return;
+            const track = scrollbar.querySelector('.w95-scroll-track');
+            const thumb = scrollbar.querySelector('.w95-scroll-thumb');
+            if (!track || !thumb) return;
+
+            function updateScrollbar() {
+                const scrollHeight = container.scrollHeight;
+                const clientHeight = container.clientHeight;
+                const maxScrollTop = Math.max(0, scrollHeight - clientHeight);
+
+                if (maxScrollTop <= 0 || scrollHeight <= clientHeight) {
+                    scrollbar.classList.add('disabled'); thumb.style.height = '100%'; thumb.style.transform = 'translate3d(0, 0, 0)'; return;
+                }
+                scrollbar.classList.remove('disabled');
+
+                const trackHeight = track.clientHeight; const ratio = clientHeight / scrollHeight;
+                const minThumbHeight = window.matchMedia('(pointer: coarse)').matches ? 50 : 40;
+                const thumbHeight = Math.max(minThumbHeight, trackHeight * ratio);
+                const finalThumbHeight = Math.min(thumbHeight, trackHeight);
+                thumb.style.height = `${finalThumbHeight}px`;
+
+                const maxThumbTop = Math.max(0, trackHeight - finalThumbHeight);
+                let scrollTop = Math.max(0, Math.min(container.scrollTop, maxScrollTop));
+                const scrollRatio = maxScrollTop > 0 ? scrollTop / maxScrollTop : 0;
+                const thumbTop = scrollRatio * maxThumbTop;
+                
+                thumb.style.transform = `translate3d(0, ${thumbTop}px, 0)`;
+            }
+
+            container.addEventListener('scroll', updateScrollbar, { passive: true });
+            window.addEventListener('resize', updateScrollbar);
+            const observer = new MutationObserver(() => requestAnimationFrame(updateScrollbar));
+            observer.observe(container, { childList: true, subtree: true, attributes: true, characterData: true });
+
+            let isDragging = false; let pointerStartY = 0; let scrollStartTop = 0;
+
+            function onPointerDown(e) {
+                if (scrollbar.classList.contains('disabled')) return;
+                if (e.pointerType === 'mouse' && e.button !== 0) return;
+                isDragging = true; pointerStartY = e.clientY; scrollStartTop = container.scrollTop;
+                thumb.classList.add('dragging');
+                try { thumb.setPointerCapture(e.pointerId); } catch (err) {}
+                window.addEventListener('pointermove', onPointerMove, { passive: false });
+                window.addEventListener('pointerup', onPointerUp); window.addEventListener('pointercancel', onPointerUp);
+                e.preventDefault(); e.stopPropagation();
+            }
+
+            function onPointerMove(e) {
+                if (!isDragging) return;
+                e.preventDefault(); e.stopPropagation();
+                const deltaY = e.clientY - pointerStartY; const trackHeight = track.clientHeight; const thumbHeight = thumb.offsetHeight;
+                const maxThumbTop = Math.max(0, trackHeight - thumbHeight); const maxScrollTop = Math.max(0, container.scrollHeight - container.clientHeight);
+                if (maxThumbTop <= 0 || maxScrollTop <= 0) return;
+                const scrollPerPixel = maxScrollTop / maxThumbTop;
+                let newScrollTop = scrollStartTop + (deltaY * scrollPerPixel);
+                container.scrollTop = Math.max(0, Math.min(newScrollTop, maxScrollTop));
+            }
+
+            function onPointerUp(e) {
+                if (!isDragging) return;
+                isDragging = false; thumb.classList.remove('dragging');
+                try { thumb.releasePointerCapture(e.pointerId); } catch (err) {}
+                window.removeEventListener('pointermove', onPointerMove);
+                window.removeEventListener('pointerup', onPointerUp); window.removeEventListener('pointercancel', onPointerUp);
+                requestAnimationFrame(updateScrollbar);
+            }
+
+            thumb.addEventListener('pointerdown', onPointerDown);
+            track.addEventListener('pointerdown', function(e) {
+                if (e.target === thumb || scrollbar.classList.contains('disabled')) return;
+                const rect = track.getBoundingClientRect(); const clickY = e.clientY - rect.top;
+                const thumbRect = thumb.getBoundingClientRect(); const thumbTop = thumbRect.top - rect.top;
+                const thumbBottom = thumbTop + thumb.offsetHeight; const pageAmount = container.clientHeight * 0.85;
+                if (clickY < thumbTop) container.scrollBy({ top: -pageAmount, behavior: 'smooth' });
+                else if (clickY > thumbBottom) container.scrollBy({ top: pageAmount, behavior: 'smooth' });
+                e.preventDefault();
             });
+
+            requestAnimationFrame(() => updateScrollbar()); setTimeout(updateScrollbar, 100); setTimeout(updateScrollbar, 300);
         }
 
-        /* --- TUTORIAL ENGINE --- */
-        let tutStep = 0;
-        const tutSteps = [
-            { target: 'ui-brief', text: "Baca permintaan klien di sini. Ini panduanmu menyusun naskah." },
-            { target: 'tut-timer', text: "Perhatikan deadline! Jangan biarkan waktumu habis." },
-            { target: 'ui-coffee', text: "Gunakan Kopi jika terdesak untuk mendapat tambahan 15 detik. Maksimal 3 gelas." },
-            { target: 'tut-paper', text: "Ini Kertas Naskah. Tarik blok dan susun sesuai urutan struktur skenario yang benar." },
-            { target: 'blocks-inventory', text: "Ini Inventory Blok. Klik blok untuk membaca isinya dengan jelas." },
-            { target: 'tut-tools', text: "Gunakan Kamus untuk belajar, Checklist untuk panduan, dan Hint jika tersesat." },
-            { target: 'btn-submit', text: "Klik PERIKSA NASKAH jika sudah yakin. Hati-hati, naskah salah akan memotong waktu!" }
+        // --- STREAMING_CHUNK: Interactive Tutorial System ---
+        const tutorialSteps = [
+            { id: 'client-brief-box', text: "CLIENT BRIEF — Baca instruksi klien di sini. Perhatikan genre, tema, dan permintaan khususnya. Waktu terus berjalan!", pos: 'bottom' },
+            { id: 'left-panel', text: "SCRIPT BLOCKS — Pilih dan tarik blok naskah dari inventory ini. Tidak semua blok benar atau diperlukan.", pos: 'right' },
+            { id: 'center-panel', text: "SCRIPT PAPER — Susun blok naskah di sini secara berurutan dan logis. Susunan yang salah akan dikenai penalti.", pos: 'left' },
+            { id: 'btn-reset', text: "RESET — Jika papan terlalu berantakan, kembalikan semua blok ke inventory tanpa menghapusnya.", pos: 'bottom' },
+            { id: 'checklist-container', text: "CHECKLIST — Pantau apakah instruksi klien, alur logika, dan batasan profesi sudah terpenuhi.", pos: 'left' },
+            { id: 'btn-open-hint', text: "HINT — Gunakan tombol ini untuk membaca anatomi naskah jika kamu bingung.", pos: 'left' },
+            { id: 'kamus-container', text: "KAMUS — Klik kata yang ditandai biru pada blok untuk memahami maknanya. Sangat berguna untuk riset!", pos: 'left' },
+            { id: 'btn-preview-paper', text: "PREVIEW — Gunakan tombol ini untuk membaca keseluruhan naskah dengan jelas sebelum disubmit.", pos: 'top' },
+            { id: 'btn-periksa', text: "SUBMIT — Kirim pekerjaanmu ke klien. Jika ada kesalahan, kamu harus merevisinya dan waktu akan dikurangi!", pos: 'bottom' },
+            { id: 'btn-settings', text: "SETTING — Buka menu ini untuk melihat profil, memantau progres kerja, atau mereset data permainan. Selamat bekerja!", pos: 'bottom' }
         ];
 
+        let tutStep = 0;
+        let resizeListenerAttached = false;
+
         function startTutorial() {
-            startGame(true); // Start Dummy Game
-            document.getElementById('screen-tutorial').style.display = 'block';
+            document.getElementById("main-menu").classList.remove("active");
+            document.getElementById("main-menu").style.display = "none";
+            document.getElementById("game-layout").style.display = "flex";
+            document.getElementById("tutorial-overlay").classList.add("active");
+            
+            // Dummy setup if empty so UI looks normal
+            if (gameState.currentBlocks.length === 0) {
+                gameState.currentBible = generateStoryBible();
+                gameState.currentBlocks = generateBlocksForBible(gameState.currentBible);
+                gameState.placedBlocks = new Array(gameState.currentBlocks.filter(b=>b.required).length).fill(null);
+                updateUI();
+            }
+            
+            initW95Scrollbars();
             tutStep = 0;
-            showTutorialStep();
+            requestAnimationFrame(() => renderTutorialStep());
+            
+            if(!resizeListenerAttached) {
+                window.addEventListener('resize', renderTutorialStep);
+                resizeListenerAttached = true;
+            }
         }
 
-        function showTutorialStep() {
-            if(tutStep >= tutSteps.length) { endTutorial(); return; }
-            const step = tutSteps[tutStep];
-            
-            const target = document.getElementById(step.target);
-            const rect = target.getBoundingClientRect();
-            
-            const box = document.getElementById('tut-box');
-            box.style.top = (rect.top - 5) + 'px';
-            box.style.left = (rect.left - 5) + 'px';
-            box.style.width = (rect.width + 10) + 'px';
-            box.style.height = (rect.height + 10) + 'px';
-
-            const arrow = document.getElementById('tut-arrow');
-            arrow.style.top = (rect.top - 50) + 'px';
-            arrow.style.left = (rect.left + rect.width/2 - 20) + 'px';
-
-            const dialog = document.getElementById('tut-dialog');
-            // position dialog nicely
-            dialog.style.top = (rect.bottom + 20 < window.innerHeight - 150) ? (rect.bottom + 20) + 'px' : (rect.top - 150) + 'px';
-            dialog.style.left = Math.max(10, Math.min(window.innerWidth - 300, rect.left)) + 'px';
-
-            document.getElementById('tut-text').innerText = step.text;
-        }
-
-        function nextTutorialStep() { tutStep++; showTutorialStep(); }
-        
         function endTutorial() {
-            document.getElementById('screen-tutorial').style.display = 'none';
-            state.isPlaying = false;
-            clearInterval(state.timerInterval);
-            document.getElementById('screen-game').style.display = 'none';
-            document.getElementById('screen-mainmenu').style.display = 'flex';
+            document.getElementById("tutorial-overlay").classList.remove("active");
+            document.getElementById("game-layout").style.display = "none";
+            document.getElementById("main-menu").classList.add("active");
+            document.getElementById("main-menu").style.display = "flex";
+        }
+
+        function nextTutorialStep() {
+            if (tutStep < tutorialSteps.length - 1) {
+                tutStep++;
+                renderTutorialStep();
+            } else {
+                endTutorial();
+            }
+        }
+
+        function renderTutorialStep() {
+            if(!document.getElementById("tutorial-overlay").classList.contains("active")) return;
+
+            const step = tutorialSteps[tutStep];
+            let targetEl = document.getElementById(step.id);
+
+            // Jika tombol preview kertas disembunyikan di mode landscape, arahkan sorotan ke tombol preview blok
+            if (step.id === 'btn-preview-paper' && (!targetEl || targetEl.offsetParent === null)) {
+                targetEl = document.getElementById('btn-preview-blocks');
+            }
+
+            const spotlight = document.getElementById("tutorial-spotlight");
+            const dialog = document.getElementById("tutorial-dialog");
+            const arrow = document.getElementById("tutorial-arrow");
+            const promptEl = document.getElementById("tut-tap-prompt");
+
+            document.getElementById("tutorial-text").innerText = step.text;
+            promptEl.innerText = tutStep === tutorialSteps.length - 1 ? "[ KLIK UNTUK SELESAI ]" : `[ KLIK DI MANA SAJA (${tutStep + 1}/${tutorialSteps.length}) ]`;
+
+            if (targetEl) {
+                const rect = targetEl.getBoundingClientRect();
+                
+                // Spotlight Positioning
+                const spotPad = 4;
+                spotlight.style.top = `${rect.top - spotPad}px`;
+                spotlight.style.left = `${rect.left - spotPad}px`;
+                spotlight.style.width = `${rect.width + (spotPad * 2)}px`;
+                spotlight.style.height = `${rect.height + (spotPad * 2)}px`;
+
+                // Hitung ruang kosong di 4 arah sekitar elemen agar dialog tidak pernah menutupi elemen yang disorot
+                const dlgW = dialog.offsetWidth || 290;
+                const dlgH = dialog.offsetHeight || 110;
+                const gap = 16;
+
+                const spaceBottom = window.innerHeight - rect.bottom;
+                const spaceTop = rect.top;
+                const spaceRight = window.innerWidth - rect.right;
+                const spaceLeft = rect.left;
+
+                let chosenPos = step.pos;
+
+                // Cek apakah posisi pilihan muat tanpa menimpa elemen
+                const fits = {
+                    bottom: spaceBottom >= dlgH + gap + 10,
+                    top: spaceTop >= dlgH + gap + 10,
+                    right: spaceRight >= dlgW + gap + 10,
+                    left: spaceLeft >= dlgW + gap + 10
+                };
+
+                if (!fits[chosenPos]) {
+                    // Pilih arah yang punya ruang paling lega
+                    const spaces = [
+                        { dir: 'bottom', val: spaceBottom, ok: fits.bottom },
+                        { dir: 'top', val: spaceTop, ok: fits.top },
+                        { dir: 'right', val: spaceRight, ok: fits.right },
+                        { dir: 'left', val: spaceLeft, ok: fits.left }
+                    ];
+                    const validSpaces = spaces.filter(s => s.ok).sort((a, b) => b.val - a.val);
+                    if (validSpaces.length > 0) {
+                        chosenPos = validSpaces[0].dir;
+                    } else {
+                        chosenPos = spaces.sort((a, b) => b.val - a.val)[0].dir;
+                    }
+                }
+
+                let top = 0, left = 0;
+                arrow.className = "tutorial-arrow";
+                arrow.style.left = ""; arrow.style.top = "";
+
+                const targetCenterX = rect.left + (rect.width / 2);
+                const targetCenterY = rect.top + (rect.height / 2);
+
+                if (chosenPos === 'bottom') {
+                    top = rect.bottom + gap;
+                    left = Math.max(10, Math.min(window.innerWidth - dlgW - 10, targetCenterX - (dlgW / 2)));
+                    arrow.classList.add('arrow-up');
+                    const arrowX = Math.max(14, Math.min(dlgW - 22, targetCenterX - left - 8));
+                    arrow.style.left = `${arrowX}px`;
+                } else if (chosenPos === 'top') {
+                    top = Math.max(10, rect.top - dlgH - gap);
+                    left = Math.max(10, Math.min(window.innerWidth - dlgW - 10, targetCenterX - (dlgW / 2)));
+                    arrow.classList.add('arrow-down');
+                    const arrowX = Math.max(14, Math.min(dlgW - 22, targetCenterX - left - 8));
+                    arrow.style.left = `${arrowX}px`;
+                } else if (chosenPos === 'right') {
+                    left = rect.right + gap;
+                    top = Math.max(10, Math.min(window.innerHeight - dlgH - 10, targetCenterY - (dlgH / 2)));
+                    arrow.classList.add('arrow-left');
+                    const arrowY = Math.max(14, Math.min(dlgH - 22, targetCenterY - top - 8));
+                    arrow.style.top = `${arrowY}px`;
+                } else if (chosenPos === 'left') {
+                    left = Math.max(10, rect.left - dlgW - gap);
+                    top = Math.max(10, Math.min(window.innerHeight - dlgH - 10, targetCenterY - (dlgH / 2)));
+                    arrow.classList.add('arrow-right');
+                    const arrowY = Math.max(14, Math.min(dlgH - 22, targetCenterY - top - 8));
+                    arrow.style.top = `${arrowY}px`;
+                }
+
+                // Pastikan tetap di dalam layar
+                left = Math.max(10, Math.min(window.innerWidth - dlgW - 10, left));
+                top = Math.max(10, Math.min(window.innerHeight - dlgH - 10, top));
+
+                dialog.style.top = `${top}px`;
+                dialog.style.left = `${left}px`;
+            }
         }
 
     </script>
