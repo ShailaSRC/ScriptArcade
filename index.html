@@ -116,6 +116,7 @@
         .brief-line .value { color: var(--text-highlight); flex: 1; word-wrap: break-word; white-space: normal; }
         .brief-line.quote-line { display: block !important; margin-top: 4px !important; width: 100% !important; text-align: center !important; }
         .brief-line.quote-line .value { color: var(--accent-yellow); font-style: italic; text-transform: none; line-height: 1.3; display: block; width: 100%; text-align: center; }
+        .brief-line.quote-line .glossary-term-link { color: #67b2d6; border-bottom-color: #67b2d6; }
 
         .deadline-area { display: flex; align-items: center; justify-content: space-between; background: #1a1a1a; padding: 4px 8px; border-top: 2px solid var(--border-dark); flex-shrink: 0; }
         .timer-wrapper { flex: 1; display: flex; align-items: center; gap: 8px; position: relative; }
@@ -404,12 +405,16 @@
 
         /* Rasio Ilustrasi Game Over Konsisten (16:9) & Tidak Terpotong */
         .ending-img-container { 
-            width: 100%; max-width: 440px; aspect-ratio: 16 / 9; height: auto; margin: 0 auto 15px auto; 
+            width: 100%; max-width: 440px; aspect-ratio: 16 / 9; height: auto; margin: 0 auto 8px auto; 
             background: #111; border: 2px solid var(--border-light); display: flex; align-items: center; 
             justify-content: center; overflow: hidden; position: relative; 
         }
         .ending-img-container img { width: 100%; height: 100%; object-fit: contain; background: #111; }
         .ending-fallback-text { position: absolute; color: var(--text-muted); font-size: var(--fs-small); font-style: italic; padding: 10px; text-align: center; }
+        .ending-badge-title {
+            font-size: var(--fs-title); color: var(--accent-yellow); letter-spacing: 2px;
+            font-weight: bold; text-transform: uppercase; margin-bottom: 6px;
+        }
         
         #modal-preview-blocks .modal-content { max-width: 650px; width: auto; }
         #preview-blocks-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding-top: 10px; max-height: none; }
@@ -687,22 +692,23 @@
     </div>
 
     <div id="modal-gameover" class="modal-overlay">
-        <div class="modal-content" style="max-width: 550px;">
-            <h1 id="go-title" style="color: var(--accent-yellow); border-bottom: 2px solid var(--border-light); padding-bottom: 10px; margin-bottom: 15px; margin-top:0;">GAME OVER</h1>
+        <div class="modal-content" style="max-width: 550px; padding: 18px 22px;">
+            <h1 id="go-title" style="color: var(--color-char); border-bottom: 2px solid var(--border-light); padding-bottom: 8px; margin-bottom: 12px; margin-top:0;">GAME OVER</h1>
             <div class="ending-img-container">
                 <img id="go-img" src="" alt="Ending Illustration" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                 <div class="ending-fallback-text" style="display:none;">[ ILUSTRASI ENDING BELUM TERSEDIA ]</div>
             </div>
-            <p id="go-epilog" style="margin-bottom: 20px; font-size: var(--fs-text); line-height: 1.4; color: var(--text-normal); font-style: italic;"></p>
-            <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); padding: 15px; margin-bottom: 20px; text-align: left;">
-                <div style="color: var(--text-highlight); font-size: var(--fs-subtitle); margin-bottom: 10px; text-align: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 5px;">HASIL KARIER: <span id="go-player" style="color: var(--accent-yellow);"></span></div>
+            <div id="go-ending-name" class="ending-badge-title">BURNOUT</div>
+            <p id="go-epilog" style="margin: 0 0 12px 0; font-size: var(--fs-text); line-height: 1.3; color: var(--text-normal); font-style: italic;"></p>
+            <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); padding: 12px; margin-bottom: 14px; text-align: left;">
+                <div style="color: var(--text-highlight); font-size: var(--fs-subtitle); margin-bottom: 8px; text-align: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 4px;">PLAYER: <span id="go-player" style="color: var(--accent-yellow);"></span></div>
                 <table class="hs-table" style="margin-bottom:0;">
                     <tr><th>SKOR AKHIR</th><td id="go-score" style="text-align: right; color: var(--text-highlight);">0</td></tr>
                     <tr><th>HARI TERTINGGI</th><td id="go-level" style="text-align: right; color: var(--text-highlight);">0</td></tr>
                     <tr><th>KASUS SELESAI</th><td id="go-jobs" style="text-align: right; color: var(--text-highlight);">0</td></tr>
                 </table>
             </div>
-            <p id="go-rank-msg" style="font-size: var(--fs-small); color: var(--color-scene); margin-top: -10px; margin-bottom: 15px; text-align: center; font-weight: bold;"></p>
+            <p id="go-rank-msg" style="font-size: var(--fs-small); color: var(--color-scene); margin-top: -6px; margin-bottom: 12px; text-align: center; font-weight: bold;"></p>
             <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
                 <button class="retro-btn" onclick="showHighscores()">HIGHSCORE</button>
                 <button class="retro-btn" onclick="returnToMenu()">MAIN MENU</button>
@@ -843,8 +849,8 @@
 
         // --- CONSTANTS & VARS ---
         const BASE_TIME = 120; 
-        const COFFEE_BOOST = 15;
-        const PENALTY_TIME = 10;
+        const COFFEE_BOOST = 25;
+        const PENALTY_TIME = 15;
         const MAX_COFFEE_PER_CASE = 3;
         const MAX_SLOTS_PER_PAGE = 8; // Hanya membuka halaman ke-2 jika jumlah slot naskah benar-benar banyak (> 8 slot)
 
@@ -860,7 +866,10 @@
             "PLEDOI": { def: "Nota pembelaan yang dibacakan oleh terdakwa/pengacaranya di pengadilan.", ex: "\"Pengacara mengajukan pledoi tebal.\"" },
             "BARANG BUKTI": { def: "Benda dari tindak pidana yang disita secara hukum.", ex: "\"Pistol itu diamankan sebagai barang bukti utama.\"" },
             "CLIFFHANGER": { def: "Akhir cerita yang menggantung dan menegangkan tanpa penyelesaian.", ex: "\"Film itu berakhir cliffhanger.\"" },
-            "RESEP": { def: "Catatan resmi dari dokter untuk apoteker mengenai obat.", ex: "\"Dokter menuliskan resep antibiotik.\"" }
+            "RESEP": { def: "Catatan resmi dari dokter untuk apoteker mengenai obat.", ex: "\"Dokter menuliskan resep antibiotik.\"" },
+            "TKP": { def: "Tempat Kejadian Perkara; lokasi awal terjadinya suatu tindak pidana atau peristiwa.", ex: "\"Polisi segera mengamankan area TKP.\"" },
+            "CUT TO:": { def: "Transisi perpindahan langsung yang tegas dari satu adegan ke adegan berikutnya.", ex: "\"Adegan berpindah cepat menggunakan CUT TO:.\"" },
+            "FADE OUT.": { def: "Transisi layar perlahan meredup menjadi gelap, lazim digunakan sebagai penutup babak atau akhir skenario.", ex: "\"Skenario ditutup dengan FADE OUT.\"" }
         };
 
         // --- STORY TEMPLATES ---
@@ -893,17 +902,17 @@
             } catch (e) {}
         }
 
-        // --- ENDINGS CATALOG (5 Endings) ---
+        // --- ENDINGS CATALOG (5 Endings dengan Keterangan Singkat 1 Kalimat) ---
         const endingCatalog = [
-            { id: 'INDUSTRY_STAR', title: 'INDUSTRY STAR', epilog: 'Berkat dedikasi dan kecepatanmu, kamu kini dikenal sebagai legenda hidup di industri perfilman.', 
+            { id: 'INDUSTRY_STAR', title: 'INDUSTRY STAR', epilog: 'Keahlian dan kecepatanmu menjadikanmu editor legendaris di industri perfilman.', 
               getImg: () => ASSET_CONFIG.endings.INDUSTRY_STAR, check: (s) => s.totalScore >= 1000 && s.day >= 10 },
-            { id: 'CLIENT_MAGNET', title: 'CLIENT MAGNET', epilog: 'Klien selalu kembali padamu karena naskahmu nyaris tanpa cela. Pekerjaan menumpuk, tetapi dompetmu tebal.', 
+            { id: 'CLIENT_MAGNET', title: 'CLIENT MAGNET', epilog: 'Naskahmu selalu rapi tanpa cela sehingga klien besar terus berdatangan.', 
               getImg: () => ASSET_CONFIG.endings.CLIENT_MAGNET, check: (s) => s.casesCompleted >= 15 && s.mistakes < 5 },
-            { id: 'ESTABLISHED_EDITOR', title: 'ESTABLISHED EDITOR', epilog: 'Sebuah studio besar mengontrakmu secara eksklusif. Kariermu stabil dan masa depanmu aman.', 
+            { id: 'ESTABLISHED_EDITOR', title: 'ESTABLISHED EDITOR', epilog: 'Sebuah studio ternama mengontrakmu secara eksklusif berkat kinerjamu yang stabil.', 
               getImg: () => ASSET_CONFIG.endings.ESTABLISHED_EDITOR, check: (s) => s.totalScore >= 500 && s.day >= 5 },
-            { id: 'FREELANCE_SURVIVOR', title: 'FREELANCE SURVIVOR', epilog: 'Kamu bertahan hidup dari komisi ke komisi. Cukup untuk makan dan kopi, tapi kurang untuk liburan.', 
+            { id: 'FREELANCE_SURVIVOR', title: 'FREELANCE SURVIVOR', epilog: 'Kamu bertahan dari proyek ke proyek dengan penghasilan yang cukup untuk kopi harianmu.', 
               getImg: () => ASSET_CONFIG.endings.FREELANCE_SURVIVOR, check: (s) => s.day >= 3 },
-            { id: 'BURNOUT', title: 'BURNOUT', epilog: 'Terlalu banyak revisi dan deadline ketat membuatmu kelelahan. Kamu butuh istirahat panjang dari dunia naskah.', 
+            { id: 'BURNOUT', title: 'BURNOUT', epilog: 'Tumpukan revisi dan tekanan deadline membuatmu kelelahan hingga harus rehat panjang.', 
               getImg: () => ASSET_CONFIG.endings.BURNOUT, check: (s) => s.mistakes >= 5 || s.day < 3 }
         ];
 
@@ -934,7 +943,7 @@
                 const remaining = (timerState.endTime - now) / 1000;
                 if (remaining <= 0) {
                     gameState.timeLeft = 0; clearInterval(timerState.interval); updateTimerUI();
-                    triggerGameOver("Waktu habis! Klien membatalkan pekerjaan ini karena melebihi deadline.");
+                    triggerGameOver();
                 } else {
                     gameState.timeLeft = remaining; updateTimerUI();
                 }
@@ -971,7 +980,7 @@
                 boostBar.style.width = `${Math.min(100 - currentPct, boostPct)}%`;
                 
                 timerState.endTime += (COFFEE_BOOST * 1000);
-                showFloatingFeedback(`+${COFFEE_BOOST} DETIK!`, "success");
+                showFloatingFeedback(`+${COFFEE_BOOST} MENIT!`, "success");
                 renderCoffee();
                 
                 setTimeout(() => boostBar.style.backgroundColor = 'var(--color-scene)', 500);
@@ -992,9 +1001,12 @@
             if (gameState.history.length > 0 && available.length > 1) { const lastGen = gameState.history[gameState.history.length - 1].genre; available = available.filter(t => t.genre !== lastGen); }
             if (available.length === 0) available = storyTemplates;
             const t = pickRandom(available);
+            // Jika tidak ada arahan transisi spesifik, jangan tulis "Tidak perlu instruksi transisi"
             const formats = [
-                { id: 'CUT_TO', text: "Gunakan transisi CUT TO: di akhir." }, { id: 'FADE_OUT', text: "Gunakan transisi FADE OUT. di akhir." },
-                { id: 'NO_TRANS', text: "Tidak perlu instruksi transisi." }, { id: 'ANY_TRANS', text: "" }
+                { id: 'CUT_TO', text: "Gunakan transisi CUT TO: di akhir." },
+                { id: 'FADE_OUT', text: "Gunakan transisi FADE OUT. di akhir." },
+                { id: 'NO_TRANS', text: "" },
+                { id: 'ANY_TRANS', text: "" }
             ];
             const chosenFormat = pickRandom(formats);
             return { genre: t.genre, theme: t.theme, reqText: t.reqText, protagonist: pickRandom(t.protagonists), location: pickRandom(t.locations), conflict: pickRandom(t.conflicts), ending: t.ending, formatId: chosenFormat.id, formatText: chosenFormat.text };
@@ -1140,13 +1152,15 @@
         function updateUI() {
             document.getElementById('level-display').innerText = `HARI 0${gameState.day}`;
 
-            let notes = gameState.currentBible.reqText; if (gameState.currentBible.formatText !== '') notes += ' ' + gameState.currentBible.formatText;
-            document.getElementById('client-brief-content').innerHTML = `<div class="brief-line"><span class="label">GENRE</span><span class="value">: ${gameState.currentBible.genre}</span></div><div class="brief-line"><span class="label">TEMA</span><span class="value">: ${gameState.currentBible.theme}</span></div><div class="brief-line quote-line"><span class="value">"${notes}"</span></div>`;
+            let notes = gameState.currentBible.reqText;
+            if (gameState.currentBible.formatText !== '') notes += ' ' + gameState.currentBible.formatText;
+            const processedNotes = processTextForGlossary(notes);
+
+            document.getElementById('client-brief-content').innerHTML = `<div class="brief-line"><span class="label">GENRE</span><span class="value">: ${gameState.currentBible.genre}</span></div><div class="brief-line"><span class="label">TEMA</span><span class="value">: ${gameState.currentBible.theme}</span></div><div class="brief-line quote-line"><span class="value">"${processedNotes}"</span></div>`;
             
             let checklistHTML = '';
             if (gameState.currentBible.reqText !== "") checklistHTML += `<div class="checklist-item" id="chk-blocks"><span class="checklist-box"></span>Sesuai plot klien</div>`;
-            if (gameState.currentBible.formatId === 'NO_TRANS') checklistHTML += `<div class="checklist-item" id="chk-trans"><span class="checklist-box"></span>Tanpa transisi</div>`;
-            else if (gameState.currentBible.formatId === 'CUT_TO' || gameState.currentBible.formatId === 'FADE_OUT') checklistHTML += `<div class="checklist-item" id="chk-trans"><span class="checklist-box"></span>Transisi sesuai instruksi</div>`;
+            if (gameState.currentBible.formatId === 'CUT_TO' || gameState.currentBible.formatId === 'FADE_OUT') checklistHTML += `<div class="checklist-item" id="chk-trans"><span class="checklist-box"></span>Transisi sesuai instruksi</div>`;
             checklistHTML += `<div class="checklist-item" id="chk-logic"><span class="checklist-box"></span>Urutan logis</div><div class="checklist-item" id="chk-prof"><span class="checklist-box"></span>Karakter sesuai profesi</div>`;
             
             document.getElementById('checklist-container').innerHTML = checklistHTML;
@@ -1169,7 +1183,7 @@
             scoreSt = Math.max(0, scoreSt); scoreLg = Math.max(0, scoreLg); scoreCh = Math.max(0, scoreCh);
             let finalScore = Math.round((scoreSt + scoreLg + scoreCh + (allReq ? 100 : 0)) / 4);
             if(allReq && !hasErr && gameState.currentBible.formatId === 'NO_TRANS') {
-               if(pIds.some(id => gameState.currentBlocks.find(x=>x.id===id).type === 'TRANSITION')) { msgs.push("Klien meminta tanpa transisi di akhir."); finalScore -= 20; hasErr = true; }
+               if(pIds.some(id => gameState.currentBlocks.find(x=>x.id===id).type === 'TRANSITION')) { msgs.push("Naskah ini tidak membutuhkan transisi di akhir."); finalScore -= 20; hasErr = true; }
             }
             return { isPass: (finalScore >= 80 && !hasErr && allReq && !seqErr), msgs: msgs, score: finalScore };
         }
@@ -1193,11 +1207,11 @@
                 let subtract = PENALTY_TIME; gameState.timeLeft -= subtract;
                 if (gameState.timeLeft <= 0) gameState.timeLeft = 0; else timerState.endTime -= (subtract * 1000);
                 let firstErr = evalResult.msgs.length > 0 ? evalResult.msgs[0] : "KONTINUITAS SALAH";
-                showFloatingFeedback(`REVISI! -${subtract}s<br><span style="font-size:var(--fs-text);">${firstErr}</span>`, "error");
+                showFloatingFeedback(`REVISI! -${subtract} MENIT<br><span style="font-size:var(--fs-text);">${firstErr}</span>`, "error");
                 updateUI();
                 const ws = document.getElementById("center-panel"); ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)";
                 setTimeout(() => ws.style.transform = "translateX(-5px)", 50); setTimeout(() => ws.style.transform = "translateX(5px)", 100); setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150);
-                if (gameState.timeLeft <= 0) setTimeout(() => { isSubmitting = false; triggerGameOver("Waktu habis saat melakukan revisi."); }, 500); else isSubmitting = false;
+                if (gameState.timeLeft <= 0) setTimeout(() => { isSubmitting = false; triggerGameOver(); }, 500); else isSubmitting = false;
             }
         }
 
@@ -1206,13 +1220,14 @@
             return endingCatalog[4]; 
         }
 
-        async function triggerGameOver(msg) {
+        async function triggerGameOver() {
             if (!gameState.isGameActive && document.getElementById("modal-gameover").classList.contains("active")) return;
             gameState.isGameActive = false; clearInterval(timerState.interval); gameState.timeLeft = 0; updateTimerUI();
             const ending = determineEnding(gameState);
             
-            document.getElementById("go-title").innerText = ending.title;
-            document.getElementById("go-epilog").innerText = (msg ? msg + "\n\n" : "") + ending.epilog;
+            document.getElementById("go-title").innerText = "GAME OVER";
+            document.getElementById("go-ending-name").innerText = ending.title;
+            document.getElementById("go-epilog").innerText = ending.epilog;
             document.getElementById("go-player").innerText = gameState.playerName;
             document.getElementById("go-score").innerText = gameState.totalScore;
             document.getElementById("go-level").innerText = gameState.day;
@@ -1312,7 +1327,19 @@
 
         function openHint() { if (gameState.hintUsed || !gameState.isGameActive) return; document.getElementById('modal-hint').classList.add('active'); }
         function closeHint() { document.getElementById('modal-hint').classList.remove('active'); gameState.hintUsed = true; document.getElementById('hint-badge').style.display = 'none'; document.getElementById('btn-open-hint').classList.add('hint-disabled'); updateChecklist(); }
-        function processTextForGlossary(text) { let p = text; for (const key in glossaryDB) { const r = new RegExp(`\\b(${key})\\b`, 'gi'); p = p.replace(r, `<span class="glossary-term-link" onclick="event.stopPropagation(); openGlossary('${key}')">$&</span>`); } return p; }
+        
+        function processTextForGlossary(text) {
+            let p = text;
+            const keys = Object.keys(glossaryDB).sort((a, b) => b.length - a.length);
+            for (const key of keys) {
+                const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const startBound = /^\w/.test(key) ? '\\b' : '';
+                const endBound = /\w$/.test(key) ? '\\b' : '';
+                const r = new RegExp(`${startBound}(${escaped})${endBound}`, 'gi');
+                p = p.replace(r, `<span class="glossary-term-link" onclick="event.stopPropagation(); openGlossary('${key}')">$&</span>`);
+            }
+            return p;
+        }
         function openGlossary(term) { const key = term.toUpperCase(); if (glossaryDB[key]) { document.getElementById('glossary-empty').classList.add('hidden'); document.getElementById('glossary-content').classList.remove('hidden'); document.getElementById('glossary-title').innerText = key; document.getElementById('glossary-def').innerText = glossaryDB[key].def; document.getElementById('glossary-ex').innerText = glossaryDB[key].ex; } }
 
         function renderPaginationControls() {
@@ -1418,7 +1445,7 @@
             return div;
         }
 
-        // Evaluasi Checklist secara independen & real-time bahkan ketika baru 1 blok yang dimasukkan
+        // Evaluasi Checklist: Karakter & Transisi mengecek real-time, sedangkan Sesuai Plot Klien & Urutan Logis menunggu seluruh slot terisi
         function updateChecklist() {
             const cBlocks = document.getElementById('chk-blocks');
             const cTrans = document.getElementById('chk-trans');
@@ -1434,6 +1461,9 @@
                 }
             });
 
+            const totalRequiredSlots = gameState.placedBlocks.length;
+            const isAllSlotsFilled = placedEntries.length === totalRequiredSlots && totalRequiredSlots > 0;
+
             if (placedEntries.length === 0) {
                 if (cBlocks) cBlocks.classList.remove('done');
                 if (cTrans) cTrans.classList.remove('done');
@@ -1442,50 +1472,53 @@
                 return;
             }
 
-            // 1. Sesuai plot klien: Tercapai bila blok plot/konflik (sequenceOrder === 4) sudah dimasukkan & tidak ada blok lokasi salah
+            // 1. Sesuai plot klien: Menunggu sampai pemain mengisi SEMUA blok
             if (cBlocks) {
-                const hasConflictPlot = placedEntries.some(e => e.block.sequenceOrder === 4 && e.block.isCorrect);
-                const hasWrongLocation = placedEntries.some(e => e.block.type === 'SCENE HEADING' && !e.block.isCorrect);
-                if (hasConflictPlot && !hasWrongLocation) cBlocks.classList.add('done');
-                else cBlocks.classList.remove('done');
-            }
-
-            // 2. Transisi sesuai instruksi / Tanpa transisi
-            if (cTrans) {
-                if (gameState.currentBible.formatId === 'NO_TRANS') {
-                    const hasAnyTrans = placedEntries.some(e => e.block.type === 'TRANSITION');
-                    if (!hasAnyTrans && placedEntries.length > 0) cTrans.classList.add('done');
-                    else cTrans.classList.remove('done');
+                if (isAllSlotsFilled) {
+                    const pIds = placedEntries.map(e => e.block.id);
+                    const allReqPresent = gameState.currentBlocks.filter(b => b.required).every(rb => pIds.includes(rb.id));
+                    const hasAnyWrongBlock = placedEntries.some(e => !e.block.isCorrect);
+                    if (allReqPresent && !hasAnyWrongBlock) cBlocks.classList.add('done');
+                    else cBlocks.classList.remove('done');
                 } else {
-                    const lastSlotIdx = gameState.placedBlocks.length - 1;
-                    const hasCorrectTrans = placedEntries.some(e => e.block.type === 'TRANSITION' && e.block.isCorrect && e.slotIdx === lastSlotIdx);
-                    const hasWrongTrans = placedEntries.some(e => e.block.type === 'TRANSITION' && (!e.block.isCorrect || e.slotIdx !== lastSlotIdx));
-                    if (hasCorrectTrans && !hasWrongTrans) cTrans.classList.add('done');
-                    else cTrans.classList.remove('done');
+                    cBlocks.classList.remove('done');
                 }
             }
 
-            // 3. Karakter sesuai profesi: Tercapai bila minimal 1 blok aksi/dialog profesi sudah masuk & tidak ada pelanggaran profesi
+            // 2. Transisi sesuai instruksi (Real-time saat blok transisi dimasukkan)
+            if (cTrans) {
+                const lastSlotIdx = gameState.placedBlocks.length - 1;
+                const hasCorrectTrans = placedEntries.some(e => e.block.type === 'TRANSITION' && e.block.isCorrect && e.slotIdx === lastSlotIdx);
+                const hasWrongTrans = placedEntries.some(e => e.block.type === 'TRANSITION' && (!e.block.isCorrect || e.slotIdx !== lastSlotIdx));
+                if (hasCorrectTrans && !hasWrongTrans) cTrans.classList.add('done');
+                else cTrans.classList.remove('done');
+            }
+
+            // 3. Karakter sesuai profesi (Real-time saat minimal 1 blok aksi/dialog karakter dimasukkan)
             const profEntries = placedEntries.filter(e => e.block.sequenceOrder === 2 || e.block.sequenceOrder === 3 || (!e.block.isCorrect && e.block.type !== 'SCENE HEADING' && e.block.type !== 'TRANSITION'));
             const hasValidProf = profEntries.some(e => e.block.isCorrect);
             const hasInvalidProf = profEntries.some(e => !e.block.isCorrect);
             if (hasValidProf && !hasInvalidProf) cProf.classList.add('done');
             else cProf.classList.remove('done');
 
-            // 4. Urutan logis: Tercapai bila setiap blok yang dimasukkan berada pada slot yang sesuai dengan urutan sekuensnya
-            let logicOk = true;
-            let lastSeq = -1;
-            placedEntries.forEach(e => {
-                if (!e.block.isCorrect) {
-                    logicOk = false;
-                } else if (e.block.sequenceOrder > 0) {
-                    if (e.block.sequenceOrder - 1 !== e.slotIdx) logicOk = false;
-                    if (e.block.sequenceOrder < lastSeq) logicOk = false;
-                    lastSeq = e.block.sequenceOrder;
-                }
-            });
-            if (logicOk) cLogic.classList.add('done');
-            else cLogic.classList.remove('done');
+            // 4. Urutan logis: Menunggu sampai pemain mengisi SEMUA blok
+            if (isAllSlotsFilled) {
+                let logicOk = true;
+                let lastSeq = -1;
+                placedEntries.forEach(e => {
+                    if (!e.block.isCorrect) {
+                        logicOk = false;
+                    } else if (e.block.sequenceOrder > 0) {
+                        if (e.block.sequenceOrder - 1 !== e.slotIdx) logicOk = false;
+                        if (e.block.sequenceOrder < lastSeq) logicOk = false;
+                        lastSeq = e.block.sequenceOrder;
+                    }
+                });
+                if (logicOk) cLogic.classList.add('done');
+                else cLogic.classList.remove('done');
+            } else {
+                cLogic.classList.remove('done');
+            }
         }
 
         let draggedId = null; let draggedFrom = null;
