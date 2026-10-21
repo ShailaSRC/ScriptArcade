@@ -104,6 +104,11 @@
         .client-avatar {
             width: 60px; height: 60px; background: #3b3a36; border: 2px solid var(--border-dark); border-radius: 4px;
             display: flex; align-items: flex-end; justify-content: center; overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); flex-shrink: 0; position: relative;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .client-avatar.angry-active {
+            border-color: var(--color-char) !important;
+            box-shadow: inset 0 0 12px rgba(181, 108, 108, 0.55), 0 0 6px rgba(181, 108, 108, 0.4);
         }
         .client-avatar svg { width: 85%; height: auto; margin-bottom: -5px; fill: #1c1c1a; }
         .client-avatar img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
@@ -542,12 +547,12 @@
             <div class="header-center">
                 <div class="avatar-wrapper">
                     <div class="client-avatar" id="client-avatar-box">
-                        <img id="client-avatar-img" src="" alt="Client Icon" style="display:none;" onerror="this.style.display='none'; document.getElementById('client-avatar-svg').style.display='block';">
+                        <img id="client-avatar-img" alt="Client Icon" style="display:none;">
                         <svg id="client-avatar-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                             <circle cx="9" cy="9" r="1.5" fill="#3b3a36"/>
                             <circle cx="15" cy="9" r="1.5" fill="#3b3a36"/>
-                            <path d="M8 8.5h2M14 8.5h2M10.5 12h3" stroke="#3b3a36" stroke-width="1.5"/>
+                            <path id="svg-mouth" d="M8 8.5h2M14 8.5h2M10.5 12h3" stroke="#3b3a36" stroke-width="1.5"/>
                         </svg>
                     </div>
                     <div class="avatar-title">CLIENT BRIEF</div>
@@ -562,7 +567,7 @@
                                 <div id="progress-bar"></div>
                                 <div class="coffee-boost-bar" id="coffee-boost-bar"></div>
                             </div>
-                            <span class="time-text" id="ui-time">02:00</span>
+                            <span class="time-text" id="ui-time">03:00</span>
                         </div>
                         <div class="coffee-area" id="ui-coffee"></div>
                     </div>
@@ -695,8 +700,8 @@
         <div class="modal-content" style="max-width: 550px; padding: 18px 22px;">
             <h1 id="go-title" style="color: var(--color-char); border-bottom: 2px solid var(--border-light); padding-bottom: 8px; margin-bottom: 12px; margin-top:0;">GAME OVER</h1>
             <div class="ending-img-container">
-                <img id="go-img" src="" alt="Ending Illustration" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <div class="ending-fallback-text" style="display:none;">[ ILUSTRASI ENDING BELUM TERSEDIA ]</div>
+                <img id="go-img" alt="Ending Illustration" style="display:none;">
+                <div id="go-img-fallback" class="ending-fallback-text" style="display:none;">[ ILUSTRASI ENDING BELUM TERSEDIA ]</div>
             </div>
             <div id="go-ending-name" class="ending-badge-title">BURNOUT</div>
             <p id="go-epilog" style="margin: 0 0 12px 0; font-size: var(--fs-text); line-height: 1.3; color: var(--text-normal); font-style: italic;"></p>
@@ -770,10 +775,27 @@
         }
 
         // =========================================================
-        // 🖼️ KONFIGURASI GAMBAR GITHUB
+        // 🖼️ KONFIGURASI ASET GAMBAR (4 KARAKTER KLIEN & 5 ENDING)
         // =========================================================
         let ASSET_CONFIG = {
-            clientBriefIcon: "assets/avatars/client-default.webp",
+            clients: {
+                client1: {
+                    normal: "assets/avatars/client1-normal.webp",
+                    angry: "assets/avatars/client1-angry.webp"
+                },
+                client2: {
+                    normal: "assets/avatars/client2-normal.webp",
+                    angry: "assets/avatars/client2-angry.webp"
+                },
+                client3: {
+                    normal: "assets/avatars/client3-normal.webp",
+                    angry: "assets/avatars/client3-angry.webp"
+                },
+                client4: {
+                    normal: "assets/avatars/client4-normal.webp",
+                    angry: "assets/avatars/client4-angry.webp"
+                }
+            },
             endings: {
                 INDUSTRY_STAR: "assets/endings/industry-star.webp",
                 CLIENT_MAGNET: "assets/endings/client-magnet.webp",
@@ -783,13 +805,140 @@
             }
         };
 
-        function applyClientAvatar() {
+        // Cache URL yang sudah terverifikasi berhasil dimuat agar gambar tidak pernah hilang/berkedip
+        const resolvedImageCache = {};
+
+        function loadSmartImage(imgEl, basePath, onSuccessCallback, onFailCallback) {
+            if (!imgEl || !basePath || basePath.trim() === "") {
+                if (onFailCallback) onFailCallback();
+                return;
+            }
+
+            // Jika path ini sudah pernah berhasil dimuat sebelumnya, langsung gunakan URL yang valid
+            if (resolvedImageCache[basePath]) {
+                imgEl.onerror = null;
+                imgEl.src = resolvedImageCache[basePath];
+                imgEl.style.display = 'block';
+                if (onSuccessCallback) onSuccessCallback();
+                return;
+            }
+
+            const cleanPath = basePath.replace(/\.(webp|png|jpg|jpeg)$/i, '');
+            const cleanBaseName = cleanPath.split('/').pop();
+            // Mencoba beberapa kemungkinan lokasi folder & ekstensi (.webp, .png, .jpg)
+            const candidates = [
+                basePath,
+                `${cleanPath}.webp`,
+                `${cleanPath}.png`,
+                `${cleanPath}.jpg`,
+                `${cleanPath}.jpeg`,
+                `assets/${cleanBaseName}.webp`,
+                `assets/${cleanBaseName}.png`,
+                `assets/${cleanBaseName}.jpg`,
+                `${cleanBaseName}.webp`,
+                `${cleanBaseName}.png`,
+                `${cleanBaseName}.jpg`
+            ].filter((v, i, a) => v && a.indexOf(v) === i);
+
+            let attempt = 0;
+
+            function tryNext() {
+                if (attempt >= candidates.length) {
+                    if (onFailCallback) onFailCallback();
+                    return;
+                }
+                const testUrl = candidates[attempt];
+                const probe = new Image();
+                probe.onload = function() {
+                    resolvedImageCache[basePath] = testUrl;
+                    imgEl.onerror = null;
+                    imgEl.src = testUrl;
+                    imgEl.style.display = 'block';
+                    if (onSuccessCallback) onSuccessCallback();
+                };
+                probe.onerror = function() {
+                    attempt++;
+                    tryNext();
+                };
+                probe.src = testUrl;
+            }
+
+            tryNext();
+        }
+
+        function preloadGameAssets() {
+            const urls = [];
+            Object.values(ASSET_CONFIG.clients).forEach(c => {
+                if (c.normal) urls.push(c.normal);
+                if (c.angry) urls.push(c.angry);
+            });
+            Object.values(ASSET_CONFIG.endings).forEach(u => {
+                if (u) urls.push(u);
+            });
+            urls.forEach(basePath => {
+                const dummy = document.createElement('img');
+                loadSmartImage(dummy, basePath);
+            });
+        }
+
+        let clientAngryTimeout = null;
+
+        function triggerClientSubmitAngry(durationMs = 2500) {
+            gameState.isSubmitAngry = true;
+            updateClientAvatarState();
+            if (clientAngryTimeout) clearTimeout(clientAngryTimeout);
+            clientAngryTimeout = setTimeout(() => {
+                gameState.isSubmitAngry = false;
+                updateClientAvatarState();
+            }, durationMs);
+        }
+
+        function updateClientAvatarState() {
             const imgEl = document.getElementById('client-avatar-img');
             const svgEl = document.getElementById('client-avatar-svg');
+            const boxEl = document.getElementById('client-avatar-box');
+            const svgMouth = document.getElementById('svg-mouth');
             if (!imgEl || !svgEl) return;
-            if (ASSET_CONFIG.clientBriefIcon && ASSET_CONFIG.clientBriefIcon.trim() !== "") {
-                imgEl.src = ASSET_CONFIG.clientBriefIcon;
-                imgEl.style.display = 'block';
+
+            const clientId = gameState.clientId || 'client1';
+            const pct = gameState.maxTime > 0 ? (gameState.timeLeft / gameState.maxTime) * 100 : 100;
+            // Marah aktif apabila timer berada di zona merah (<= 30%) ATAU baru saja salah submit
+            const isTimerRed = gameState.isGameActive && pct <= 30;
+            const isAngry = Boolean(gameState.isSubmitAngry || isTimerRed);
+
+            if (boxEl) {
+                if (isAngry) boxEl.classList.add('angry-active');
+                else boxEl.classList.remove('angry-active');
+            }
+
+            // Update ekspresi SVG fallback jika gambar belum tersedia
+            if (svgMouth) {
+                if (isAngry) {
+                    svgMouth.setAttribute('d', 'M7.5 7.5L10.5 9M16.5 7.5L13.5 9M10 13c1-1.2 3-1.2 4 0');
+                } else {
+                    svgMouth.setAttribute('d', 'M8 8.5h2M14 8.5h2M10.5 12h3');
+                }
+            }
+
+            const clientData = (ASSET_CONFIG.clients && ASSET_CONFIG.clients[clientId]) ? ASSET_CONFIG.clients[clientId] : ASSET_CONFIG.clients.client1;
+            const targetSrc = clientData ? (isAngry ? clientData.angry : clientData.normal) : "";
+
+            if (targetSrc && targetSrc.trim() !== "") {
+                if (imgEl.getAttribute('data-current-key') !== targetSrc) {
+                    imgEl.setAttribute('data-current-key', targetSrc);
+                    loadSmartImage(
+                        imgEl,
+                        targetSrc,
+                        () => {
+                            imgEl.style.display = 'block';
+                            svgEl.style.display = 'none';
+                        },
+                        () => {
+                            imgEl.style.display = 'none';
+                            svgEl.style.display = 'block';
+                        }
+                    );
+                }
             } else {
                 imgEl.style.display = 'none';
                 svgEl.style.display = 'block';
@@ -848,11 +997,11 @@
         };
 
         // --- CONSTANTS & VARS ---
-        const BASE_TIME = 120; 
-        const COFFEE_BOOST = 25;
-        const PENALTY_TIME = 15;
+        const BASE_TIME = 180; // 3 Menit (180 detik)
+        const COFFEE_BOOST = 35; // Bonus kopi +35 detik
+        const PENALTY_TIME = 20; // Penalti salah submit -20 detik
         const MAX_COFFEE_PER_CASE = 3;
-        const MAX_SLOTS_PER_PAGE = 8; // Hanya membuka halaman ke-2 jika jumlah slot naskah benar-benar banyak (> 8 slot)
+        const MAX_SLOTS_PER_PAGE = 8;
 
         // --- GLOSSARY DB ---
         const glossaryDB = {
@@ -890,16 +1039,6 @@
                     if (parsed.length > 0) storyTemplates = parsed;
                 }
             } catch (e) {}
-
-            try {
-                const snapAssets = await firebaseDB.ref('gameAssets').once('value');
-                if (snapAssets.exists()) {
-                    const data = snapAssets.val();
-                    if (data.clientBriefIcon) ASSET_CONFIG.clientBriefIcon = data.clientBriefIcon;
-                    if (data.endings) Object.assign(ASSET_CONFIG.endings, data.endings);
-                    applyClientAvatar();
-                }
-            } catch (e) {}
         }
 
         // --- ENDINGS CATALOG (5 Endings dengan Keterangan Singkat 1 Kalimat) ---
@@ -922,7 +1061,8 @@
             caseRevisions: 0, revisedSlots: [], currentPage: 1, totalPages: 1,
             history: [], currentBible: null, currentBlocks: [], placedBlocks: [],
             selectedBlockId: null, hintUsed: false, playerName: "ANONIM",
-            timeLeft: BASE_TIME, maxTime: BASE_TIME, coffeesLeft: MAX_COFFEE_PER_CASE, isGameActive: false
+            timeLeft: BASE_TIME, maxTime: BASE_TIME, coffeesLeft: MAX_COFFEE_PER_CASE, isGameActive: false,
+            clientId: 'client1', isSubmitAngry: false
         };
 
         let timerState = { endTime: 0, interval: null, isPaused: false, pausedTimeLeft: 0 };
@@ -960,9 +1100,11 @@
             document.getElementById("ui-time").innerText = `${m}:${s}`;
             const pct = Math.max(0, Math.min(100, (gameState.timeLeft / gameState.maxTime) * 100));
             const bar = document.getElementById("progress-bar"); bar.style.width = `${pct}%`;
-            if (gameState.timeLeft > 40) bar.style.backgroundColor = "var(--color-scene)";
-            else if (gameState.timeLeft > 15) bar.style.backgroundColor = "var(--accent-yellow)";
+            if (pct > 60) bar.style.backgroundColor = "var(--color-scene)";
+            else if (pct > 30) bar.style.backgroundColor = "var(--accent-yellow)";
             else bar.style.backgroundColor = "var(--color-char)";
+
+            updateClientAvatarState();
         }
 
         function useCoffee() {
@@ -980,8 +1122,9 @@
                 boostBar.style.width = `${Math.min(100 - currentPct, boostPct)}%`;
                 
                 timerState.endTime += (COFFEE_BOOST * 1000);
-                showFloatingFeedback(`+${COFFEE_BOOST} MENIT!`, "success");
+                showFloatingFeedback(`+${COFFEE_BOOST} DETIK!`, "success");
                 renderCoffee();
+                updateClientAvatarState();
                 
                 setTimeout(() => boostBar.style.backgroundColor = 'var(--color-scene)', 500);
                 setTimeout(() => { boostBar.style.opacity = '0'; updateTimerUI(); }, 1000);
@@ -1001,7 +1144,6 @@
             if (gameState.history.length > 0 && available.length > 1) { const lastGen = gameState.history[gameState.history.length - 1].genre; available = available.filter(t => t.genre !== lastGen); }
             if (available.length === 0) available = storyTemplates;
             const t = pickRandom(available);
-            // Jika tidak ada arahan transisi spesifik, jangan tulis "Tidak perlu instruksi transisi"
             const formats = [
                 { id: 'CUT_TO', text: "Gunakan transisi CUT TO: di akhir." },
                 { id: 'FADE_OUT', text: "Gunakan transisi FADE OUT. di akhir." },
@@ -1060,7 +1202,6 @@
             return blocks.sort(() => Math.random() - 0.5);
         }
 
-        // Pembagian halaman tetap stabil berdasarkan jumlah slot kasus (tidak melompat ke hal 2 saat diisi)
         function computeScriptPages() {
             const pages = [[]];
             for (let i = 0; i < gameState.placedBlocks.length; i++) {
@@ -1075,7 +1216,6 @@
             return pages;
         }
 
-        // Menghitung nomor urut Scene Heading (1, 2, dst.) hanya untuk blok SCENE HEADING yang ditempatkan
         function getSceneHeadingNumber(slotIdx) {
             const currentId = gameState.placedBlocks[slotIdx];
             if (!currentId) return "";
@@ -1121,7 +1261,6 @@
             if (type === 'TRANSITION') {
                 return `<div class="sp-transition">${processTextForGlossary(block.text.toUpperCase())}</div>`;
             }
-            // Default: ACTION
             const paragraphs = block.text.split('\n').map(p => processTextForGlossary(p.trim())).filter(Boolean);
             return paragraphs.map(p => `<div class="sp-action">${p}</div>`).join('');
         }
@@ -1136,6 +1275,12 @@
             gameState.currentBible = generateStoryBible(); gameState.currentBlocks = generateBlocksForBible(gameState.currentBible);
             const reqCount = gameState.currentBlocks.filter(b => b.required).length; gameState.placedBlocks = new Array(reqCount).fill(null);
             gameState.caseRevisions = 0; gameState.revisedSlots = []; gameState.currentPage = 1;
+            
+            // Pilih acak dari 4 karakter klien (client1, client2, client3, client4)
+            gameState.clientId = pickRandom(['client1', 'client2', 'client3', 'client4']);
+            gameState.isSubmitAngry = false;
+            if (clientAngryTimeout) clearTimeout(clientAngryTimeout);
+
             deselectBlock(); gameState.hintUsed = false;
             document.getElementById('hint-badge').style.display = 'flex'; document.getElementById('btn-open-hint').classList.remove('hint-disabled');
             document.getElementById('glossary-empty').classList.remove('hidden'); document.getElementById('glossary-content').classList.add('hidden');
@@ -1143,7 +1288,7 @@
             if (isNewGame) {
                 gameState.sessionId = generateSessionId(); gameState.maxTime = BASE_TIME; gameState.timeLeft = BASE_TIME; gameState.coffeesLeft = MAX_COFFEE_PER_CASE; gameState.mistakes = 0;
             } else {
-                let timeBonus = Math.max(30, 60 - (gameState.day * 2)); gameState.timeLeft = Math.min(180, gameState.timeLeft + timeBonus); gameState.maxTime = Math.max(gameState.timeLeft, gameState.maxTime);
+                let timeBonus = Math.max(30, 60 - (gameState.day * 2)); gameState.timeLeft = Math.min(BASE_TIME, gameState.timeLeft + timeBonus); gameState.maxTime = Math.max(gameState.timeLeft, BASE_TIME);
                 gameState.coffeesLeft = MAX_COFFEE_PER_CASE;
             }
             gameState.isGameActive = true; isSubmitting = false; updateUI(); startTimer();
@@ -1165,7 +1310,7 @@
             
             document.getElementById('checklist-container').innerHTML = checklistHTML;
             if (gameState.hintUsed) { document.getElementById('hint-badge').style.display = 'none'; document.getElementById('btn-open-hint').classList.add('hint-disabled'); }
-            applyClientAvatar(); renderCoffee(); updateTimerUI(); renderBlocksAndSlots(); updateChecklist();
+            updateClientAvatarState(); renderCoffee(); updateTimerUI(); renderBlocksAndSlots(); updateChecklist();
         }
 
         function evaluateScript(pIds) {
@@ -1192,6 +1337,7 @@
             if (isSubmitting || !gameState.isGameActive) return; isSubmitting = true;
             const pIds = gameState.placedBlocks.filter(i => i !== null);
             if (pIds.length === 0 || pIds.length < gameState.placedBlocks.length) {
+                triggerClientSubmitAngry(2200);
                 showFloatingFeedback("SCRIPT BELUM LENGKAP!", "neutral");
                 const ws = document.getElementById("center-panel"); ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)";
                 setTimeout(() => ws.style.transform = "translateX(-5px)", 50); setTimeout(() => ws.style.transform = "translateX(5px)", 100); setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150);
@@ -1199,15 +1345,19 @@
             }
             const evalResult = evaluateScript(pIds); updateChecklist();
             if (evalResult.isPass) {
+                gameState.isSubmitAngry = false;
+                if (clientAngryTimeout) clearTimeout(clientAngryTimeout);
+                updateClientAvatarState();
                 clearInterval(timerState.interval); gameState.isGameActive = false; showFloatingFeedback("CLIENT MENERIMA!<br>+WAKTU", "success");
                 gameState.casesCompleted++; gameState.totalScore += evalResult.score; gameState.history.push({ genre: gameState.currentBible.genre }); saveData();
                 setTimeout(() => { isSubmitting = false; nextDay(); }, 2000);
             } else {
+                triggerClientSubmitAngry(2800);
                 gameState.mistakes++; gameState.caseRevisions++;
                 let subtract = PENALTY_TIME; gameState.timeLeft -= subtract;
                 if (gameState.timeLeft <= 0) gameState.timeLeft = 0; else timerState.endTime -= (subtract * 1000);
                 let firstErr = evalResult.msgs.length > 0 ? evalResult.msgs[0] : "KONTINUITAS SALAH";
-                showFloatingFeedback(`REVISI! -${subtract} MENIT<br><span style="font-size:var(--fs-text);">${firstErr}</span>`, "error");
+                showFloatingFeedback(`REVISI! -${subtract} DETIK<br><span style="font-size:var(--fs-text);">${firstErr}</span>`, "error");
                 updateUI();
                 const ws = document.getElementById("center-panel"); ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)";
                 setTimeout(() => ws.style.transform = "translateX(-5px)", 50); setTimeout(() => ws.style.transform = "translateX(5px)", 100); setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150);
@@ -1234,10 +1384,22 @@
             document.getElementById("go-jobs").innerText = gameState.casesCompleted;
 
             const imgEl = document.getElementById("go-img");
-            const fallbackEl = imgEl.nextElementSibling;
-            imgEl.style.display = 'block';
+            const fallbackEl = document.getElementById("go-img-fallback");
+            imgEl.style.display = 'none';
             fallbackEl.style.display = 'none';
-            imgEl.src = ending.getImg();
+
+            loadSmartImage(
+                imgEl,
+                ending.getImg(),
+                () => {
+                    imgEl.style.display = 'block';
+                    fallbackEl.style.display = 'none';
+                },
+                () => {
+                    imgEl.style.display = 'none';
+                    fallbackEl.style.display = 'block';
+                }
+            );
 
             localStorage.removeItem('edsave');
             document.getElementById("modal-gameover").classList.add("active");
@@ -1296,7 +1458,6 @@
         function returnToMenu() { closeModal('modal-gameover'); closeModal('modal-start'); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; pauseTimer(); }
         function returnToMenuFromProfile() { saveData(); closeModal('modal-start'); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; }
         
-        // Saat klik PLAY dari Main Menu, selalu mulai baru & hanya minta isi nama seperti biasa (tanpa opsi Lanjutkan)
         function openStartModal() {
             document.getElementById("main-menu").classList.remove("active");
             document.getElementById("main-menu").style.display = "none";
@@ -1320,8 +1481,8 @@
         function nextDay() { gameState.day++; setupNewCase(false); saveData(); }
         function restartGame() { closeModal('modal-gameover'); gameState.day = 1; gameState.casesCompleted = 0; gameState.totalScore = 0; gameState.mistakes = 0; gameState.history = []; localStorage.removeItem('edsave'); setupNewCase(true); }
 
-        function saveData() { if(!gameState.isGameActive) return; localStorage.setItem('edsave', JSON.stringify({ sessId: gameState.sessionId, d: gameState.day, c: gameState.casesCompleted, s: gameState.totalScore, h: gameState.history, pName: gameState.playerName, tLeft: gameState.timeLeft, mTime: gameState.maxTime, cLeft: gameState.coffeesLeft, m: gameState.mistakes, cr: gameState.caseRevisions, rs: gameState.revisedSlots, b: gameState.currentBible, cb: gameState.currentBlocks, pb: gameState.placedBlocks })); }
-        function loadData() { try { const sv = localStorage.getItem('edsave'); if (sv) { const d = JSON.parse(sv); gameState.sessionId = d.sessId || generateSessionId(); gameState.day = d.d; gameState.casesCompleted = d.c; gameState.totalScore = d.s; gameState.history = d.h || []; gameState.playerName = d.pName || "ANONIM"; gameState.timeLeft = d.tLeft || BASE_TIME; gameState.maxTime = d.mTime || BASE_TIME; gameState.coffeesLeft = d.cLeft !== undefined ? d.cLeft : MAX_COFFEE_PER_CASE; gameState.mistakes = d.m || 0; gameState.caseRevisions = d.cr || 0; gameState.revisedSlots = d.rs || []; if(d.b && d.cb && d.pb) { gameState.currentBible = d.b; gameState.currentBlocks = d.cb; gameState.placedBlocks = d.pb; } return true; } } catch(e) {} return false; }
+        function saveData() { if(!gameState.isGameActive) return; localStorage.setItem('edsave', JSON.stringify({ sessId: gameState.sessionId, d: gameState.day, c: gameState.casesCompleted, s: gameState.totalScore, h: gameState.history, pName: gameState.playerName, tLeft: gameState.timeLeft, mTime: gameState.maxTime, cLeft: gameState.coffeesLeft, m: gameState.mistakes, cr: gameState.caseRevisions, rs: gameState.revisedSlots, b: gameState.currentBible, cb: gameState.currentBlocks, pb: gameState.placedBlocks, cid: gameState.clientId })); }
+        function loadData() { try { const sv = localStorage.getItem('edsave'); if (sv) { const d = JSON.parse(sv); gameState.sessionId = d.sessId || generateSessionId(); gameState.day = d.d; gameState.casesCompleted = d.c; gameState.totalScore = d.s; gameState.history = d.h || []; gameState.playerName = d.pName || "ANONIM"; gameState.timeLeft = d.tLeft || BASE_TIME; gameState.maxTime = d.mTime || BASE_TIME; gameState.coffeesLeft = d.cLeft !== undefined ? d.cLeft : MAX_COFFEE_PER_CASE; gameState.mistakes = d.m || 0; gameState.caseRevisions = d.cr || 0; gameState.revisedSlots = d.rs || []; gameState.clientId = d.cid || 'client1'; if(d.b && d.cb && d.pb) { gameState.currentBible = d.b; gameState.currentBlocks = d.cb; gameState.placedBlocks = d.pb; } return true; } } catch(e) {} return false; }
         function showProfile() { pauseTimer(); saveData(); document.getElementById('stat-day').innerText = gameState.day; document.getElementById('stat-cases').innerText = gameState.casesCompleted; document.getElementById('stat-score').innerText = gameState.casesCompleted > 0 ? Math.round(gameState.totalScore / gameState.casesCompleted) : 0; document.getElementById('profile-stats').classList.remove('hidden'); document.getElementById('modal-start').classList.add('active'); document.getElementById('btn-start-game').innerText = "LANJUTKAN"; if(gameState.playerName !== "ANONIM") document.getElementById('player-name').value = gameState.playerName; }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
@@ -1387,7 +1548,6 @@
             const pages = computeScriptPages();
             const currentSlots = pages[gameState.currentPage - 1] || [];
 
-            // Halaman pertama tidak menampilkan page number, halaman ke-2 dst baru menampilkan 2., 3., dst.
             const headerBar = document.getElementById('paper-header-bar');
             const pageNumEl = document.getElementById('page-number');
             if (gameState.currentPage > 1) {
@@ -1405,7 +1565,6 @@
             currentSlots.forEach(i => {
                 const row = document.createElement('div'); row.className = 'slot-row';
                 const num = document.createElement('div'); num.className = 'slot-number';
-                // Nomor hanya muncul apabila slot berisi blok SCENE HEADING
                 num.innerText = getSceneHeadingNumber(i);
 
                 const slot = document.createElement('div'); slot.className = 'drop-slot'; slot.dataset.index = i;
@@ -1445,7 +1604,6 @@
             return div;
         }
 
-        // Evaluasi Checklist: Karakter & Transisi mengecek real-time, sedangkan Sesuai Plot Klien & Urutan Logis menunggu seluruh slot terisi
         function updateChecklist() {
             const cBlocks = document.getElementById('chk-blocks');
             const cTrans = document.getElementById('chk-trans');
@@ -1485,7 +1643,7 @@
                 }
             }
 
-            // 2. Transisi sesuai instruksi (Real-time saat blok transisi dimasukkan)
+            // 2. Transisi sesuai instruksi (Real-time)
             if (cTrans) {
                 const lastSlotIdx = gameState.placedBlocks.length - 1;
                 const hasCorrectTrans = placedEntries.some(e => e.block.type === 'TRANSITION' && e.block.isCorrect && e.slotIdx === lastSlotIdx);
@@ -1494,7 +1652,7 @@
                 else cTrans.classList.remove('done');
             }
 
-            // 3. Karakter sesuai profesi (Real-time saat minimal 1 blok aksi/dialog karakter dimasukkan)
+            // 3. Karakter sesuai profesi (Real-time)
             const profEntries = placedEntries.filter(e => e.block.sequenceOrder === 2 || e.block.sequenceOrder === 3 || (!e.block.isCorrect && e.block.type !== 'SCENE HEADING' && e.block.type !== 'TRANSITION'));
             const hasValidProf = profEntries.some(e => e.block.isCorrect);
             const hasInvalidProf = profEntries.some(e => !e.block.isCorrect);
@@ -1658,7 +1816,8 @@
         }
 
         window.onload = function() {
-            applyClientAvatar();
+            preloadGameAssets();
+            updateClientAvatarState();
             syncFromFirebase();
         };
     </script>
