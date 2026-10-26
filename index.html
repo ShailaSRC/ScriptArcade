@@ -47,6 +47,7 @@
             --fs-small: 0.75rem;
             --sp-font-size: 14px;
             --sp-line-height: 1.25;
+            --header-overlay-offset: 112px;
         }
         @media (orientation: portrait) {
             :root { 
@@ -77,6 +78,7 @@
             flex: 0 0 auto; min-height: 90px; display: grid; grid-template-columns: 230px minmax(0, 1fr) 230px;
             gap: 10px; background: var(--bg-panel); border: 2px solid var(--border-dark); padding: 10px;
             box-shadow: 2px 2px 0 rgba(0,0,0,0.3); align-items: stretch; position: relative;
+            z-index: 1500;
         }
         #main-area { 
             flex: 1 1 auto; min-height: 0; display: grid; 
@@ -113,28 +115,31 @@
         .client-avatar svg { width: 85%; height: auto; margin-bottom: -5px; fill: #1c1c1a; }
         .client-avatar img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
         
-        .client-brief-box { flex: 1; max-width: 500px; border: 2px solid var(--border-dark); background: var(--bg-app); display: flex; flex-direction: column; border-radius: 4px; overflow: hidden; min-height: 0; }
+        /* Pemisahan tegas antara kotak Client Brief dan kotak Deadline Timer & Kopi */
+        .client-brief-wrapper { flex: 1; max-width: 500px; display: flex; flex-direction: column; gap: 6px; min-height: 0; min-width: 0; justify-content: space-between; }
+        .client-brief-box { flex: 1; border: 2px solid var(--border-dark); background: var(--bg-app); display: flex; flex-direction: column; border-radius: 4px; overflow: hidden; min-height: 0; box-shadow: inset 0 1px 4px rgba(0,0,0,0.45); }
         .client-brief-box .brief-title { display: none !important; }
-        .client-brief-box .brief-content { padding: 6px 10px; display: flex; flex-direction: column; justify-content: center; gap: 2px; font-size: var(--fs-subtitle); text-transform: uppercase; color: var(--text-normal); flex: 1; overflow-y: auto; overflow-x: hidden; }
-        .brief-line { display: flex; align-items: flex-start; line-height: 1.2; }
-        .brief-line .label { color: var(--text-muted); margin-right: 8px; font-weight: bold; min-width: 50px; }
-        .brief-line .value { color: var(--text-highlight); flex: 1; word-wrap: break-word; white-space: normal; }
-        .brief-line.quote-line { display: block !important; margin-top: 4px !important; width: 100% !important; text-align: center !important; }
-        .brief-line.quote-line .value { color: var(--accent-yellow); font-style: italic; text-transform: none; line-height: 1.3; display: block; width: 100%; text-align: center; }
+        .client-brief-box .brief-content { padding: 5px 10px; display: flex; flex-direction: column; justify-content: center; gap: 1px; font-size: var(--fs-subtitle); text-transform: uppercase; color: var(--text-normal); flex: 1; overflow-y: auto; overflow-x: hidden; }
+        .brief-line { display: flex; align-items: flex-start; line-height: 1.1; }
+        .brief-line .label { color: var(--text-muted); font-weight: bold; width: 46px; flex-shrink: 0; }
+        .brief-line .colon { color: var(--text-muted); font-weight: bold; margin-right: 6px; flex-shrink: 0; }
+        .brief-line .value { color: var(--text-highlight); flex: 1; min-width: 0; word-wrap: break-word; white-space: normal; }
+        .brief-line.quote-line { display: block !important; margin-top: 2px !important; width: 100% !important; text-align: center !important; }
+        .brief-line.quote-line .value { color: var(--accent-yellow); font-style: italic; text-transform: none; line-height: 1.15; display: block; width: 100%; text-align: center; }
         .brief-line.quote-line .glossary-term-link { color: #67b2d6; border-bottom-color: #67b2d6; }
 
-        .deadline-area { display: flex; align-items: center; justify-content: space-between; background: #1a1a1a; padding: 4px 8px; border-top: 2px solid var(--border-dark); flex-shrink: 0; }
+        .deadline-area { display: flex; align-items: center; justify-content: space-between; background: #161615; padding: 4px 10px; border: 2px solid var(--border-dark); border-radius: 4px; flex-shrink: 0; box-shadow: 0 1px 0 rgba(255,255,255,0.04); }
         .timer-wrapper { flex: 1; display: flex; align-items: center; gap: 8px; position: relative; }
-        .timer-label { color: var(--text-highlight); font-size: var(--fs-subtitle); }
+        .timer-label { color: var(--text-highlight); font-size: var(--fs-subtitle); letter-spacing: 0.5px; }
         .progress-bar-container { flex: 1; height: 12px; background: #333; border: 1px solid var(--border-dark); position: relative; overflow: hidden; }
         #progress-bar { height: 100%; width: 100%; background: var(--color-scene); transition: width 0.1s linear, background-color 0.3s; position: absolute; left: 0; top: 0; z-index: 1;}
         .coffee-boost-bar { height: 100%; background: var(--color-coffee-boost); position: absolute; left: 0; top: 0; z-index: 2; opacity: 0; transition: width 0.5s ease-out, background-color 1s ease-in-out, opacity 1s; pointer-events: none;}
         .time-text { font-size: var(--fs-subtitle); color: var(--text-highlight); min-width: 40px; text-align: right; }
         
-        .coffee-area { display: flex; gap: 4px; margin-left: 10px; }
+        .coffee-area { display: flex; align-items: center; gap: 4px; margin-left: 10px; padding-left: 10px; border-left: 1px dashed var(--border-light); }
         .coffee-btn { background: transparent; border: none; font-size: var(--fs-subtitle); cursor: pointer; filter: grayscale(0%); transition: transform 0.1s; padding: 0; line-height: 1; }
         .coffee-btn:active { transform: scale(0.9); }
-        .coffee-btn.used { filter: grayscale(100%); opacity: 0.3; pointer-events: none; }
+        .coffee-btn.used { filter: grayscale(100%); opacity: 0.35; cursor: pointer; }
 
         .header-right { display: flex; align-items: center; justify-content: flex-end; gap: 10px; width: 100%; }
         .retro-btn { background: var(--bg-panel); border: 2px solid var(--border-dark); color: var(--text-highlight); font-size: var(--fs-subtitle); padding: 6px 14px; cursor: pointer; text-transform: uppercase; box-shadow: 2px 2px 0 rgba(0,0,0,0.5); transition: transform 0.1s, box-shadow 0.1s; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; }
@@ -146,7 +151,7 @@
         .retro-input { background: #1a1a1a; border: 2px solid var(--text-muted); color: var(--text-highlight); font-size: var(--fs-subtitle); padding: 10px; width: 100%; text-align: center; margin-bottom: 20px; text-transform: uppercase; user-select: text; }
         .retro-input:focus { outline: none; border-color: var(--accent-yellow); }
 
-        #floating-feedback { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--color-char); color: white; padding: 15px 30px; font-size: var(--fs-head); border: 2px solid #fff; box-shadow: 0 0 20px rgba(0,0,0,0.8); z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.2s; text-align: center; width: max-content; max-width: 90%; line-height: 1.2; }
+        #floating-feedback { position: fixed; top: 55%; left: 50%; transform: translate(-50%, -50%); background: var(--color-char); color: white; padding: 15px 30px; font-size: var(--fs-head); border: 2px solid #fff; box-shadow: 0 0 20px rgba(0,0,0,0.8); z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.2s; text-align: center; width: max-content; max-width: 90%; line-height: 1.2; }
         #floating-feedback.show { opacity: 1; }
         #floating-feedback.success { background: var(--color-scene); }
         #floating-feedback.neutral { background: var(--bg-panel); border-color: var(--color-neutral); color: var(--text-highlight); }
@@ -234,6 +239,9 @@
             font-size: var(--sp-font-size); font-weight: 700; padding-top: 6px; text-align: left; flex-shrink: 0; 
             user-select: none;
         }
+        .slot-number-right {
+            text-align: right; padding-left: 4px;
+        }
         .drop-slot { 
             flex: 1; border: 1.5px dashed var(--paper-dashed); display: flex; align-items: stretch; 
             transition: background 0.2s, border-color 0.2s; min-height: 46px; background: rgba(0,0,0,0.02); 
@@ -314,7 +322,7 @@
         .hint-btn-style:hover:not(.hint-disabled) { background: rgba(255,255,255,0.05); color: #fff; }
         .hint-btn-style:active:not(.hint-disabled) { transform: translate(1px,1px); }
         .notification-badge { position: absolute; top: -3px; right: 2px; background: var(--color-char); color: white; border-radius: 50%; width: 16px; height: 16px; font-size: var(--fs-text); display: flex; align-items: center; justify-content: center; border: 2px solid var(--bg-panel); font-weight: bold; box-shadow: 1px 1px 0 rgba(0,0,0,0.5); pointer-events: none; }
-        .hint-disabled { opacity: 0.3; pointer-events: none; border-style: solid !important; }
+        .hint-disabled { opacity: 0.4; cursor: pointer; border-style: solid !important; }
 
         .glossary-term-link { color: #2b6582; cursor: pointer; text-decoration: none; font-weight: bold; border-bottom: 1.5px dotted #2b6582; }
         .glossary-term-link:hover { background: rgba(90,140,168,0.2); }
@@ -342,20 +350,70 @@
            ================================================== */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        /* Modal In-Game berada di bawah Header/Client Brief agar arahan & timer selalu terlihat */
+        .in-game-modal {
+            top: var(--header-overlay-offset, 112px) !important;
+            padding: 10px;
+        }
+        .in-game-modal .modal-content {
+            max-height: calc(100dvh - var(--header-overlay-offset, 112px) - 20px) !important;
+        }
         
-        .modal-content { background: var(--bg-panel); border: 2px solid var(--text-highlight); padding: 25px; max-width: 550px; width: 90%; color: var(--text-highlight); text-align: center; box-shadow: 5px 5px 0 rgba(0,0,0,0.5); position: relative; max-height: 90vh; overflow-y: auto; }
-        .modal-content h1 { font-size: var(--fs-head) !important; color: var(--accent-yellow); margin-top: 0; margin-bottom: 10px; }
-        .modal-content h2 { font-size: var(--fs-title); color: var(--accent-yellow); margin-top: 0; margin-bottom: 10px; }
+        .modal-content { background: var(--bg-panel); border: 2px solid var(--text-highlight); padding: 20px 24px; max-width: 550px; width: 90%; color: var(--text-highlight); text-align: center; box-shadow: 5px 5px 0 rgba(0,0,0,0.5); position: relative; max-height: 90vh; overflow-y: auto; }
+        /* Pembatas garis patah-patah (dashed) di bawah judul untuk setiap pop up / panel modal */
+        .modal-content h1 { font-size: var(--fs-head) !important; color: var(--accent-yellow); margin-top: 0; margin-bottom: 12px; padding-bottom: 8px; border: none; border-bottom: 2px dashed var(--border-light); background: transparent; }
+        .modal-content h2 { font-size: var(--fs-title); color: var(--accent-yellow); margin-top: 0; margin-bottom: 12px; padding-bottom: 8px; border: none; border-bottom: 2px dashed var(--border-light); background: transparent; text-align: center; letter-spacing: 1px; line-height: 1.2; }
         .modal-content p, .modal-content div { font-size: var(--fs-text); }
-        .modal-close-x { position: absolute; top: -10px; right: -10px; background: var(--color-char); color: #fff; border: 2px solid #5c2f2f; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; font-size: var(--fs-title); font-weight: bold; cursor: pointer; box-shadow: 2px 2px 0 rgba(0,0,0,0.5); z-index: 101; padding: 0; }
-        .modal-close-x:active { transform: translate(2px,2px); box-shadow: none; }
+
+        /* Header dengan tombol X yang rapi, sejajar judul, dan berada di atas garis patah-patah */
+        .modal-header-row {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 26px;
+            padding: 0 30px 10px 30px;
+            margin-bottom: 12px;
+            border-bottom: 2px dashed var(--border-light);
+        }
+        .modal-header-row h2 {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            line-height: 1.1;
+        }
+        .modal-close-x {
+            position: absolute;
+            right: 0;
+            top: calc(50% - 5px);
+            transform: translateY(-50%);
+            background: var(--color-char);
+            color: #fff;
+            border: 1.5px solid #5c2f2f;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            line-height: 1;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.45);
+            z-index: 101;
+            padding: 0;
+            border-radius: 2px;
+            transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
+        }
+        .modal-close-x:hover { filter: brightness(1.1); }
+        .modal-close-x:active { transform: translateY(-50%) translate(1px, 1px); box-shadow: none; }
 
         /* Main Menu Specifics */
         #main-menu { z-index: 2000; flex-direction: column; background: radial-gradient(circle at center, #2e2d2a 0%, var(--bg-app) 80%); position: fixed; inset: 0; }
         #main-menu::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 32px 32px; pointer-events: none; }
         .main-menu-credit { position: absolute; top: 18px; right: 24px; font-size: var(--fs-subtitle); color: var(--text-muted); letter-spacing: 1.5px; z-index: 5; background: rgba(0,0,0,0.35); padding: 4px 10px; border: 1px solid var(--border-light); }
         .main-menu-card { background: var(--bg-panel); border: 2px solid var(--border-dark); box-shadow: 8px 8px 0 rgba(0,0,0,0.6), inset 0 0 0 2px var(--border-light); padding: 35px 40px; display: flex; flex-direction: column; align-items: center; max-width: 90%; width: 420px; position: relative; z-index: 2; }
-        .main-menu-badge { background: var(--border-dark); color: var(--color-scene); font-size: var(--fs-small); padding: 3px 10px; letter-spacing: 2px; border: 1px solid var(--border-light); margin-bottom: 12px; }
         .main-menu-title { font-size: 3.4rem; color: var(--accent-yellow); letter-spacing: 4px; text-shadow: 4px 4px 0 var(--border-dark); margin: 0 0 6px 0; text-align: center; line-height: 1; }
         .main-menu-subtitle { font-size: var(--fs-subtitle); color: var(--text-normal); letter-spacing: 2px; margin-bottom: 28px; text-align: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 10px; width: 100%; }
         .main-menu-buttons { display: flex; flex-direction: column; gap: 14px; width: 100%; }
@@ -377,12 +435,12 @@
         /* Full Window Highscore */
         #modal-highscore { z-index: 3000; background: var(--bg-app); padding: 0; align-items: stretch; justify-content: stretch; }
         .hs-window-frame { width: 100vw; height: 100dvh; max-width: none; max-height: none; background: var(--bg-app); border: none; box-shadow: none; display: flex; flex-direction: column; overflow: hidden; }
-        .hs-window-bar { background: var(--bg-panel); color: var(--accent-yellow); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-dark); flex-shrink: 0; }
+        .hs-window-bar { background: var(--bg-panel); color: var(--accent-yellow); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border-light); flex-shrink: 0; }
         .hs-window-title { font-size: var(--fs-head); letter-spacing: 2px; font-weight: normal; color: var(--text-highlight); }
         .hs-window-body { flex: 1; overflow-y: auto; padding: 20px; background: var(--bg-app); display: flex; flex-direction: column; align-items: center; gap: 20px; }
         .hs-content-wrapper { width: 100%; max-width: 850px; display: flex; flex-direction: column; gap: 20px; }
         .hs-top3-box { background: linear-gradient(180deg, rgba(214, 176, 84, 0.1) 0%, var(--bg-panel) 100%); border: 2px solid var(--accent-yellow); box-shadow: 4px 4px 0 rgba(0,0,0,0.5); padding: 16px; width: 100%; display: flex; flex-direction: column; gap: 10px; }
-        .hs-top3-header { font-size: var(--fs-title); color: var(--accent-yellow); letter-spacing: 2px; border-bottom: 2px solid var(--border-light); padding-bottom: 6px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+        .hs-top3-header { font-size: var(--fs-title); color: var(--accent-yellow); letter-spacing: 2px; border-bottom: 2px dashed var(--border-light); padding-bottom: 6px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
         .hs-top3-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(0,0,0,0.25); border: 1px solid var(--border-light); gap: 12px; }
         .hs-top3-row.rank-1 { border-left: 4px solid var(--accent-yellow); background: rgba(214, 176, 84, 0.12); }
         .hs-top3-row.rank-2 { border-left: 4px solid #c0c0c0; }
@@ -397,7 +455,7 @@
         .hs-podium-meta { font-size: var(--fs-text); color: var(--text-muted); display: flex; gap: 10px; }
         .hs-podium-score { font-size: var(--fs-title); color: var(--accent-yellow); font-weight: bold; letter-spacing: 1px; min-width: 80px; text-align: right; }
         .hs-list-container { background: var(--bg-panel); border: 2px solid var(--border-dark); padding: 15px; box-shadow: 4px 4px 0 rgba(0,0,0,0.4); width: 100%; }
-        .hs-section-divider { font-size: var(--fs-title); color: var(--text-muted); letter-spacing: 1px; border-bottom: 2px solid var(--border-light); padding-bottom: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .hs-section-divider { font-size: var(--fs-title); color: var(--text-muted); letter-spacing: 1px; border-bottom: 2px dashed var(--border-light); padding-bottom: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 
         @media (orientation: portrait) {
             .hs-top3-row { flex-direction: column; align-items: flex-start; gap: 6px; padding: 8px 10px; }
@@ -426,8 +484,8 @@
         #preview-blocks-grid .script-block { width: 100%; flex-shrink: 0; cursor: pointer; font-size: var(--fs-text) !important; padding: 8px !important; margin-bottom: 0 !important; }
         
         @media (orientation: landscape) { #preview-blocks-grid { grid-template-columns: repeat(3, 190px); justify-content: center; } .btn-expand-paper { display: none !important; } }
-        #preview-script-container { width: 100%; height: 68vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 16px; padding: 15px; overflow-x: hidden; overflow-y: auto; background: #1c1c1b; border: 1px solid var(--border-light); }
-        #selected-block-popup { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 350px; background: var(--bg-panel); border: 2px solid var(--accent-yellow); padding: 8px 12px; z-index: 900; box-shadow: 4px 4px 0 rgba(0,0,0,0.6); display: none; flex-direction: column; gap: 4px; pointer-events: auto; }
+        #preview-script-container { width: 100%; height: 55vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 16px; padding: 15px; overflow-x: hidden; overflow-y: auto; background: #1c1c1b; border: 1px solid var(--border-light); }
+        #selected-block-popup { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 350px; background: var(--bg-panel); border: 2px solid var(--accent-yellow); padding: 10px 12px; z-index: 900; box-shadow: 4px 4px 0 rgba(0,0,0,0.6); display: none; flex-direction: column; gap: 4px; pointer-events: auto; }
         #selected-block-popup.active { display: flex; }
 
         @media (max-height: 550px) and (orientation: landscape) {
@@ -436,31 +494,36 @@
             #main-area { grid-template-columns: 240px minmax(300px, 440px) 205px; }
             .client-avatar { width: 50px; height: 50px; } .client-brief-box .brief-content { padding: 4px; }
             .retro-btn { padding: 4px 8px; } .hide-mobile { display: none; } #right-panel { padding: 10px; }
-            .right-section-title { margin-bottom: 8px; } .deadline-area { padding: 2px 4px; }
+            .right-section-title { margin-bottom: 8px; } .deadline-area { padding: 2px 6px; }
             .main-menu-title { font-size: 2rem; margin-bottom: 20px; }
         }
 
         @media (orientation: portrait) {
             #game-layout { max-width: none; height: 100dvh; padding: 6px; gap: 6px; }
-            #game-header { min-height: 0; display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto; gap: 6px; padding: 6px 10px; position: relative; }
+            #game-header { min-height: 0; display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto; gap: 4px; padding: 4px 8px; position: relative; }
             .header-left { grid-row: 1; grid-column: 1; justify-content: flex-start; gap: 12px; width: 100%; position: static; z-index: 1; }
             .header-right { grid-row: 1; grid-column: 1; justify-content: flex-end; position: relative; right: auto; top: auto; gap: 6px; width: 100%; pointer-events: none; z-index: 2; }
             .header-right button { pointer-events: auto; }
             .header-center { grid-row: 2; grid-column: 1; justify-content: flex-start; align-items: center !important; flex-direction: row !important; flex-wrap: nowrap !important; }
             .title-area { flex-direction: row; align-items: baseline; gap: 6px; position: static !important; }
-            .header-left h1 { position: absolute !important; left: 50% !important; top: 22px !important; transform: translate(-50%, -50%) !important; margin: 0 !important; font-weight: bold !important; white-space: nowrap !important; z-index: 10; font-size: var(--fs-head) !important; letter-spacing: 1px !important; }
-            .settings-btn { font-size: 20px !important; width: 30px !important; height: 28px !important; margin-right: 4px; }
-            .retro-btn { padding: 0 8px !important; border-width: 1px !important; height: 26px !important; box-sizing: border-box !important; margin: 0 !important; }
-            #btn-reset { width: 26px !important; padding: 0 !important; justify-content: center !important; }
+            .header-left h1 { position: absolute !important; left: 50% !important; top: 18px !important; transform: translate(-50%, -50%) !important; margin: 0 !important; font-weight: bold !important; white-space: nowrap !important; z-index: 10; font-size: var(--fs-head) !important; letter-spacing: 1px !important; }
+            .settings-btn { font-size: 18px !important; width: 28px !important; height: 24px !important; margin-right: 4px; }
+            .retro-btn { padding: 0 8px !important; border-width: 1px !important; height: 24px !important; box-sizing: border-box !important; margin: 0 !important; }
+            #btn-reset { width: 24px !important; padding: 0 !important; justify-content: center !important; }
             .avatar-wrapper { width: 38px !important; }
             .client-avatar { width: 38px !important; height: 38px !important; border-width: 1px !important; border-radius: 2px; align-self: center; }
-            .avatar-title { display: block !important; margin-top: 2px; font-size: var(--fs-small) !important; }
+            .avatar-title { display: block !important; margin-top: 1px; font-size: var(--fs-small) !important; }
+            .client-brief-wrapper { gap: 4px !important; max-width: none !important; }
             .client-brief-box { max-height: none; overflow: hidden; border-width: 1px !important; justify-content: flex-start; }
             .client-brief-box .brief-title { display: none !important; }
-            .client-brief-box .brief-content { display: flex !important; flex-direction: column !important; padding: 4px 6px !important; gap: 2px !important; }
-            .brief-line { line-height: 1.1 !important; align-items: flex-start !important; margin-bottom: 0 !important; width: 100% !important; }
-            .brief-line .label { min-width: 48px !important; margin-right: 4px !important; display: inline-block !important; }
-            .deadline-area { padding: 2px 4px !important; border-top-width: 1px !important; margin-top: auto; }
+            .client-brief-box .brief-content { display: flex !important; flex-direction: column !important; padding: 3px 6px !important; gap: 1px !important; }
+            .brief-line { line-height: 1.0 !important; align-items: flex-start !important; margin-bottom: 0 !important; width: 100% !important; }
+            .brief-line .label { width: 36px !important; flex-shrink: 0 !important; display: inline-block !important; }
+            .brief-line .colon { margin-right: 4px !important; flex-shrink: 0 !important; }
+            .brief-line.quote-line { margin-top: 1px !important; }
+            .brief-line.quote-line .value { line-height: 1.05 !important; }
+            .deadline-area { padding: 2px 6px !important; border-width: 1px !important; margin-top: 0 !important; }
+            .coffee-area { margin-left: 6px !important; padding-left: 6px !important; }
             .progress-bar-container { height: 8px !important; }
             .hide-mobile { display: none !important; }
             #main-area { flex: 1 1 auto; min-height: 0; display: grid; gap: 6px; grid-template-columns: 1.25fr 1fr; grid-template-rows: 1fr 1fr; justify-content: stretch; }
@@ -492,10 +555,12 @@
             .pagination-area { padding-top: 6px !important; margin-top: auto !important; border-top-width: 1px !important; }
             .nav-arrow { width: 24px !important; height: 24px !important; }
             .page-thumb { width: 26px !important; height: 32px !important; padding: 2px 4px !important; }
-            #modal-preview-blocks .modal-content { padding: 12px !important; width: 90% !important; }
+            .modal-header-row { min-height: 22px !important; padding: 0 26px 8px 26px !important; margin-bottom: 10px !important; }
+            .modal-close-x { width: 20px !important; height: 20px !important; font-size: 0.9rem !important; top: calc(50% - 4px) !important; }
+            #modal-preview-blocks .modal-content { padding: 12px 14px !important; width: 90% !important; }
             #preview-blocks-grid { gap: 6px !important; padding-top: 6px !important; }
-            #modal-preview-script .modal-content { padding: 12px !important; width: 95% !important; }
-            #preview-script-container { height: 58vh !important; }
+            #modal-preview-script .modal-content { padding: 12px 14px !important; width: 95% !important; }
+            #preview-script-container { height: 48vh !important; }
             .main-menu-title { font-size: 2.2rem; }
         }
         @media (orientation: portrait) and (pointer: coarse) { #block-container { padding-right: 25px !important; } }
@@ -514,9 +579,758 @@
         .flex { display: flex; } .justify-between { justify-content: space-between; } .justify-center { justify-content: center; } .items-center { align-items: center; }
         .grid { display: grid; } .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .gap-2 { gap: 0.5rem; } .p-3 { padding: 0.75rem; } .pb-2 { padding-bottom: 0.5rem; }
-        .border-b { border-bottom-width: 1px; border-style: solid; } .border-t { border-top-width: 1px; border-style: solid; }
+        .border-b { border-bottom: 2px dashed var(--border-light); } .border-t { border-top: 2px dashed var(--border-light); }
         .border { border-width: 1px; border-style: solid; }
         .cursor-pointer { cursor: pointer; } .hover\:text-\[var\(--text-highlight\)\]:hover { color: var(--text-highlight); }
+
+        /* ==================================================
+           MINI GAMES — PIXEL ART OFFICE DESK INTERRUPTIONS
+           ================================================== */
+        #modal-minigame .modal-content {
+            max-width: 520px;
+            width: 95%;
+            padding: 16px 20px;
+            user-select: none;
+            image-rendering: pixelated;
+        }
+        .mg-HeaderMeta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #141413;
+            border: 2px solid var(--border-dark);
+            box-shadow: inset 0 0 0 1px var(--border-light);
+            padding: 6px 10px;
+            margin-bottom: 10px;
+            font-size: var(--fs-subtitle);
+            color: var(--text-highlight);
+            gap: 8px;
+        }
+        .mg-level-pips {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .mg-pip {
+            padding: 2px 7px;
+            font-size: var(--fs-small);
+            border: 1.5px solid var(--border-light);
+            background: #1e1e1c;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+        .mg-pip.active {
+            background: var(--accent-yellow);
+            color: #121211;
+            border-color: #fff;
+            font-weight: bold;
+            box-shadow: 0 0 6px rgba(214, 176, 84, 0.5);
+        }
+        .mg-pip.done {
+            background: var(--color-scene);
+            color: #121211;
+            border-color: #c2dec2;
+            font-weight: bold;
+        }
+        .mg-badge {
+            background: #242320;
+            border: 1.5px solid var(--accent-yellow);
+            color: var(--accent-yellow);
+            padding: 2px 8px;
+            font-size: var(--fs-text);
+            white-space: nowrap;
+        }
+        .mg-stage {
+            background: #181715;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 8px 8px;
+            border: 3px solid var(--border-dark);
+            outline: 1px solid var(--border-light);
+            box-shadow: inset 0 0 18px rgba(0,0,0,0.85);
+            padding: 12px;
+            height: 256px;
+            min-height: 256px;
+            max-height: 256px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .mg-status-bar {
+            margin-top: 10px;
+            height: 44px;
+            min-height: 44px;
+            max-height: 44px;
+            font-size: var(--fs-subtitle);
+            color: var(--accent-yellow);
+            text-align: center;
+            letter-spacing: 0.5px;
+            background: #141413;
+            border: 1px dashed var(--border-light);
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.15;
+            overflow: hidden;
+        }
+        .pixel-svg {
+            shape-rendering: crispEdges;
+            image-rendering: pixelated;
+            display: block;
+        }
+
+        /* Mini Game 1: Simon Keypad Pixel Hardware */
+        .simon-casing {
+            background: #363532;
+            border: 3px solid #121211;
+            box-shadow: inset -3px -3px 0 #22211f, inset 3px 3px 0 #52504b, 4px 4px 0 rgba(0,0,0,0.6);
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+        .simon-countdown-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(18, 18, 17, 0.78);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            pointer-events: none;
+        }
+        .simon-countdown-overlay.active {
+            display: flex;
+        }
+        .simon-countdown-num {
+            font-size: 5rem;
+            color: var(--accent-yellow);
+            font-weight: bold;
+            text-shadow: 4px 4px 0 #121211, 0 0 18px rgba(214, 176, 84, 0.8);
+            line-height: 1;
+        }
+        .simon-countdown-num.pop-tick {
+            animation: popSnap 0.65s ease-out forwards;
+        }
+        @keyframes popSnap {
+            0% { transform: scale(1.38); opacity: 1; }
+            70% { transform: scale(1.0); opacity: 1; }
+            100% { transform: scale(0.92); opacity: 0.45; }
+        }
+        .simon-lcd {
+            width: 100%;
+            background: #233022;
+            border: 2px solid #121211;
+            box-shadow: inset 2px 2px 0 #141c13;
+            color: #9cd689;
+            padding: 6px 10px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            letter-spacing: 3px;
+            min-height: 34px;
+        }
+        .simon-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 58px);
+            gap: 6px;
+            justify-content: center;
+        }
+        .simon-key {
+            height: 36px;
+            background: #d9d1ba;
+            border: 2px solid #121211;
+            box-shadow: inset -2px -3px 0 #999075, inset 2px 2px 0 #f5efe0, 2px 2px 0 #121211;
+            color: #1c1b18;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.06s;
+        }
+        .simon-key.zero-key { grid-column: 2; }
+        .simon-key:active {
+            transform: translate(1px, 2px);
+            box-shadow: inset 1px 1px 0 #999075;
+        }
+        .simon-key.lit {
+            background: #ffdf6b !important;
+            color: #121211 !important;
+            box-shadow: inset 0 0 0 2px #fff, 0 0 12px #ffdf6b !important;
+            transform: translate(1px, 1px);
+        }
+        .simon-key.err-lit {
+            background: #e05a5a !important;
+            color: #fff !important;
+            box-shadow: inset 0 0 0 2px #ffaaaa, 0 0 10px #e05a5a !important;
+        }
+
+        /* Mini Game 2: Pixel Coffee Machine Desk Scene */
+        .coffee-desk-scene {
+            width: 100%;
+            height: 230px;
+            background: linear-gradient(180deg, #252422 0%, #1f1e1c 64%, #4a3828 64%, #3b2c1f 100%);
+            border: 3px solid #121211;
+            box-shadow: inset 0 0 16px rgba(0,0,0,0.85);
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+        .coffee-desk-scene::before {
+            content: "";
+            position: absolute;
+            left: 0; right: 0; top: 64%;
+            height: 3px;
+            background: #121211;
+            z-index: 1;
+        }
+        .cm-wall-shelf {
+            position: absolute;
+            left: 140px;
+            right: 8px;
+            height: 7px;
+            background: linear-gradient(180deg, #6e5239 0%, #423020 100%);
+            border: 2px solid #121211;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.55);
+            z-index: 2;
+            pointer-events: none;
+        }
+        .cm-wall-shelf::before, .cm-wall-shelf::after {
+            content: "";
+            position: absolute;
+            top: 5px;
+            width: 5px;
+            height: 7px;
+            background: #1c1b18;
+        }
+        .cm-wall-shelf::before { left: 16px; }
+        .cm-wall-shelf::after { right: 16px; }
+        .cm-wall-shelf.shelf-top { top: 64px; }
+        .cm-wall-shelf.shelf-mid { top: 122px; left: 8px; right: 8px; }
+        .cm-sticky-note {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: #e8d882;
+            color: #1c1b18;
+            border: 2px solid #121211;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.55);
+            padding: 4px 6px;
+            z-index: 6;
+            width: 128px;
+            font-size: 0.65rem;
+            line-height: 1.1;
+            transform: rotate(-1.5deg);
+            pointer-events: none;
+        }
+        .cm-sticky-title {
+            font-weight: bold;
+            border-bottom: 1px dashed #5c5328;
+            padding-bottom: 2px;
+            margin-bottom: 3px;
+            color: #121211;
+            font-size: 0.68rem;
+            text-align: center;
+        }
+        .cm-sticky-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px 4px;
+        }
+        .cm-center-machine {
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%);
+            width: 122px;
+            height: 162px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 3;
+        }
+        .cm-hopper {
+            width: 58px;
+            height: 18px;
+            background: linear-gradient(90deg, rgba(111,78,55,0.85), rgba(160,120,90,0.65), rgba(111,78,55,0.85));
+            border: 2px solid #121211;
+            border-bottom: none;
+            position: relative;
+        }
+        .cm-hopper::before {
+            content: "";
+            position: absolute;
+            top: -4px; left: -3px; right: -3px;
+            height: 4px;
+            background: #1c1b19;
+            border: 1px solid #121211;
+        }
+        .cm-body-top {
+            width: 118px;
+            height: 34px;
+            background: #8c2d2d;
+            border: 3px solid #121211;
+            box-shadow: inset -2px -2px 0 #591a1a, inset 2px 2px 0 #b84848;
+            padding: 3px 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cm-gauge {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #e6dfc8;
+            border: 2px solid #121211;
+            position: relative;
+        }
+        .cm-gauge::after {
+            content: "";
+            position: absolute;
+            width: 6px; height: 2px;
+            background: #b56c6c;
+            top: 7px; left: 6px;
+            transform: rotate(-35deg);
+        }
+        .cm-led-screen {
+            background: #141c13;
+            border: 1.5px solid #121211;
+            color: #9cd689;
+            padding: 1px 5px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        .cm-brew-chamber {
+            width: 104px;
+            height: 78px;
+            background: #181716;
+            border-left: 3px solid #121211;
+            border-right: 3px solid #121211;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.9), inset 6px 0 0 #2d2c29, inset -6px 0 0 #2d2c29;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .cm-portafilter {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 34px;
+            height: 12px;
+            background: #77756e;
+            border: 2px solid #121211;
+            border-top: none;
+            z-index: 3;
+        }
+        .cm-portafilter::after {
+            content: "";
+            position: absolute;
+            right: -22px;
+            top: 2px;
+            width: 22px;
+            height: 5px;
+            background: #1c1b18;
+            border: 1px solid #000;
+        }
+        .cm-steam-wand {
+            position: absolute;
+            left: 16px;
+            top: 0;
+            width: 4px;
+            height: 36px;
+            background: #9e9b93;
+            border: 1px solid #121211;
+            transform: rotate(10deg);
+        }
+        .cm-stream {
+            width: 5px;
+            height: 0;
+            background: repeating-linear-gradient(0deg, #6f4e37 0px, #6f4e37 4px, #8b6347 4px, #8b6347 8px);
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: height 0.2s;
+            z-index: 1;
+        }
+        .cm-stream.pouring { height: 42px; }
+        .cm-cup {
+            width: 34px;
+            height: 26px;
+            border: 3px solid #e6dfc8;
+            background: #262421;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+            box-shadow: 2px 2px 0 #000;
+        }
+        .cm-cup-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 0%;
+            background: linear-gradient(180deg, #d6b054 0%, #6f4e37 30%, #4a3222 100%);
+            transition: height 0.7s steps(6);
+        }
+        .cm-base-tray {
+            width: 118px;
+            height: 30px;
+            background: #3a3935;
+            border: 3px solid #121211;
+            box-shadow: inset 0 3px 0 #66645e, 3px 3px 0 rgba(0,0,0,0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 6px;
+        }
+        .cm-brew-trigger {
+            width: 100%;
+            background: #689c68;
+            color: #fff;
+            border: 2px solid #121211;
+            box-shadow: inset 1px 1px 0 #9cd689, 1px 1px 0 #000;
+            font-size: 0.72rem;
+            font-weight: bold;
+            padding: 2px 0;
+            cursor: pointer;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        .cm-brew-trigger:active { transform: translate(1px, 1px); }
+        .cm-desk-item {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            z-index: 5;
+            padding: 3px;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            transition: transform 0.1s, border-color 0.1s, background 0.1s;
+            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.65));
+        }
+        .cm-desk-item:hover {
+            transform: translateY(-2px);
+        }
+        .cm-desk-item.selected {
+            border-color: var(--accent-yellow);
+            background: rgba(214, 176, 84, 0.22);
+            box-shadow: 0 0 8px rgba(214, 176, 84, 0.45);
+        }
+        .cm-desk-item-label {
+            font-size: 0.65rem;
+            background: rgba(18, 18, 17, 0.85);
+            color: var(--text-highlight);
+            padding: 0 4px;
+            border: 1px solid var(--border-light);
+            margin-top: 1px;
+            white-space: nowrap;
+        }
+        .cm-desk-item.selected .cm-desk-item-label {
+            background: var(--accent-yellow);
+            color: #121211;
+            border-color: #121211;
+            font-weight: bold;
+        }
+
+        /* Mini Game 3: Pixel Cockroach Smasher */
+        .roach-arena {
+            width: 100%;
+            height: 205px;
+            background: #5c4632;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.12) 0px, rgba(0,0,0,0.12) 2px, transparent 2px, transparent 18px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 4px, transparent 4px, transparent 32px);
+            border: 3px solid #121211;
+            box-shadow: inset 0 0 16px rgba(0,0,0,0.75);
+            position: relative;
+            overflow: hidden;
+            cursor: crosshair;
+            touch-action: manipulation;
+        }
+        .roach-target {
+            position: absolute;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            transition: top 0.28s steps(5), left 0.28s steps(5), transform 0.12s steps(2);
+            z-index: 5;
+            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.65));
+        }
+        .roach-splat {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Mini Game 4: Pixel Wire Matching */
+        .wire-board {
+            position: relative;
+            width: 100%;
+            max-width: 260px;
+            height: 210px;
+            margin: 0 auto;
+            background: #1d2621;
+            background-image: 
+                radial-gradient(#2d3b32 15%, transparent 16%),
+                linear-gradient(0deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 12px 12px, 12px 12px, 12px 12px;
+            border: 3px solid #121211;
+            box-shadow: inset 0 0 14px rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            padding: 12px 18px;
+            user-select: none;
+            touch-action: none;
+        }
+        .wire-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            z-index: 5;
+        }
+        .wire-node {
+            width: 42px;
+            height: 26px;
+            border: 2px solid #121211;
+            box-shadow: inset -2px -2px 0 rgba(0,0,0,0.45), inset 2px 2px 0 rgba(255,255,255,0.35), 2px 2px 0 #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.08s;
+        }
+        .wire-node.active-pin {
+            outline: 3px solid #fff;
+            transform: scale(1.1);
+        }
+        .wire-node.matched {
+            box-shadow: inset 0 0 0 2px #fff, 0 0 6px rgba(255,255,255,0.5);
+        }
+        .wire-svg-layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            shape-rendering: crispEdges;
+        }
+
+        /* Mini Game 5: Pixel Paper Ball Toss */
+        .toss-arena {
+            width: 100%;
+            height: 162px;
+            background: 
+                repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 24px, rgba(0,0,0,0.12) 24px, rgba(0,0,0,0.12) 26px),
+                linear-gradient(180deg, #232830 0%, #2c323b 82%, #473628 82%, #36281d 100%);
+            border: 3px solid #121211;
+            box-shadow: inset 0 0 14px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+        .toss-arena::before {
+            content: "";
+            position: absolute;
+            left: 0; right: 0; bottom: 18%;
+            height: 4px;
+            background: #121211;
+            box-shadow: 0 -2px 0 #594433;
+            z-index: 1;
+        }
+        .toss-bg-decor {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .toss-wall-clock {
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: #e6dfc8;
+            border: 3px solid #121211;
+            border-radius: 50%;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+        }
+        .toss-wall-clock::before {
+            content: "";
+            position: absolute;
+            left: 11px; top: 5px;
+            width: 2px; height: 8px;
+            background: #121211;
+        }
+        .toss-wall-clock::after {
+            content: "";
+            position: absolute;
+            left: 11px; top: 11px;
+            width: 6px; height: 2px;
+            background: #b56c6c;
+        }
+        .toss-wall-shelf {
+            position: absolute;
+            top: 38px;
+            left: 18px;
+            width: 86px;
+            height: 6px;
+            background: #594433;
+            border: 2px solid #121211;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.45);
+        }
+        .toss-wall-books {
+            position: absolute;
+            top: 18px;
+            left: 24px;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+        }
+        .toss-book {
+            width: 8px;
+            height: 20px;
+            border: 1.5px solid #121211;
+        }
+        .toss-water-cooler {
+            position: absolute;
+            right: 14px;
+            bottom: 18%;
+            width: 28px;
+            height: 64px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .toss-cooler-jug {
+            width: 22px;
+            height: 26px;
+            background: linear-gradient(90deg, rgba(119,195,236,0.75), rgba(212,244,255,0.85), rgba(90,158,194,0.75));
+            border: 2px solid #121211;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+        }
+        .toss-cooler-body {
+            width: 26px;
+            height: 38px;
+            background: #d9d1ba;
+            border: 2px solid #121211;
+            box-shadow: inset -3px 0 0 #b0a688;
+            position: relative;
+        }
+        .toss-cooler-body::before {
+            content: "";
+            position: absolute;
+            top: 8px; left: 5px; right: 5px;
+            height: 10px;
+            background: #2a2a28;
+            border: 1px solid #121211;
+        }
+        .toss-bin {
+            position: absolute;
+            bottom: 4px;
+            width: 52px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: left 0.25s steps(6);
+            z-index: 3;
+            filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.65));
+        }
+        .toss-ball {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 4;
+            filter: drop-shadow(2px 3px 0 rgba(0,0,0,0.65));
+        }
+        .toss-controls {
+            width: 100%;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .power-bar-wrap {
+            flex: 1;
+            height: 20px;
+            background: #111;
+            border: 2px solid #121211;
+            box-shadow: inset 0 0 0 1px var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .power-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #d6b054;
+            position: relative;
+            z-index: 1;
+        }
+        .power-sweetspot {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            border-left: 2px solid #fff;
+            border-right: 2px solid #fff;
+            background: rgba(104, 196, 125, 0.72);
+            pointer-events: none;
+            z-index: 2;
+        }
+        .toss-arcade-btn {
+            width: 58px;
+            height: 38px;
+            background: radial-gradient(circle at 50% 35%, #e07070 0%, #b56c6c 55%, #7a3b3b 100%);
+            border: 3px solid #121211;
+            border-radius: 8px;
+            box-shadow: inset 0 3px 0 rgba(255,255,255,0.4), inset 0 -3px 0 rgba(0,0,0,0.45), 0 3px 0 #121211;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.06s, box-shadow 0.06s;
+            touch-action: none;
+            flex-shrink: 0;
+        }
+        .toss-arcade-btn:active, .toss-arcade-btn.pressing {
+            transform: translateY(2px);
+            box-shadow: inset 0 2px 0 rgba(0,0,0,0.4), 0 1px 0 #121211;
+            background: radial-gradient(circle at 50% 45%, #ffdf6b 0%, #d6b054 70%, #8f6f24 100%);
+        }
     </style>
 </head>
 <body>
@@ -524,7 +1338,6 @@
     <div id="main-menu" class="modal-overlay active" style="display: flex;">
         <div class="main-menu-credit">credit by SSRC</div>
         <div class="main-menu-card">
-            <div class="main-menu-badge">● SYSTEM READY ●</div>
             <div class="main-menu-title">SCRIPT ARCADE</div>
             <div class="main-menu-subtitle">STORY CONTINUITY &amp; SCRIPT EDITING DESK</div>
             <div class="main-menu-buttons">
@@ -557,9 +1370,11 @@
                     </div>
                     <div class="avatar-title">CLIENT BRIEF</div>
                 </div>
-                <div class="client-brief-box" id="client-brief-box">
-                    <div class="brief-title">CLIENT BRIEF</div>
-                    <div class="brief-content" id="client-brief-content"></div>
+                <div class="client-brief-wrapper" id="client-brief-box">
+                    <div class="client-brief-box">
+                        <div class="brief-title">CLIENT BRIEF</div>
+                        <div class="brief-content" id="client-brief-content"></div>
+                    </div>
                     <div class="deadline-area">
                         <div class="timer-wrapper">
                             <span class="timer-label">DEADLINE</span>
@@ -610,7 +1425,7 @@
                 <div class="right-panel-content">
                     <div class="right-section-title">CHECKLIST</div>
                     <div id="checklist-container"></div>
-                    <div class="hint-section"><button id="btn-open-hint" class="hint-btn-style" onclick="openHint()"><span>HINT</span><div id="hint-badge" class="notification-badge">1</div></button></div>
+                    <div class="hint-section"><button id="btn-open-hint" class="hint-btn-style" onclick="openHint()"><span>HINT</span><div id="hint-badge" class="notification-badge">2</div></button></div>
                     <div class="kamus-tab-container" id="kamus-container">
                         <div class="kamus-tab-title">KAMUS</div>
                         <div class="kamus-tab-content">
@@ -632,46 +1447,85 @@
     <!-- Overlays -->
     <div id="floating-feedback"></div>
     <div id="selected-block-popup">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-light); padding-bottom: 4px;"><span style="color: var(--accent-yellow); font-size: var(--fs-subtitle);">SELECTED</span><button class="retro-btn" style="padding: 0; width: 24px; height: 24px; font-size: var(--fs-small); display: flex; justify-content: center; align-items: center;" onclick="deselectBlock()">X</button></div>
+        <div class="modal-header-row" style="padding: 0 26px 6px 0; margin-bottom: 6px; justify-content: flex-start; min-height: 22px;">
+            <span style="color: var(--accent-yellow); font-size: var(--fs-subtitle); font-weight: bold; letter-spacing: 1px;">SELECTED</span>
+            <button class="modal-close-x" onclick="deselectBlock()">X</button>
+        </div>
         <div class="script-block" style="margin-bottom: 0; border: none; box-shadow: none; background: transparent; padding: 4px;"><div class="block-type-label" id="selected-popup-type" style="color: var(--text-highlight);"></div><div class="block-text" id="selected-popup-text" style="color: var(--text-normal);"></div></div>
     </div>
 
-    <div id="modal-preview-blocks" class="modal-overlay"><div class="modal-content" style="min-width: 300px;"><div style="position: relative; margin-bottom: 15px;"><h2>AVAILABLE BLOCKS</h2><button class="modal-close-x" onclick="closeModal('modal-preview-blocks')">X</button></div><div id="preview-blocks-grid"></div><div style="color: var(--text-muted); margin-top: 10px; font-size: var(--fs-text);">Klik blok untuk memilih, lalu letakkan di Script.</div></div></div>
-    <div id="modal-preview-script" class="modal-overlay"><div class="modal-content" style="max-width: 95%; display: flex; flex-direction: column;"><div style="position: relative; margin-bottom: 15px;"><h2>SCRIPT PREVIEW</h2><button class="modal-close-x" onclick="closeModal('modal-preview-script')">X</button></div><div id="preview-script-container"></div></div></div>
+    <!-- Panel-panel In-Game yang tetap memperlihatkan Header/Client Brief -->
+    <div id="modal-preview-blocks" class="modal-overlay in-game-modal">
+        <div class="modal-content" style="min-width: 300px;">
+            <div class="modal-header-row">
+                <h2>AVAILABLE BLOCKS</h2>
+                <button class="modal-close-x" onclick="closeModal('modal-preview-blocks')">X</button>
+            </div>
+            <div id="preview-blocks-grid"></div>
+            <div style="color: var(--text-muted); margin-top: 10px; font-size: var(--fs-text);">Klik blok untuk memilih, lalu letakkan di Script.</div>
+        </div>
+    </div>
+
+    <div id="modal-preview-script" class="modal-overlay in-game-modal">
+        <div class="modal-content" style="max-width: 95%; display: flex; flex-direction: column;">
+            <div class="modal-header-row">
+                <h2>SCRIPT PREVIEW</h2>
+                <button class="modal-close-x" onclick="closeModal('modal-preview-script')">X</button>
+            </div>
+            <div id="preview-script-container"></div>
+        </div>
+    </div>
     
-    <div id="modal-hint" class="modal-overlay">
-        <div class="modal-content" style="max-width: 650px; text-align: left;">
-            <h2 class="mb-4 border-b pb-2" style="border-color: var(--border-light); text-align: center;">ANATOMI NASKAH</h2>
-            <div style="color: var(--text-normal); line-height: 1.6; max-height: 65vh; padding-right: 15px; overflow-y: auto;">
-                <p class="mb-4" style="font-size: var(--fs-text);">Setiap tipe blok memiliki peran penting. Perhatikan formatnya untuk menyusun alur yang benar.</p>
-                <div class="mb-4">
-                    <strong style="color: var(--text-highlight); font-size: var(--fs-subtitle);">1. SCENE HEADING (Slugline)</strong><br>
-                    <span style="font-size: var(--fs-text);">Penanda awal adegan (Lokasi &amp; Waktu). Selalu kapital. Setiap Scene Heading di kertas akan diberi nomor urut adegan (1, 2, dst.).</span><br>
-                    <span style="color: var(--text-muted); font-style: italic; font-size: var(--fs-text);">Contoh: INT. RUANG SIDANG - SIANG</span>
-                </div>
-                <div class="mb-4">
-                    <strong style="color: var(--text-highlight); font-size: var(--fs-subtitle);">2. ACTION</strong><br>
-                    <span style="font-size: var(--fs-text);">Deskripsi kejadian/tindakan fisik karakter yang terlihat di layar. Rata kiri penuh.</span><br>
-                    <span style="color: var(--text-muted); font-style: italic; font-size: var(--fs-text);">Contoh: Seorang Hakim mengetuk palu.</span>
-                </div>
-                <div class="mb-4">
-                    <strong style="color: var(--text-highlight); font-size: var(--fs-subtitle);">3. CHARACTER CUE, PARENTHETICAL &amp; DIALOGUE</strong><br>
-                    <span style="font-size: var(--fs-text);">Nama tokoh kapital menjorok ke tengah, diikuti keterangan ekspresi (parenthetical) bila ada, lalu kolom dialog di bawahnya.</span><br>
-                    <span style="color: var(--text-muted); font-style: italic; font-size: var(--fs-text);">JAKSA<br>(tegas)<br>Saya keberatan!</span>
-                </div>
-                <div class="mb-4">
-                    <strong style="color: var(--text-highlight); font-size: var(--fs-subtitle);">4. TRANSITION</strong><br>
-                    <span style="font-size: var(--fs-text);">Instruksi penyuntingan (kamera). Selalu kapital di rata kanan.</span><br>
-                    <span style="color: var(--text-muted); font-style: italic; font-size: var(--fs-text);">Contoh: CUT TO:</span>
-                </div>
+    <div id="modal-hint" class="modal-overlay in-game-modal">
+        <div class="modal-content" style="max-width: 500px; text-align: left;">
+            <div class="modal-header-row">
+                <h2>HINT</h2>
+                <button class="modal-close-x" onclick="closeHint()">X</button>
+            </div>
+            <div id="hint-diagnostic-body" style="color: var(--text-normal); line-height: 1.6; max-height: 50vh; padding-right: 10px; overflow-y: auto; font-size: var(--fs-subtitle);">
             </div>
             <div class="flex justify-center mt-6"><button class="retro-btn primary" onclick="closeHint()">SAYA MENGERTI (TUTUP)</button></div>
         </div>
     </div>
 
-    <div id="modal-start" class="modal-overlay">
+    <!-- Pop-Up Penawaran Mini Game Saat Coffee / Hint Habis -->
+    <div id="modal-resource-empty" class="modal-overlay in-game-modal">
+        <div class="modal-content" style="max-width: 420px;">
+            <div class="modal-header-row">
+                <h2 id="res-empty-title">KOPI HABIS!</h2>
+            </div>
+            <p id="res-empty-desc" class="mb-4" style="line-height: 1.45; color: var(--text-normal); font-size: var(--fs-subtitle);"></p>
+            <p class="mb-6" style="color: var(--accent-yellow); font-size: var(--fs-title); letter-spacing: 1px;">Mainkan mini game?</p>
+            <div class="flex justify-between items-center mt-2">
+                <button class="retro-btn" id="btn-res-no" onclick="cancelPlayMiniGame()">TIDAK</button>
+                <button class="retro-btn primary" id="btn-res-yes" onclick="confirmPlayMiniGame()">YA</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay Mini Game Meja Kerja (Pixel Art & 3 Level) -->
+    <div id="modal-minigame" class="modal-overlay in-game-modal">
         <div class="modal-content">
-            <h1 class="mb-2">PROFIL EDITOR</h1>
+            <div class="modal-header-row">
+                <h2 id="mg-title">MINI GAME</h2>
+                <button class="modal-close-x" onclick="abortMiniGame()" title="Tutup">X</button>
+            </div>
+            <div class="mg-HeaderMeta">
+                <div class="mg-level-pips" id="mg-level-pips">
+                    <span class="mg-pip active">LV.1</span>
+                    <span class="mg-pip">LV.2</span>
+                    <span class="mg-pip">LV.3</span>
+                </div>
+                <span class="mg-badge" id="mg-reward-badge">HADIAH: +1 KOPI</span>
+            </div>
+            <div class="mg-stage" id="mg-stage"></div>
+            <div class="mg-status-bar" id="mg-status">Siapkan dirimu...</div>
+        </div>
+    </div>
+
+    <div id="modal-start" class="modal-overlay">
+        <div class="modal-content" style="max-width: 380px;">
+            <h1>PROFIL EDITOR</h1>
             <p class="mb-4" style="color: var(--text-muted); font-size: var(--fs-text);">Setiap cerita memiliki masalah. Tugasmu memastikan setiap bagian memiliki alasan yang logis. Waktu terus berjalan!</p>
             <input type="text" id="player-name" class="retro-input" placeholder="MASUKKAN NAMA" maxlength="10">
             <div id="profile-stats" class="mb-6 hidden border p-3 text-left" style="color: var(--text-normal); border-color: var(--border-light);">
@@ -688,9 +1542,9 @@
         </div>
     </div>
 
-    <div id="modal-msg" class="modal-overlay">
+    <div id="modal-msg" class="modal-overlay in-game-modal">
         <div class="modal-content" style="max-width: 400px;">
-            <h2 id="msg-title" class="mb-4 border-b pb-2" style="border-color: var(--border-light);">INFO</h2>
+            <h2 id="msg-title">INFO</h2>
             <p id="msg-body" class="mb-6 text-center" style="line-height: 1.5; color: var(--text-normal); font-size: var(--fs-text);"></p>
             <div class="flex justify-center gap-4"><button class="retro-btn" id="btn-msg-cancel" style="display:none;" onclick="closeModal('modal-msg')">BATAL</button><button class="retro-btn primary" id="btn-msg-ok" onclick="closeModal('modal-msg')">OK</button></div>
         </div>
@@ -698,7 +1552,7 @@
 
     <div id="modal-gameover" class="modal-overlay">
         <div class="modal-content" style="max-width: 550px; padding: 18px 22px;">
-            <h1 id="go-title" style="color: var(--color-char); border-bottom: 2px solid var(--border-light); padding-bottom: 8px; margin-bottom: 12px; margin-top:0;">GAME OVER</h1>
+            <h1 id="go-title" style="color: var(--color-char);">GAME OVER</h1>
             <div class="ending-img-container">
                 <img id="go-img" alt="Ending Illustration" style="display:none;">
                 <div id="go-img-fallback" class="ending-fallback-text" style="display:none;">[ ILUSTRASI ENDING BELUM TERSEDIA ]</div>
@@ -726,13 +1580,13 @@
         <div class="hs-window-frame">
             <div class="hs-window-bar">
                 <span class="hs-window-title">🏆 LEADERBOARD — TOP 100 EDITORS</span>
-                <button class="retro-btn" style="padding: 4px 12px; background: var(--color-char); color: #fff; border-color: #5c2f2f; font-size: var(--fs-title); font-weight: bold;" onclick="closeHighscores()">X</button>
+                <button class="modal-close-x" style="position: static; transform: none; width: 24px; height: 24px;" onclick="closeHighscores()">X</button>
             </div>
             <div class="hs-window-body">
                 <div class="hs-content-wrapper">
                     <div id="hs-top3-container" class="hs-top3-box"></div>
                     <div class="hs-list-container" id="hs-others-wrapper">
-                        <div class="hs-section-divider"><span>PERINGKAT #4 — #100</span><span style="font-size: var(--fs-small);" id="hs-status">Menghubungkan ke Firebase...</span></div>
+                        <div class="hs-section-divider"><span>PERINGKAT #4 — #100</span></div>
                         <table class="hs-table" id="hs-table-body" style="margin-bottom: 0;">
                             <tr><th>NO</th><th>NAMA</th><th>SKOR</th><th>HARI</th><th style="text-align:right;">KASUS</th></tr>
                         </table>
@@ -805,7 +1659,6 @@
             }
         };
 
-        // Cache URL yang sudah terverifikasi berhasil dimuat agar gambar tidak pernah hilang/berkedip
         const resolvedImageCache = {};
 
         function loadSmartImage(imgEl, basePath, onSuccessCallback, onFailCallback) {
@@ -814,7 +1667,6 @@
                 return;
             }
 
-            // Jika path ini sudah pernah berhasil dimuat sebelumnya, langsung gunakan URL yang valid
             if (resolvedImageCache[basePath]) {
                 imgEl.onerror = null;
                 imgEl.src = resolvedImageCache[basePath];
@@ -825,7 +1677,6 @@
 
             const cleanPath = basePath.replace(/\.(webp|png|jpg|jpeg)$/i, '');
             const cleanBaseName = cleanPath.split('/').pop();
-            // Mencoba beberapa kemungkinan lokasi folder & ekstensi (.webp, .png, .jpg)
             const candidates = [
                 basePath,
                 `${cleanPath}.webp`,
@@ -881,6 +1732,18 @@
             });
         }
 
+        // Menjaga posisi modal in-game agar tidak pernah menutupi Header / Client Brief
+        function syncHeaderOverlayOffset() {
+            const header = document.getElementById('game-header');
+            if (header && header.offsetParent !== null) {
+                const rect = header.getBoundingClientRect();
+                if (rect.bottom > 0) {
+                    document.documentElement.style.setProperty('--header-overlay-offset', `${Math.ceil(rect.bottom + 4)}px`);
+                }
+            }
+        }
+        window.addEventListener('resize', syncHeaderOverlayOffset);
+
         let clientAngryTimeout = null;
 
         function triggerClientSubmitAngry(durationMs = 2500) {
@@ -902,7 +1765,6 @@
 
             const clientId = gameState.clientId || 'client1';
             const pct = gameState.maxTime > 0 ? (gameState.timeLeft / gameState.maxTime) * 100 : 100;
-            // Marah aktif apabila timer berada di zona merah (<= 30%) ATAU baru saja salah submit
             const isTimerRed = gameState.isGameActive && pct <= 30;
             const isAngry = Boolean(gameState.isSubmitAngry || isTimerRed);
 
@@ -911,7 +1773,6 @@
                 else boxEl.classList.remove('angry-active');
             }
 
-            // Update ekspresi SVG fallback jika gambar belum tersedia
             if (svgMouth) {
                 if (isAngry) {
                     svgMouth.setAttribute('d', 'M7.5 7.5L10.5 9M16.5 7.5L13.5 9M10 13c1-1.2 3-1.2 4 0');
@@ -1017,22 +1878,106 @@
             "CLIFFHANGER": { def: "Akhir cerita yang menggantung dan menegangkan tanpa penyelesaian.", ex: "\"Film itu berakhir cliffhanger.\"" },
             "RESEP": { def: "Catatan resmi dari dokter untuk apoteker mengenai obat.", ex: "\"Dokter menuliskan resep antibiotik.\"" },
             "TKP": { def: "Tempat Kejadian Perkara; lokasi awal terjadinya suatu tindak pidana atau peristiwa.", ex: "\"Polisi segera mengamankan area TKP.\"" },
+            "SLAPSTICK": { def: "Gaya komedi fisik yang mengandalkan gerakan konyol atau kemalangan tubuh secara berlebihan.", ex: "\"Adegan terpeleset kulit pisang adalah ciri komedi slapstick.\"" },
+            "ARTEFAK": { def: "Benda peninggalan bersejarah atau pusaka kuno yang memiliki nilai magis atau arkeologis.", ex: "\"Penjelajah itu menemukan artefak kuno di dasar kuil.\"" },
+            "HOLOGRAM": { def: "Proyeksi gambar tiga dimensi yang terbentuk dari pantulan sinar laser teknologi tinggi.", ex: "\"Layar hologram menampilkan peta galaksi.\"" },
+            "PROTOKOL": { def: "Prosedur resmi atau sistem aturan standar yang wajib dipatuhi dalam operasi teknis.", ex: "\"Ilmuwan itu mengaktifkan protokol darurat laboratorium.\"" },
             "CUT TO:": { def: "Transisi perpindahan langsung yang tegas dari satu adegan ke adegan berikutnya.", ex: "\"Adegan berpindah cepat menggunakan CUT TO:.\"" },
             "FADE OUT.": { def: "Transisi layar perlahan meredup menjadi gelap, lazim digunakan sebagai penutup babak atau akhir skenario.", ex: "\"Skenario ditutup dengan FADE OUT.\"" }
         };
 
-        // --- STORY TEMPLATES ---
+        // --- STORY TEMPLATES (6 Genre Sinema Murni & Gagasan Cerita Film Pendek) ---
         let storyTemplates = [
-            { genre: "HOROR", theme: "Ketakutan pada yang tak terlihat", reqText: "Buat akhir cerita menjadi ironis.", protagonists: ["POLISI", "DOKTER"], locations: ["RUMAH SAKIT KOSONG", "GUDANG TUA", "RUMAH TUA"], conflicts: ["terdengar langkah kaki mendekat perlahan", "semua lampu berkedip dan mati"], ending: "IRONIS" },
-            { genre: "DRAMA KRIMINAL", theme: "Keadilan yang terhalang kebohongan", reqText: "Pastikan kewenangan hukum karakter tidak dilanggar.", protagonists: ["JAKSA"], locations: ["RUANG SIDANG"], conflicts: ["saksi ahli tiba-tiba mengubah kesaksiannya", "alibi terdakwa dipalsukan"], ending: "PENYELESAIAN TUNTUTAN" },
-            { genre: "THRILLER MEDIS", theme: "Berpacu dengan waktu melawan kematian", reqText: "Buat tensi naskah memuncak di akhir cerita (Cliffhanger).", protagonists: ["DOKTER"], locations: ["RUANG OPERASI", "KLINIK DARURAT"], conflicts: ["kondisi korban memburuk dalam hitungan detik", "pasien kejang hebat"], ending: "CLIFFHANGER" },
-            { genre: "MISTERI", theme: "Kebenaran bersembunyi di detail kecil", reqText: "Pastikan tokoh utama mengamankan area TKP.", protagonists: ["POLISI"], locations: ["TKP PENEMUAN KORBAN", "GANG GELAP"], conflicts: ["sebuah BARANG BUKTI hilang", "tersangka menolak bicara"], ending: "TERBUKA (AMBIGU)" }
+            {
+                genre: "HOROR",
+                theme: "Rasa bersalah masa lalu yang menghantui pikiran",
+                reqText: "Bangun suasana mencekam dan akhiri dengan penemuan yang IRONIS.",
+                location: "INT. KORIDOR RUMAH SAKIT LAMA - MALAM",
+                setupAction: "RINA (20) berjalan pelan menyusuri lorong gelap sambil menyorotkan senter ke arah bangsal yang terkunci.",
+                charDialogue: "RINA\n(berbisik gemetar)\nMaafkan aku... waktu itu aku terlalu takut untuk menolongmu keluar.",
+                turningPoint: "Tiba-tiba pintu bangsal terbuka sendiri, memperlihatkan kursi roda tua yang bergerak maju dan menjatuhkan kartu identitas milik Rina sendiri secara IRONIS.",
+                distractors: [
+                    { type: 'ACTION', text: "RINA terpeleset kulit pisang dengan gaya SLAPSTICK lalu menari gembira mengikuti irama musik disko.", err: "Genre Tidak Konsisten", hint: "Adegan komedi slapstick dan tarian disko merusak atmosfer mencekam pada film HOROR." },
+                    { type: 'DIALOGUE', text: "RINA\n(ceria)\nWah, diskon belanja online malam ini besar sekali! Aku harus segera checkout!", err: "Logika & Suasana Salah", hint: "Dialog belanja online tidak nyambung dengan tema rasa bersalah dan suasana mencekam." },
+                    { type: 'SCENE HEADING', text: "EXT. TAMAN HIBURAN KOTA - SIANG", err: "Latar Lokasi Salah", hint: "Lokasi taman hiburan siang hari bertabrakan dengan premis lorong rumah sakit malam hari." }
+                ]
+            },
+            {
+                genre: "COMEDY",
+                theme: "Kebohongan kecil yang memicu kekacauan beruntun",
+                reqText: "Tampilkan kepanikan konyol tokoh saat menutupi kesalahannya.",
+                location: "INT. DAPUR RESTORAN BINTANG LIMA - SIANG",
+                setupAction: "DONI (18), koki magang yang ceroboh, tak sengaja menumpahkan satu botol penuh bubuk cabai ke dalam panci sup pesanan kritikus makanan.",
+                charDialogue: "DONI\n(panik berkeringat)\nKalau Chef Kepala tahu, tamat riwayatku! Aku harus menyamar jadi pelayan dan menukar mangkuknya!",
+                turningPoint: "Dengan gerakan SLAPSTICK yang terburu-buru, Doni justru tersandung karpet hingga panci sup melayang dan mendarat tepat di atas kepala sang kritikus.",
+                distractors: [
+                    { type: 'ACTION', text: "DONI mengeluarkan peralatan bedah forensik dan mulai melakukan AUTOPSI di atas meja dapur.", err: "Konteks & Genre Salah", hint: "Melakukan autopsi forensik di dapur restoran sangat tidak masuk akal untuk cerita COMEDY ini." },
+                    { type: 'DIALOGUE', text: "DONI\n(dingin)\nSaya akan membacakan PLEDOI pembelaan hukum atas tindak pidana di ruangan ini.", err: "Dialog Tidak Relevan", hint: "Istilah persidangan hukum (Pledoi) tidak sesuai dengan situasi koki magang di restoran." },
+                    { type: 'SCENE HEADING', text: "INT. RUANG INTROGASI POLISI - MALAM", err: "Latar Lokasi Salah", hint: "Cerita komedi ini berlatar di dapur restoran saat jam makan siang, bukan ruang interogasi." }
+                ]
+            },
+            {
+                genre: "DRAMA",
+                theme: "Pentingnya memaafkan keluarga sebelum terlambat",
+                reqText: "Tunjukkan perubahan emosi tokoh dari keras kepala menjadi luluh.",
+                location: "INT. RUANG TAMU RUMAH TUA - SORE",
+                setupAction: "BIMA (19) berdiri kaku memegang koper di dekat pintu, menatap AYAH (55) yang duduk lemah sambil memeriksa hasil pemeriksaan KLINIS di tangannya.",
+                charDialogue: "BIMA\n(suara bergetar)\nSelama ini aku mengira Ayah membenciku, ternyata Ayah menyembunyikan rasa sakit itu sendirian.",
+                turningPoint: "Bima melepaskan kopernya, berlari memeluk sang Ayah erat-erat sementara hujan mulai turun membasahi jendela.",
+                distractors: [
+                    { type: 'ACTION', text: "BIMA mengaktifkan meriam laser HOLOGRAM dan menembaki pesawat alien yang mendarat di atap rumah.", err: "Genre Tidak Konsisten", hint: "Serangan alien dan meriam laser adalah elemen Sci-Fi yang merusak keutuhan cerita DRAMA keluarga." },
+                    { type: 'DIALOGUE', text: "BIMA\n(tertawa konyol)\nHaha! Tadi aku cuma bercanda, ayo kita lomba makan kerupuk sekarang!", err: "Emosi & Suasana Salah", hint: "Candaan lomba makan kerupuk merusak momen emosional rekonsiliasi antara anak dan ayah." },
+                    { type: 'SCENE HEADING', text: "EXT. STASIUN LUAR ANGKASA - MALAM", err: "Latar Lokasi Salah", hint: "Drama keluarga ini terjadi di ruang tamu rumah tua, bukan di luar angkasa." }
+                ]
+            },
+            {
+                genre: "SCI-FI",
+                theme: "Teknologi canggih yang tidak bisa menggantikan hati nurani manusia",
+                reqText: "Tonjolkan dilema tokoh antara mematuhi sistem mesin atau menyelamatkan nyawa.",
+                location: "INT. PUSAT KENDALI LABORATORIUM MASA DEPAN - MALAM",
+                setupAction: "DR. ARIS (35) menatap layar HOLOGRAM yang menampilkan peringatan merah bahwa oksigen di sektor pemukiman pekerja hampir habis.",
+                charDialogue: "DR. ARIS\n(tegas)\nKomputer pusat menyuruhku mengaktifkan PROTOKOL penguncian, tapi aku tidak mungkin membiarkan ratusan warga terjebak!",
+                turningPoint: "Dr. Aris mencabut kabel inti kecerdasan buatan secara manual dan membuka pintu darurat tepat sebelum sistem mengunci ruangan selamanya.",
+                distractors: [
+                    { type: 'ACTION', text: "DR. ARIS merapalkan mantra sihir kuno sambil mengayunkan tongkat kayu untuk memanggil naga api.", err: "Genre Tidak Konsisten", hint: "Mantra sihir dan naga adalah elemen Fantasy yang bertabrakan dengan latar laboratorium SCI-FI." },
+                    { type: 'DIALOGUE', text: "DR. ARIS\n(santai)\nTolong buatkan saya RESEP jamu tradisional dan siapkan kuda poni di depan gedung.", err: "Konteks Cerita Salah", hint: "Dialog jamu dan kuda poni tidak relevan dengan ketegangan darurat di laboratorium masa depan." },
+                    { type: 'SCENE HEADING', text: "EXT. HUTAN PERI KUNO - PAGI", err: "Latar Lokasi Salah", hint: "Latar hutan peri kuno tidak sesuai dengan premis fiksi ilmiah di laboratorium." }
+                ]
+            },
+            {
+                genre: "MYSTERY / THRILLER",
+                theme: "Kebenaran selalu meninggalkan jejak sekecil apa pun",
+                reqText: "Akhiri naskah dengan ketegangan menggantung (CLIFFHANGER).",
+                location: "INT. RUANG KERJA DETEKTIF - MALAM",
+                setupAction: "DETEKTIF KARA (28) mengamati foto TKP dan memeriksa sebuah jam tangan rusak yang disita sebagai BARANG BUKTI utama.",
+                charDialogue: "DETEKTIF KARA\n(fokus)\nJarum jam ini berhenti tepat pukul sembilan. Artinya ALIBI yang disampaikan saksi kunci tadi pagi sepenuhnya palsu.",
+                turningPoint: "Saat Kara hendak menghubungi kantor pusat, lampu ruangan mendadak padam dan siluet seseorang berdiri mengunci pintu dari dalam secara CLIFFHANGER.",
+                distractors: [
+                    { type: 'ACTION', text: "DETEKTIF KARA malah tertidur pulas sambil memeluk boneka beruang dan bermimpi indah tentang pelangi.", err: "Tensi & Alur Salah", hint: "Tindakan tidur memeluk boneka menghancurkan ketegangan investigasi pada genre MYSTERY / THRILLER." },
+                    { type: 'DIALOGUE', text: "DETEKTIF KARA\n(riang)\nKasus ini terlalu rumit, lebih baik kita pergi piknik ke pantai dan lupakan saja semuanya!", err: "Karakterisasi Salah", hint: "Seorang detektif di tengah puncak penyelidikan tidak akan mengajak piknik dan melupakan kasus." },
+                    { type: 'SCENE HEADING', text: "INT. STUDIO ACARA KOMEDI TV - SIANG", err: "Latar Lokasi Salah", hint: "Latar studio acara komedi tidak sesuai dengan suasana investigasi malam hari." }
+                ]
+            },
+            {
+                genre: "FANTASY",
+                theme: "Kekuatan sejati lahir dari pengorbanan yang tulus",
+                reqText: "Jaga keutuhan dunia magis kuno tanpa dicampuri unsur teknologi modern.",
+                location: "INT. KUIL CAHAYA KUNO - MALAM",
+                setupAction: "ELARA (17), penjaga kuil terakhir, meletakkan ARTEFAK kristal yang mulai meredup di atas altar batu berlumut.",
+                charDialogue: "ELARA\n(khidmat)\nJika kristal ini padam, kegelapan akan menelan desa. Aku rela menyerahkan energi pelindungku demi menyalakannya kembali.",
+                turningPoint: "Saat Elara menyentuhkan tangannya ke altar, cahaya keemasan memancar hebat dari kristal dan memulihkan pohon kehidupan di seluruh lembah.",
+                distractors: [
+                    { type: 'ACTION', text: "ELARA memeriksa kamera CCTV kuil dan menyambungkan ponsel pintarnya ke jaringan Wi-Fi berkecepatan tinggi.", err: "Anakronisme / Logika Dunia Salah", hint: "Teknologi modern seperti CCTV dan Wi-Fi tidak boleh muncul di dalam dunia kuil FANTASY kuno." },
+                    { type: 'DIALOGUE', text: "ELARA\n(resmi)\nSebagai JAKSA penuntut umum, saya menuntut naga tersebut membayar denda tilang di pengadilan negeri.", err: "Konteks & Profesi Salah", hint: "Profesi Jaksa dan denda tilang pengadilan modern merusak imersi cerita FANTASY." },
+                    { type: 'SCENE HEADING', text: "INT. BENGKEL MOBIL BALAP - SIANG", err: "Latar Lokasi Salah", hint: "Bengkel mobil balap modern sangat bertolak belakang dengan latar kuil fantasi kuno." }
+                ]
+            }
         ];
 
         async function syncFromFirebase() {
             if (!firebaseDB) return;
             try {
-                const snapTemplates = await firebaseDB.ref('storyTemplates').once('value');
+                const snapTemplates = await firebaseDB.ref('storyTemplates_v2').once('value');
                 if (snapTemplates.exists()) {
                     const data = snapTemplates.val();
                     const parsed = Array.isArray(data) ? data : Object.values(data);
@@ -1041,7 +1986,7 @@
             } catch (e) {}
         }
 
-        // --- ENDINGS CATALOG (5 Endings dengan Keterangan Singkat 1 Kalimat) ---
+        // --- ENDINGS CATALOG ---
         const endingCatalog = [
             { id: 'INDUSTRY_STAR', title: 'INDUSTRY STAR', epilog: 'Keahlian dan kecepatanmu menjadikanmu editor legendaris di industri perfilman.', 
               getImg: () => ASSET_CONFIG.endings.INDUSTRY_STAR, check: (s) => s.totalScore >= 1000 && s.day >= 10 },
@@ -1056,11 +2001,12 @@
         ];
 
         // --- State Management ---
+        const MAX_HINTS_PER_CASE = 2;
         let gameState = {
             sessionId: '', day: 1, casesCompleted: 0, totalScore: 0, mistakes: 0,
             caseRevisions: 0, revisedSlots: [], currentPage: 1, totalPages: 1,
             history: [], currentBible: null, currentBlocks: [], placedBlocks: [],
-            selectedBlockId: null, hintUsed: false, playerName: "ANONIM",
+            selectedBlockId: null, hintUsed: false, hintsLeft: MAX_HINTS_PER_CASE, playerName: "ANONIM",
             timeLeft: BASE_TIME, maxTime: BASE_TIME, coffeesLeft: MAX_COFFEE_PER_CASE, isGameActive: false,
             clientId: 'client1', isSubmitAngry: false
         };
@@ -1108,7 +2054,12 @@
         }
 
         function useCoffee() {
-            if (gameState.coffeesLeft > 0 && gameState.timeLeft > 0 && gameState.isGameActive && !timerState.isPaused) {
+            if (!gameState.isGameActive || mgState.isOpen) return;
+            if (gameState.coffeesLeft <= 0) {
+                promptResourceMiniGame('COFFEE');
+                return;
+            }
+            if (gameState.timeLeft > 0 && !timerState.isPaused) {
                 gameState.coffeesLeft--;
                 const boostBar = document.getElementById('coffee-boost-bar');
                 const currentPct = (gameState.timeLeft / gameState.maxTime) * 100;
@@ -1125,6 +2076,7 @@
                 showFloatingFeedback(`+${COFFEE_BOOST} DETIK!`, "success");
                 renderCoffee();
                 updateClientAvatarState();
+                saveData();
                 
                 setTimeout(() => boostBar.style.backgroundColor = 'var(--color-scene)', 500);
                 setTimeout(() => { boostBar.style.opacity = '0'; updateTimerUI(); }, 1000);
@@ -1134,71 +2086,97 @@
         function renderCoffee() {
             const container = document.getElementById("ui-coffee"); container.innerHTML = "";
             for (let i = 0; i < MAX_COFFEE_PER_CASE; i++) {
-                const btn = document.createElement("button"); btn.className = `coffee-btn ${i >= gameState.coffeesLeft ? 'used' : ''}`; btn.innerText = "☕"; btn.onclick = useCoffee; container.appendChild(btn);
+                const btn = document.createElement("button");
+                btn.className = `coffee-btn ${i >= gameState.coffeesLeft ? 'used' : ''}`;
+                btn.innerText = "☕";
+                btn.title = gameState.coffeesLeft > 0 ? "Minum Kopi (+Waktu)" : "Kopi Habis! Klik untuk isi ulang via Mini Game";
+                btn.onclick = useCoffee;
+                container.appendChild(btn);
             }
         }
 
         // --- Game Logic & Professional Screenplay Blocks ---
         function generateStoryBible() {
             let available = storyTemplates;
-            if (gameState.history.length > 0 && available.length > 1) { const lastGen = gameState.history[gameState.history.length - 1].genre; available = available.filter(t => t.genre !== lastGen); }
+            if (gameState.history.length > 0 && available.length > 1) {
+                const lastGen = gameState.history[gameState.history.length - 1].genre;
+                available = available.filter(t => t.genre !== lastGen);
+            }
             if (available.length === 0) available = storyTemplates;
             const t = pickRandom(available);
             const formats = [
                 { id: 'CUT_TO', text: "Gunakan transisi CUT TO: di akhir." },
                 { id: 'FADE_OUT', text: "Gunakan transisi FADE OUT. di akhir." },
-                { id: 'NO_TRANS', text: "" },
-                { id: 'ANY_TRANS', text: "" }
+                { id: 'ANY_TRANS', text: "Tutup naskah dengan transisi standar di akhir." }
             ];
             const chosenFormat = pickRandom(formats);
-            return { genre: t.genre, theme: t.theme, reqText: t.reqText, protagonist: pickRandom(t.protagonists), location: pickRandom(t.locations), conflict: pickRandom(t.conflicts), ending: t.ending, formatId: chosenFormat.id, formatText: chosenFormat.text };
+            return {
+                genre: t.genre,
+                theme: t.theme,
+                reqText: t.reqText,
+                location: t.location,
+                setupAction: t.setupAction,
+                charDialogue: t.charDialogue,
+                turningPoint: t.turningPoint,
+                distractors: t.distractors || [],
+                formatId: chosenFormat.id,
+                formatText: chosenFormat.text
+            };
         }
 
         function generateBlocksForBible(bible) {
-            let blocks = []; let cid = 1;
-            const cb = (type, text, isCorrect, seq, req, err, hint) => ({ id: 'blk_' + cid++, type, text, isCorrect, sequenceOrder: seq, required: req, errorReason: err, hint });
-            blocks.push(cb('SCENE HEADING', `INT. ${bible.location} - SIANG`, true, 1, true));
-            if (gameState.day >= 4) {
-                blocks.push(cb('SCENE HEADING', `EXT. JALAN RAYA - MALAM`, false, 0, false, "Lokasi Salah", "Perhatikan lokasi relevan sesuai profesi di kasus ini."));
-                blocks.push(cb('SCENE HEADING', `INT. RESTORAN CEPAT SAJI - PAGI`, false, 0, false, "Lokasi Salah", "Konteks adegan tidak terjadi di restoran."));
-            }
-            if (bible.protagonist === 'JAKSA') {
-                blocks.push(cb('ACTION', `Seorang JAKSA merapikan berkas tuntutan di meja dengan gugup.`, true, 2, true));
-                blocks.push(cb('DIALOGUE', `JAKSA\n(tegas)\nKita harus periksa ALIBI terdakwa dengan saksama.`, true, 3, true));
-                blocks.push(cb('ACTION', `JAKSA mengetuk palu hakim dan memutuskan vonis penjara.`, false, 0, false, "Kewenangan", "Periksa batas wewenang profesi Jaksa di pengadilan."));
-                blocks.push(cb('DIALOGUE', `JAKSA\n(dingin)\nSaya akan melakukan AUTOPSI sekarang juga.`, false, 0, false, "Kewenangan", "Jaksa bukan tenaga forensik."));
-                blocks.push(cb('ACTION', `Hakim menyuruh JAKSA membacakan PLEDOI pembelaan.`, false, 0, false, "Kewenangan", "Pledoi adalah tugas terdakwa/pengacara pembela."));
-            } else if (bible.protagonist === 'DOKTER') {
-                blocks.push(cb('ACTION', `DOKTER memeriksa kondisi KLINIS pasien secara manual.`, true, 2, true));
-                blocks.push(cb('ACTION', `Ia mengambil STETOSKOP dan menarik napas panjang.`, true, 3, true));
-                blocks.push(cb('ACTION', `DOKTER mengeluarkan pistol dinas dan memborgol pelaku.`, false, 0, false, "Kewenangan", "Dokter sipil tidak berwenang menangkap."));
-                blocks.push(cb('ACTION', `DOKTER memasang GARIS POLISI di sekitar ranjang.`, false, 0, false, "Kewenangan", "Tindakan ini wewenang kepolisian."));
-                blocks.push(cb('DIALOGUE', `DOKTER\n(panik)\nSaya akan mengajukan PLEDOI untuk pasien ini.`, false, 0, false, "Konteks", "Istilah hukum tak lazim dalam medis. Ia harusnya menulis RESEP."));
-            } else {
-                blocks.push(cb('ACTION', `POLISI merunduk masuk di bawah GARIS POLISI.`, true, 2, true));
-                blocks.push(cb('DIALOGUE', `POLISI\n(melalui HT)\nArea ini steril. Amankan BARANG BUKTI!`, true, 3, true));
-                blocks.push(cb('ACTION', `POLISI melakukan pembedahan KLINIS pada mayat di tempat.`, false, 0, false, "Kewenangan", "Pembedahan ranah forensik (Autopsi)."));
-                blocks.push(cb('ACTION', `POLISI membacakan PLEDOI di depan saksi mata.`, false, 0, false, "Kewenangan", "Ini tugas pengacara di persidangan."));
-                blocks.push(cb('ACTION', `POLISI menuliskan RESEP obat dosis tinggi untuk korban.`, false, 0, false, "Kewenangan", "Hanya dokter yang berhak meresepkan."));
-            }
-            blocks.push(cb('ACTION', `Tiba-tiba, ${bible.conflict}.`, true, 4, true));
-            
+            let blocks = [];
+            let cid = 1;
+            const cb = (type, text, isCorrect, seq, req, err, hint) => ({
+                id: 'blk_' + cid++,
+                type,
+                text,
+                isCorrect,
+                sequenceOrder: seq,
+                required: req,
+                errorReason: err,
+                hint
+            });
+
+            blocks.push(cb('SCENE HEADING', bible.location, true, 1, true));
+            blocks.push(cb('ACTION', bible.setupAction, true, 2, true));
+            blocks.push(cb('DIALOGUE', bible.charDialogue, true, 3, true));
+            blocks.push(cb('ACTION', bible.turningPoint, true, 4, true));
+
             let reqTrans = bible.formatId;
             if (reqTrans === 'CUT_TO') {
                 blocks.push(cb('TRANSITION', `CUT TO:`, true, 5, true));
-                if (gameState.day >= 4) blocks.push(cb('TRANSITION', `FADE OUT.`, false, 0, false, "Format Transisi", "Klien meminta CUT TO: secara spesifik."));
             } else if (reqTrans === 'FADE_OUT') {
                 blocks.push(cb('TRANSITION', `FADE OUT.`, true, 5, true));
-                if (gameState.day >= 4) blocks.push(cb('TRANSITION', `CUT TO:`, false, 0, false, "Format Transisi", "Klien meminta FADE OUT secara spesifik."));
-            } else if (reqTrans === 'NO_TRANS') {
-                if (gameState.day >= 4) {
-                    blocks.push(cb('TRANSITION', `CUT TO:`, false, 0, false, "Format Transisi", "Naskah ini diminta tanpa transisi di akhir."));
-                    blocks.push(cb('TRANSITION', `FADE OUT.`, false, 0, false, "Format Transisi", "Naskah ini diminta tanpa transisi di akhir."));
-                }
-            } else if (reqTrans === 'ANY_TRANS') {
+            } else {
                 blocks.push(cb('TRANSITION', pickRandom([`CUT TO:`, `FADE OUT.`]), true, 5, true));
-                if (gameState.day >= 4) blocks.push(cb('TRANSITION', `DISSOLVE TO:`, false, 0, false, "Format Transisi", "Gunakan transisi standar yang lazim seperti CUT TO atau FADE OUT."));
             }
+
+            let distractorPool = [...(bible.distractors || [])];
+            if (gameState.day >= 5) {
+                if (reqTrans === 'CUT_TO') {
+                    distractorPool.push({ type: 'TRANSITION', text: `FADE OUT.`, err: "Format Transisi", hint: "Klien meminta transisi CUT TO: secara spesifik di akhir naskah." });
+                } else if (reqTrans === 'FADE_OUT') {
+                    distractorPool.push({ type: 'TRANSITION', text: `CUT TO:`, err: "Format Transisi", hint: "Klien meminta transisi FADE OUT. secara spesifik di akhir naskah." });
+                } else {
+                    distractorPool.push({ type: 'TRANSITION', text: `DISSOLVE TO:`, err: "Format Transisi", hint: "Gunakan transisi standar yang tersedia seperti CUT TO: atau FADE OUT." });
+                }
+            }
+
+            let maxDistractors = 1;
+            if (gameState.day <= 2) {
+                maxDistractors = 1;
+            } else if (gameState.day <= 4) {
+                maxDistractors = 2;
+            } else {
+                maxDistractors = distractorPool.length;
+            }
+
+            const selectedDistractors = distractorPool.slice(0, maxDistractors);
+            selectedDistractors.forEach(d => {
+                blocks.push(cb(d.type, d.text, false, 0, false, d.err, d.hint));
+            });
+
             return blocks.sort(() => Math.random() - 0.5);
         }
 
@@ -1272,17 +2250,19 @@
         }
 
         function setupNewCase(isNewGame = false) {
+            closeInGameModals();
             gameState.currentBible = generateStoryBible(); gameState.currentBlocks = generateBlocksForBible(gameState.currentBible);
             const reqCount = gameState.currentBlocks.filter(b => b.required).length; gameState.placedBlocks = new Array(reqCount).fill(null);
             gameState.caseRevisions = 0; gameState.revisedSlots = []; gameState.currentPage = 1;
             
-            // Pilih acak dari 4 karakter klien (client1, client2, client3, client4)
             gameState.clientId = pickRandom(['client1', 'client2', 'client3', 'client4']);
             gameState.isSubmitAngry = false;
             if (clientAngryTimeout) clearTimeout(clientAngryTimeout);
 
-            deselectBlock(); gameState.hintUsed = false;
-            document.getElementById('hint-badge').style.display = 'flex'; document.getElementById('btn-open-hint').classList.remove('hint-disabled');
+            deselectBlock();
+            gameState.hintsLeft = MAX_HINTS_PER_CASE;
+            gameState.hintUsed = false;
+            updateHintButtonUI();
             document.getElementById('glossary-empty').classList.remove('hidden'); document.getElementById('glossary-content').classList.add('hidden');
             
             if (isNewGame) {
@@ -1294,6 +2274,20 @@
             gameState.isGameActive = true; isSubmitting = false; updateUI(); startTimer();
         }
 
+        function updateHintButtonUI() {
+            const badge = document.getElementById('hint-badge');
+            const btn = document.getElementById('btn-open-hint');
+            if (!badge || !btn) return;
+            if (gameState.hintsLeft > 0) {
+                badge.style.display = 'flex';
+                badge.innerText = gameState.hintsLeft;
+                btn.classList.remove('hint-disabled');
+            } else {
+                badge.style.display = 'none';
+                btn.classList.add('hint-disabled');
+            }
+        }
+
         function updateUI() {
             document.getElementById('level-display').innerText = `HARI 0${gameState.day}`;
 
@@ -1301,16 +2295,17 @@
             if (gameState.currentBible.formatText !== '') notes += ' ' + gameState.currentBible.formatText;
             const processedNotes = processTextForGlossary(notes);
 
-            document.getElementById('client-brief-content').innerHTML = `<div class="brief-line"><span class="label">GENRE</span><span class="value">: ${gameState.currentBible.genre}</span></div><div class="brief-line"><span class="label">TEMA</span><span class="value">: ${gameState.currentBible.theme}</span></div><div class="brief-line quote-line"><span class="value">"${processedNotes}"</span></div>`;
+            document.getElementById('client-brief-content').innerHTML = `<div class="brief-line"><span class="label">GENRE</span><span class="colon">:</span><span class="value">${gameState.currentBible.genre}</span></div><div class="brief-line"><span class="label">TEMA</span><span class="colon">:</span><span class="value">${gameState.currentBible.theme}</span></div><div class="brief-line quote-line"><span class="value">"${processedNotes}"</span></div>`;
             
             let checklistHTML = '';
             if (gameState.currentBible.reqText !== "") checklistHTML += `<div class="checklist-item" id="chk-blocks"><span class="checklist-box"></span>Sesuai plot klien</div>`;
             if (gameState.currentBible.formatId === 'CUT_TO' || gameState.currentBible.formatId === 'FADE_OUT') checklistHTML += `<div class="checklist-item" id="chk-trans"><span class="checklist-box"></span>Transisi sesuai instruksi</div>`;
-            checklistHTML += `<div class="checklist-item" id="chk-logic"><span class="checklist-box"></span>Urutan logis</div><div class="checklist-item" id="chk-prof"><span class="checklist-box"></span>Karakter sesuai profesi</div>`;
+            checklistHTML += `<div class="checklist-item" id="chk-logic"><span class="checklist-box"></span>Urutan logis</div><div class="checklist-item" id="chk-prof"><span class="checklist-box"></span>Konsistensi genre & cerita</div>`;
             
             document.getElementById('checklist-container').innerHTML = checklistHTML;
-            if (gameState.hintUsed) { document.getElementById('hint-badge').style.display = 'none'; document.getElementById('btn-open-hint').classList.add('hint-disabled'); }
+            updateHintButtonUI();
             updateClientAvatarState(); renderCoffee(); updateTimerUI(); renderBlocksAndSlots(); updateChecklist();
+            requestAnimationFrame(syncHeaderOverlayOffset);
         }
 
         function evaluateScript(pIds) {
@@ -1333,8 +2328,21 @@
             return { isPass: (finalScore >= 80 && !hasErr && allReq && !seqErr), msgs: msgs, score: finalScore };
         }
 
+        function closeInGameModals() {
+            closeModal('modal-hint');
+            closeModal('modal-preview-blocks');
+            closeModal('modal-preview-script');
+            closeModal('modal-msg');
+            closeModal('modal-resource-empty');
+            if (mgState && mgState.isOpen) {
+                cleanupMiniGame();
+                closeModal('modal-minigame');
+            }
+        }
+
         function checkScript() {
             if (isSubmitting || !gameState.isGameActive) return; isSubmitting = true;
+            closeInGameModals();
             const pIds = gameState.placedBlocks.filter(i => i !== null);
             if (pIds.length === 0 || pIds.length < gameState.placedBlocks.length) {
                 triggerClientSubmitAngry(2200);
@@ -1372,6 +2380,7 @@
 
         async function triggerGameOver() {
             if (!gameState.isGameActive && document.getElementById("modal-gameover").classList.contains("active")) return;
+            closeInGameModals();
             gameState.isGameActive = false; clearInterval(timerState.interval); gameState.timeLeft = 0; updateTimerUI();
             const ending = determineEnding(gameState);
             
@@ -1415,10 +2424,8 @@
 
         async function showHighscores() {
             document.getElementById("modal-highscore").classList.add("active");
-            document.getElementById("hs-status").innerText = "Memuat data dari Firebase...";
             
             const scores = await LeaderboardManager.getTop100();
-            document.getElementById("hs-status").innerText = firebaseDB ? "🟢 ONLINE (FIREBASE RTDB)" : "🟡 LOCAL MODE";
 
             const top3Container = document.getElementById("hs-top3-container");
             const othersWrapper = document.getElementById("hs-others-wrapper");
@@ -1455,8 +2462,8 @@
         }
         function closeHighscores() { document.getElementById("modal-highscore").classList.remove("active"); }
 
-        function returnToMenu() { closeModal('modal-gameover'); closeModal('modal-start'); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; pauseTimer(); }
-        function returnToMenuFromProfile() { saveData(); closeModal('modal-start'); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; }
+        function returnToMenu() { closeInGameModals(); closeModal('modal-gameover'); closeModal('modal-start'); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; pauseTimer(); }
+        function returnToMenuFromProfile() { saveData(); closeInGameModals(); closeModal('modal-start'); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; }
         
         function openStartModal() {
             document.getElementById("main-menu").classList.remove("active");
@@ -1477,17 +2484,1438 @@
             document.getElementById('modal-start').classList.remove('active'); document.getElementById("game-layout").style.display = "flex";
             if (!gameState.currentBible || gameState.currentBlocks.length === 0) setupNewCase(true); else { gameState.isGameActive = true; updateUI(); startTimer(); }
             initW95Scrollbars();
+            requestAnimationFrame(syncHeaderOverlayOffset);
         }
         function nextDay() { gameState.day++; setupNewCase(false); saveData(); }
         function restartGame() { closeModal('modal-gameover'); gameState.day = 1; gameState.casesCompleted = 0; gameState.totalScore = 0; gameState.mistakes = 0; gameState.history = []; localStorage.removeItem('edsave'); setupNewCase(true); }
 
-        function saveData() { if(!gameState.isGameActive) return; localStorage.setItem('edsave', JSON.stringify({ sessId: gameState.sessionId, d: gameState.day, c: gameState.casesCompleted, s: gameState.totalScore, h: gameState.history, pName: gameState.playerName, tLeft: gameState.timeLeft, mTime: gameState.maxTime, cLeft: gameState.coffeesLeft, m: gameState.mistakes, cr: gameState.caseRevisions, rs: gameState.revisedSlots, b: gameState.currentBible, cb: gameState.currentBlocks, pb: gameState.placedBlocks, cid: gameState.clientId })); }
-        function loadData() { try { const sv = localStorage.getItem('edsave'); if (sv) { const d = JSON.parse(sv); gameState.sessionId = d.sessId || generateSessionId(); gameState.day = d.d; gameState.casesCompleted = d.c; gameState.totalScore = d.s; gameState.history = d.h || []; gameState.playerName = d.pName || "ANONIM"; gameState.timeLeft = d.tLeft || BASE_TIME; gameState.maxTime = d.mTime || BASE_TIME; gameState.coffeesLeft = d.cLeft !== undefined ? d.cLeft : MAX_COFFEE_PER_CASE; gameState.mistakes = d.m || 0; gameState.caseRevisions = d.cr || 0; gameState.revisedSlots = d.rs || []; gameState.clientId = d.cid || 'client1'; if(d.b && d.cb && d.pb) { gameState.currentBible = d.b; gameState.currentBlocks = d.cb; gameState.placedBlocks = d.pb; } return true; } } catch(e) {} return false; }
-        function showProfile() { pauseTimer(); saveData(); document.getElementById('stat-day').innerText = gameState.day; document.getElementById('stat-cases').innerText = gameState.casesCompleted; document.getElementById('stat-score').innerText = gameState.casesCompleted > 0 ? Math.round(gameState.totalScore / gameState.casesCompleted) : 0; document.getElementById('profile-stats').classList.remove('hidden'); document.getElementById('modal-start').classList.add('active'); document.getElementById('btn-start-game').innerText = "LANJUTKAN"; if(gameState.playerName !== "ANONIM") document.getElementById('player-name').value = gameState.playerName; }
+        function saveData() { if(!gameState.isGameActive) return; localStorage.setItem('edsave', JSON.stringify({ sessId: gameState.sessionId, d: gameState.day, c: gameState.casesCompleted, s: gameState.totalScore, h: gameState.history, pName: gameState.playerName, tLeft: gameState.timeLeft, mTime: gameState.maxTime, cLeft: gameState.coffeesLeft, hLeft: gameState.hintsLeft, m: gameState.mistakes, cr: gameState.caseRevisions, rs: gameState.revisedSlots, b: gameState.currentBible, cb: gameState.currentBlocks, pb: gameState.placedBlocks, cid: gameState.clientId })); }
+        function loadData() { try { const sv = localStorage.getItem('edsave'); if (sv) { const d = JSON.parse(sv); gameState.sessionId = d.sessId || generateSessionId(); gameState.day = d.d; gameState.casesCompleted = d.c; gameState.totalScore = d.s; gameState.history = d.h || []; gameState.playerName = d.pName || "ANONIM"; gameState.timeLeft = d.tLeft || BASE_TIME; gameState.maxTime = d.mTime || BASE_TIME; gameState.coffeesLeft = d.cLeft !== undefined ? d.cLeft : MAX_COFFEE_PER_CASE; gameState.hintsLeft = d.hLeft !== undefined ? d.hLeft : MAX_HINTS_PER_CASE; gameState.mistakes = d.m || 0; gameState.caseRevisions = d.cr || 0; gameState.revisedSlots = d.rs || []; gameState.clientId = d.cid || 'client1'; if(d.b && d.cb && d.pb) { gameState.currentBible = d.b; gameState.currentBlocks = d.cb; gameState.placedBlocks = d.pb; } return true; } } catch(e) {} return false; }
+        function showProfile() { closeInGameModals(); pauseTimer(); saveData(); document.getElementById('stat-day').innerText = gameState.day; document.getElementById('stat-cases').innerText = gameState.casesCompleted; document.getElementById('stat-score').innerText = gameState.casesCompleted > 0 ? Math.round(gameState.totalScore / gameState.casesCompleted) : 0; document.getElementById('profile-stats').classList.remove('hidden'); document.getElementById('modal-start').classList.add('active'); document.getElementById('btn-start-game').innerText = "LANJUTKAN"; if(gameState.playerName !== "ANONIM") document.getElementById('player-name').value = gameState.playerName; }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        function openHint() { if (gameState.hintUsed || !gameState.isGameActive) return; document.getElementById('modal-hint').classList.add('active'); }
-        function closeHint() { document.getElementById('modal-hint').classList.remove('active'); gameState.hintUsed = true; document.getElementById('hint-badge').style.display = 'none'; document.getElementById('btn-open-hint').classList.add('hint-disabled'); updateChecklist(); }
+        // Menampilkan HANYA 1 petunjuk spesifik per penggunaan Hint
+        function generateDiagnosticHintHTML() {
+            const slotNames = [
+                "Pengenalan Latar (SCENE HEADING)",
+                "Tindakan Pembuka (ACTION)",
+                "Dialog Penguat Suasana (DIALOGUE)",
+                "Titik Balik / Konflik (ACTION)",
+                "Transisi Penutup (TRANSITION)"
+            ];
+
+            // Prioritas 1: Cek apakah ada blok pengecoh (salah pilih) yang terpasang
+            for (let i = 0; i < gameState.placedBlocks.length; i++) {
+                const slotNum = i + 1;
+                const bId = gameState.placedBlocks[i];
+                if (!bId) continue;
+                const block = gameState.currentBlocks.find(x => x.id === bId);
+                if (block && !block.isCorrect) {
+                    return `<div style="background: rgba(181, 108, 108, 0.14); border-left: 4px solid var(--color-char); padding: 12px 14px;">
+                        <div style="color: var(--color-char); font-weight: bold; margin-bottom: 6px;">✖ KOTAK BARIS #${slotNum} SALAH PILIH (${block.type})</div>
+                        <div>Blok yang kamu pasang di <strong>Kotak Baris #${slotNum}</strong> adalah pengecoh! ${block.hint} Keluarkan blok tersebut dari kertas naskah.</div>
+                    </div>`;
+                }
+            }
+
+            // Prioritas 2: Cek apakah ada blok benar tetapi posisinya tertukar
+            for (let i = 0; i < gameState.placedBlocks.length; i++) {
+                const slotNum = i + 1;
+                const bId = gameState.placedBlocks[i];
+                if (!bId) continue;
+                const block = gameState.currentBlocks.find(x => x.id === bId);
+                if (block && block.isCorrect && block.sequenceOrder !== slotNum) {
+                    const targetSlot = block.sequenceOrder;
+                    const roleName = slotNames[targetSlot - 1] || `baris ke-${targetSlot}`;
+                    return `<div style="background: rgba(214, 176, 84, 0.14); border-left: 4px solid var(--accent-yellow); padding: 12px 14px;">
+                        <div style="color: var(--accent-yellow); font-weight: bold; margin-bottom: 6px;">⇄ POSISI KOTAK BARIS #${slotNum} TERTUKAR</div>
+                        <div>Blok <strong>${block.type}</strong> di <strong>Kotak Baris #${slotNum}</strong> sudah tepat secara cerita, namun urutannya salah. Pindahkan blok ini ke <strong>Kotak Baris #${targetSlot}</strong> (${roleName}).</div>
+                    </div>`;
+                }
+            }
+
+            // Prioritas 3: Cek kotak pertama yang masih kosong
+            for (let i = 0; i < gameState.placedBlocks.length; i++) {
+                const slotNum = i + 1;
+                const bId = gameState.placedBlocks[i];
+                if (!bId) {
+                    const expectedRole = slotNames[i] || `Urutan ke-${slotNum}`;
+                    return `<div style="background: rgba(255, 255, 255, 0.06); border-left: 4px solid var(--text-highlight); padding: 12px 14px;">
+                        <div style="color: var(--text-highlight); font-weight: bold; margin-bottom: 6px;">□ KOTAK BARIS #${slotNum} MASIH KOSONG</div>
+                        <div><strong>Kotak Baris #${slotNum}</strong> belum terisi. Carilah blok bagian <strong>${expectedRole}</strong> yang sesuai dengan arahan Client Brief di atas.</div>
+                    </div>`;
+                }
+            }
+
+            return `<div style="padding: 12px 14px; background: rgba(127, 163, 127, 0.15); border-left: 4px solid var(--color-scene); color: var(--text-highlight);">
+                <div style="color: var(--color-scene); font-weight: bold; margin-bottom: 4px;">✔ SEMUA KOTAK SUDAH TEPAT!</div>
+                <div>Seluruh blok pada Script Paper sudah sesuai dengan genre, tema, dan urutan struktur cerita yang benar. Silakan tekan tombol <strong>SUBMIT</strong>!</div>
+            </div>`;
+        }
+
+        function openHint() {
+            if (!gameState.isGameActive || mgState.isOpen) return;
+            if (gameState.hintsLeft <= 0) {
+                promptResourceMiniGame('HINT');
+                return;
+            }
+            syncHeaderOverlayOffset();
+            closeModal('modal-preview-blocks');
+            closeModal('modal-preview-script');
+            gameState.hintsLeft--;
+            gameState.hintUsed = (gameState.hintsLeft <= 0);
+            updateHintButtonUI();
+            document.getElementById('hint-diagnostic-body').innerHTML = generateDiagnosticHintHTML();
+            document.getElementById('modal-hint').classList.add('active');
+            saveData();
+        }
+        function closeHint() {
+            document.getElementById('modal-hint').classList.remove('active');
+            updateChecklist();
+        }
+
+        // =========================================================
+        // 🎨 PIXEL ART SVG ASSETS & 3-LEVEL MINI GAMES SYSTEM
+        // =========================================================
+        const PIXEL_ART = {
+            roach: `<svg class="pixel-svg" width="38" height="38" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="1" width="1" height="3" fill="#2b1b12"/><rect x="10" y="1" width="1" height="3" fill="#2b1b12"/>
+                <rect x="4" y="0" width="1" height="1" fill="#2b1b12"/><rect x="11" y="0" width="1" height="1" fill="#2b1b12"/>
+                <rect x="6" y="3" width="4" height="2" fill="#3d2516"/>
+                <rect x="6" y="3" width="1" height="1" fill="#e05a5a"/><rect x="9" y="3" width="1" height="1" fill="#e05a5a"/>
+                <rect x="5" y="5" width="6" height="8" fill="#6e4226"/>
+                <rect x="6" y="6" width="4" height="6" fill="#8c5532"/>
+                <rect x="7" y="5" width="2" height="8" fill="#4d2e1b"/>
+                <rect x="6" y="13" width="4" height="2" fill="#4d2e1b"/>
+                <rect x="3" y="5" width="2" height="1" fill="#2b1b12"/><rect x="11" y="5" width="2" height="1" fill="#2b1b12"/>
+                <rect x="2" y="8" width="3" height="1" fill="#2b1b12"/><rect x="11" y="8" width="3" height="1" fill="#2b1b12"/>
+                <rect x="3" y="11" width="2" height="1" fill="#2b1b12"/><rect x="11" y="11" width="2" height="1" fill="#2b1b12"/>
+                <rect x="2" y="12" width="1" height="2" fill="#2b1b12"/><rect x="13" y="12" width="1" height="2" fill="#2b1b12"/>
+            </svg>`,
+            splat: `<svg class="pixel-svg" width="38" height="38" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="5" width="6" height="6" fill="#7fa37f"/>
+                <rect x="4" y="6" width="8" height="4" fill="#9cd689"/>
+                <rect x="6" y="3" width="3" height="2" fill="#7fa37f"/>
+                <rect x="7" y="11" width="3" height="3" fill="#7fa37f"/>
+                <rect x="2" y="4" width="2" height="2" fill="#9cd689"/>
+                <rect x="12" y="3" width="2" height="2" fill="#7fa37f"/>
+                <rect x="12" y="11" width="2" height="2" fill="#9cd689"/>
+                <rect x="3" y="12" width="2" height="2" fill="#7fa37f"/>
+            </svg>`,
+            paperBall: `<svg class="pixel-svg" width="30" height="30" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="1" width="7" height="1" fill="#121211"/>
+                <rect x="2" y="2" width="2" height="1" fill="#121211"/><rect x="11" y="2" width="3" height="1" fill="#121211"/>
+                <rect x="1" y="3" width="1" height="4" fill="#121211"/><rect x="14" y="3" width="1" height="3" fill="#121211"/>
+                <rect x="2" y="7" width="1" height="3" fill="#121211"/><rect x="13" y="6" width="1" height="4" fill="#121211"/>
+                <rect x="1" y="10" width="1" height="3" fill="#121211"/><rect x="14" y="10" width="1" height="2" fill="#121211"/>
+                <rect x="2" y="13" width="3" height="1" fill="#121211"/><rect x="12" y="12" width="2" height="2" fill="#121211"/>
+                <rect x="5" y="14" width="7" height="1" fill="#121211"/>
+                <rect x="4" y="2" width="7" height="12" fill="#f7f4eb"/>
+                <rect x="2" y="3" width="12" height="9" fill="#f7f4eb"/>
+                <rect x="3" y="7" width="10" height="6" fill="#f7f4eb"/>
+                <rect x="2" y="10" width="3" height="3" fill="#e6dfc8"/>
+                <rect x="11" y="3" width="3" height="3" fill="#e6dfc8"/>
+                <rect x="5" y="11" width="7" height="3" fill="#d9d1ba"/>
+                <rect x="11" y="9" width="2" height="3" fill="#cfc5aa"/>
+                <rect x="4" y="4" width="4" height="1" fill="#88806b"/>
+                <rect x="7" y="5" width="2" height="2" fill="#b0a688"/>
+                <rect x="3" y="8" width="4" height="1" fill="#88806b"/>
+                <rect x="6" y="7" width="5" height="1" fill="#999075"/>
+                <rect x="9" y="8" width="2" height="2" fill="#88806b"/>
+                <rect x="5" y="10" width="4" height="1" fill="#b0a688"/>
+                <rect x="5" y="3" width="3" height="1" fill="#67b2d6"/>
+                <rect x="9" y="6" width="3" height="1" fill="#67b2d6"/>
+                <rect x="4" y="9" width="2" height="1" fill="#d67a7a"/>
+            </svg>`,
+            trashBin: `<svg class="pixel-svg" width="48" height="54" viewBox="0 0 16 18" xmlns="http://www.w3.org/2000/svg">
+                <rect x="1" y="1" width="14" height="2" fill="#d6b054"/>
+                <rect x="2" y="3" width="12" height="14" fill="#4a4a47"/>
+                <rect x="3" y="4" width="10" height="12" fill="#2a2a28"/>
+                <rect x="4" y="5" width="2" height="10" fill="#5c5950"/>
+                <rect x="7" y="5" width="2" height="10" fill="#5c5950"/>
+                <rect x="10" y="5" width="2" height="10" fill="#5c5950"/>
+                <rect x="2" y="16" width="12" height="2" fill="#88867c"/>
+            </svg>`,
+            ingIcon(type, size = 28) {
+                const map = {
+                    BEANS: `<svg class="pixel-svg" width="${size}" height="${size}" viewBox="0 0 16 16">
+                        <rect x="3" y="4" width="10" height="10" fill="#7a5330"/>
+                        <rect x="4" y="5" width="8" height="8" fill="#9c6b3f"/>
+                        <rect x="4" y="2" width="8" height="2" fill="#52361e"/>
+                        <rect x="6" y="7" width="4" height="4" fill="#3d2516"/>
+                        <rect x="7" y="7" width="1" height="4" fill="#6f4e37"/>
+                    </svg>`,
+                    WATER: `<svg class="pixel-svg" width="${size}" height="${size}" viewBox="0 0 16 16">
+                        <rect x="6" y="1" width="4" height="2" fill="#386b85"/>
+                        <rect x="5" y="3" width="6" height="2" fill="#b8e4f9"/>
+                        <rect x="4" y="5" width="8" height="9" fill="#5a9ec2"/>
+                        <rect x="5" y="6" width="6" height="7" fill="#77c3ec"/>
+                        <rect x="6" y="7" width="2" height="4" fill="#ffffff"/>
+                    </svg>`,
+                    MILK: `<svg class="pixel-svg" width="${size}" height="${size}" viewBox="0 0 16 16">
+                        <rect x="5" y="1" width="6" height="2" fill="#5a8ca8"/>
+                        <rect x="4" y="3" width="8" height="2" fill="#d9d1ba"/>
+                        <rect x="4" y="5" width="8" height="9" fill="#f5efe0"/>
+                        <rect x="5" y="7" width="6" height="4" fill="#67b2d6"/>
+                        <rect x="6" y="8" width="2" height="2" fill="#ffffff"/>
+                    </svg>`,
+                    SUGAR: `<svg class="pixel-svg" width="${size}" height="${size}" viewBox="0 0 16 16">
+                        <rect x="3" y="7" width="10" height="6" fill="#b56c6c"/>
+                        <rect x="4" y="8" width="8" height="4" fill="#8f4f4f"/>
+                        <rect x="4" y="4" width="3" height="3" fill="#ffffff"/>
+                        <rect x="8" y="4" width="3" height="3" fill="#f5efe0"/>
+                        <rect x="6" y="2" width="3" height="3" fill="#ffffff"/>
+                    </svg>`,
+                    ICE: `<svg class="pixel-svg" width="${size}" height="${size}" viewBox="0 0 16 16">
+                        <rect x="2" y="6" width="6" height="6" fill="#8fd6f2"/>
+                        <rect x="3" y="7" width="4" height="4" fill="#d4f4ff"/>
+                        <rect x="8" y="5" width="6" height="6" fill="#6fc3e6"/>
+                        <rect x="9" y="6" width="4" height="4" fill="#b8ecff"/>
+                        <rect x="5" y="2" width="5" height="5" fill="#a5e3fa"/>
+                    </svg>`,
+                    CARAMEL: `<svg class="pixel-svg" width="${size}" height="${size}" viewBox="0 0 16 16">
+                        <rect x="6" y="1" width="4" height="3" fill="#d6b054"/>
+                        <rect x="5" y="4" width="6" height="2" fill="#7a4918"/>
+                        <rect x="4" y="6" width="8" height="8" fill="#c97a2b"/>
+                        <rect x="5" y="7" width="6" height="6" fill="#e6963e"/>
+                        <rect x="6" y="8" width="4" height="3" fill="#f7c873"/>
+                    </svg>`
+                };
+                return map[type] || '';
+            }
+        };
+
+        const MINIGAME_POOL = [
+            'SIMON_KEYPAD',
+            'COFFEE_MACHINE',
+            'COCKROACH_SMASHER',
+            'WIRE_MATCHING',
+            'PAPER_TOSS'
+        ];
+
+        const MG_MAX_LEVEL = 3;
+
+        let mgState = {
+            isOpen: false,
+            isPromptOpen: false,
+            pendingResource: null, // 'COFFEE' | 'HINT'
+            currentGameId: null,
+            currentLevel: 1, // 1 (Easy) -> 2 (Normal) -> 3 (Hard)
+            lastPlayedId: null,
+            recentHistory: [],
+            timers: [],
+            intervals: [],
+            rafId: null,
+            cleanupFn: null,
+            finished: false
+        };
+
+        function registerMgTimeout(fn, delay) {
+            const id = setTimeout(fn, delay);
+            mgState.timers.push(id);
+            return id;
+        }
+
+        function registerMgInterval(fn, delay) {
+            const id = setInterval(fn, delay);
+            mgState.intervals.push(id);
+            return id;
+        }
+
+        function clearMiniGameTimersOnly() {
+            mgState.timers.forEach(id => clearTimeout(id));
+            mgState.intervals.forEach(id => clearInterval(id));
+            mgState.timers = [];
+            mgState.intervals = [];
+            if (mgState.rafId) {
+                cancelAnimationFrame(mgState.rafId);
+                mgState.rafId = null;
+            }
+            if (typeof mgState.cleanupFn === 'function') {
+                try { mgState.cleanupFn(); } catch (e) {}
+                mgState.cleanupFn = null;
+            }
+        }
+
+        function cleanupMiniGame() {
+            clearMiniGameTimersOnly();
+            mgState.isOpen = false;
+            mgState.isPromptOpen = false;
+        }
+
+        function updateMiniGameLevelHeader() {
+            const pipsContainer = document.getElementById('mg-level-pips');
+            if (!pipsContainer) return;
+            const diffLabels = ['EASY', 'NORMAL', 'HARD'];
+            let html = '';
+            for (let lv = 1; lv <= MG_MAX_LEVEL; lv++) {
+                let cls = 'mg-pip';
+                if (lv < mgState.currentLevel) cls += ' done';
+                else if (lv === mgState.currentLevel) cls += ' active';
+                const label = lv < mgState.currentLevel ? `LV.${lv} ✔` : `LV.${lv} ${diffLabels[lv - 1]}`;
+                html += `<span class="${cls}">${label}</span>`;
+            }
+            pipsContainer.innerHTML = html;
+        }
+
+        function pickRandomMiniGame() {
+            let pool = [...MINIGAME_POOL];
+            // Filter out the last played game if there are other options available
+            if (mgState.lastPlayedId && pool.length > 1) {
+                pool = pool.filter(id => id !== mgState.lastPlayedId);
+            }
+            const chosen = pool[Math.floor(Math.random() * pool.length)];
+            mgState.lastPlayedId = chosen;
+            mgState.recentHistory.push(chosen);
+            if (mgState.recentHistory.length > 5) mgState.recentHistory.shift();
+            return chosen;
+        }
+
+        function promptResourceMiniGame(resourceType) {
+            if (!gameState.isGameActive || mgState.isOpen || mgState.isPromptOpen) return;
+            syncHeaderOverlayOffset();
+            closeModal('modal-hint');
+            closeModal('modal-preview-blocks');
+            closeModal('modal-preview-script');
+            closeModal('modal-msg');
+
+            mgState.pendingResource = resourceType;
+            mgState.isPromptOpen = true;
+
+            const titleEl = document.getElementById('res-empty-title');
+            const descEl = document.getElementById('res-empty-desc');
+
+            if (resourceType === 'COFFEE') {
+                titleEl.innerText = 'KOPI HABIS!';
+                descEl.innerText = 'Persediaan kopimu sudah habis. Selesaikan mini game untuk mendapatkan secangkir kopi tambahan agar tetap terjaga!';
+            } else {
+                titleEl.innerText = 'HINT HABIS!';
+                descEl.innerText = 'Butuh sedikit bantuan? Selesaikan mini game untuk mendapatkan tambahan Hint.';
+            }
+
+            document.getElementById('modal-resource-empty').classList.add('active');
+        }
+
+        function cancelPlayMiniGame() {
+            mgState.isPromptOpen = false;
+            mgState.pendingResource = null;
+            closeModal('modal-resource-empty');
+        }
+
+        function confirmPlayMiniGame() {
+            if (!mgState.pendingResource || mgState.isOpen) return;
+            const targetRes = mgState.pendingResource;
+            closeModal('modal-resource-empty');
+            mgState.isPromptOpen = false;
+
+            pauseTimer();
+            saveData();
+
+            launchRandomMiniGame(targetRes);
+        }
+
+        function launchRandomMiniGame(resourceType) {
+            cleanupMiniGame();
+            mgState.isOpen = true;
+            mgState.finished = false;
+            mgState.pendingResource = resourceType;
+            mgState.currentLevel = 1;
+            simonMasterSequence = [];
+
+            const gameId = pickRandomMiniGame();
+            mgState.currentGameId = gameId;
+
+            const rewardLabel = resourceType === 'COFFEE' ? 'HADIAH: +1 KOPI ☕' : 'HADIAH: +1 HINT 💡';
+            document.getElementById('mg-reward-badge').innerText = rewardLabel;
+
+            syncHeaderOverlayOffset();
+            document.getElementById('modal-minigame').classList.add('active');
+
+            startCurrentMiniGameStage();
+        }
+
+        function startCurrentMiniGameStage() {
+            clearMiniGameTimersOnly();
+            mgState.finished = false;
+            updateMiniGameLevelHeader();
+
+            const lv = mgState.currentLevel;
+            const gameId = mgState.currentGameId;
+
+            if (gameId === 'SIMON_KEYPAD') initSimonKeypadGame(lv);
+            else if (gameId === 'COFFEE_MACHINE') initCoffeeMachineGame(lv);
+            else if (gameId === 'COCKROACH_SMASHER') initCockroachSmasherGame(lv);
+            else if (gameId === 'WIRE_MATCHING') initWireMatchingGame(lv);
+            else if (gameId === 'PAPER_TOSS') initPaperTossGame(lv);
+        }
+
+        function advanceMiniGameLevelOrWin() {
+            if (mgState.finished) return;
+            clearMiniGameTimersOnly();
+
+            if (mgState.currentLevel < MG_MAX_LEVEL) {
+                mgState.currentLevel++;
+                updateMiniGameLevelHeader();
+                const statusEl = document.getElementById('mg-status');
+                if (statusEl) {
+                    statusEl.style.color = 'var(--color-scene)';
+                    statusEl.innerText = 'Berhasil! Bersiap ke tahap berikutnya...';
+                }
+                registerMgTimeout(() => {
+                    startCurrentMiniGameStage();
+                }, 750);
+            } else {
+                completeMiniGameSuccess();
+            }
+        }
+
+        function completeMiniGameSuccess() {
+            if (mgState.finished) return;
+            mgState.finished = true;
+
+            const rewardType = mgState.pendingResource;
+            cleanupMiniGame();
+            closeModal('modal-minigame');
+
+            if (rewardType === 'COFFEE') {
+                gameState.coffeesLeft = Math.min(MAX_COFFEE_PER_CASE, gameState.coffeesLeft + 1);
+                renderCoffee();
+                showFloatingFeedback('MINI GAME SELESAI!<br>+1 KOPI ☕', 'success');
+            } else if (rewardType === 'HINT') {
+                gameState.hintsLeft = Math.min(MAX_HINTS_PER_CASE, gameState.hintsLeft + 1);
+                gameState.hintUsed = false;
+                updateHintButtonUI();
+                showFloatingFeedback('MINI GAME SELESAI!<br>+1 HINT 💡', 'success');
+            }
+
+            mgState.pendingResource = null;
+            saveData();
+            if (gameState.isGameActive) startTimer();
+        }
+
+        function failMiniGame(reasonText) {
+            if (mgState.finished) return;
+            mgState.finished = true;
+            clearMiniGameTimersOnly();
+            const statusEl = document.getElementById('mg-status');
+            if (statusEl) {
+                statusEl.style.color = 'var(--color-char)';
+                statusEl.innerText = reasonText || 'Gagal! Kembali ke meja kerja...';
+            }
+            registerMgTimeout(() => {
+                abortMiniGame();
+            }, 1300);
+        }
+
+        function abortMiniGame() {
+            cleanupMiniGame();
+            mgState.pendingResource = null;
+            closeModal('modal-minigame');
+            saveData();
+            if (gameState.isGameActive) startTimer();
+        }
+
+        // ---------------------------------------------------------
+        // MINI GAME 1: KODE NUMPAD (3 LEVEL)
+        // Level 2 & 3 melanjutkan urutan angka dari Level 1,
+        // countdown besar di atas numpad seperti mengambil foto
+        // ---------------------------------------------------------
+        let simonMasterSequence = [];
+
+        function initSimonKeypadGame(level) {
+            document.getElementById('mg-title').innerText = 'KODE NUMPAD';
+            const seqLength = level === 1 ? 3 : (level === 2 ? 5 : 7);
+            const flashSpeed = 680;
+
+            if (level === 1 || simonMasterSequence.length === 0) {
+                simonMasterSequence = [];
+                for (let i = 0; i < 7; i++) {
+                    simonMasterSequence.push(Math.floor(Math.random() * 10));
+                }
+            }
+            const sequence = simonMasterSequence.slice(0, seqLength);
+
+            const stage = document.getElementById('mg-stage');
+            const statusEl = document.getElementById('mg-status');
+            statusEl.style.color = 'var(--accent-yellow)';
+            statusEl.innerText = 'Bersiap mengamati urutan angka pada numpad...';
+
+            const initialSlots = Array(seqLength).fill('_').join(' ');
+
+            stage.innerHTML = `
+                <div class="simon-casing">
+                    <div class="simon-countdown-overlay" id="simon-cd-overlay">
+                        <span class="simon-countdown-num" id="simon-cd-num">3</span>
+                    </div>
+                    <div class="simon-lcd">
+                        <span id="simon-prog">${initialSlots}</span>
+                    </div>
+                    <div class="simon-grid" id="simon-grid"></div>
+                </div>
+            `;
+
+            const grid = document.getElementById('simon-grid');
+            const keysLayout = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+            const keyEls = {};
+
+            keysLayout.forEach(num => {
+                const btn = document.createElement('button');
+                btn.className = `simon-key ${num === 0 ? 'zero-key' : ''}`;
+                btn.innerText = num;
+                btn.onclick = () => handleSimonPress(num);
+                grid.appendChild(btn);
+                keyEls[num] = btn;
+            });
+
+            let playerIndex = 0;
+            let acceptingInput = false;
+
+            function updateSlotsDisplay() {
+                const progEl = document.getElementById('simon-prog');
+                if (!progEl) return;
+                const arr = [];
+                for (let i = 0; i < seqLength; i++) {
+                    arr.push(i < playerIndex ? sequence[i] : '_');
+                }
+                progEl.innerText = arr.join(' ');
+            }
+
+            function startCountdownAndPlay(isReplay = false) {
+                acceptingInput = false;
+                playerIndex = 0;
+                updateSlotsDisplay();
+
+                const cdOverlay = document.getElementById('simon-cd-overlay');
+                const cdNum = document.getElementById('simon-cd-num');
+                let count = 3;
+
+                statusEl.style.color = 'var(--accent-yellow)';
+                statusEl.innerText = isReplay ? 'Perhatikan kembali urutan angkanya...' : (level > 1 ? 'Hafalkan tambahan angka berikutnya...' : 'Bersiap menghafal urutan angka...');
+
+                function triggerCountdownTick(val) {
+                    if (!cdNum) return;
+                    cdNum.innerText = val;
+                    cdNum.classList.remove('pop-tick');
+                    void cdNum.offsetWidth;
+                    cdNum.classList.add('pop-tick');
+                }
+
+                if (cdOverlay && cdNum) {
+                    cdOverlay.classList.add('active');
+                    triggerCountdownTick(count);
+                }
+
+                const cdId = registerMgInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        triggerCountdownTick(count);
+                    } else {
+                        clearInterval(cdId);
+                        if (cdOverlay) cdOverlay.classList.remove('active');
+                        if (cdNum) cdNum.classList.remove('pop-tick');
+                        playSequence();
+                    }
+                }, 650);
+            }
+
+            function playSequence() {
+                acceptingInput = false;
+                playerIndex = 0;
+                updateSlotsDisplay();
+                statusEl.style.color = 'var(--accent-yellow)';
+                statusEl.innerText = 'Perhatikan tombol yang menyala...';
+
+                sequence.forEach((digit, idx) => {
+                    registerMgTimeout(() => {
+                        const el = keyEls[digit];
+                        if (el) {
+                            el.classList.add('lit');
+                            registerMgTimeout(() => el.classList.remove('lit'), Math.floor(flashSpeed * 0.65));
+                        }
+                    }, 300 + idx * flashSpeed);
+                });
+
+                registerMgTimeout(() => {
+                    acceptingInput = true;
+                    statusEl.style.color = 'var(--color-scene)';
+                    statusEl.innerText = 'Tekan angka sesuai urutan yang ditampilkan!';
+                }, 350 + sequence.length * flashSpeed);
+            }
+
+            function handleSimonPress(num) {
+                if (!acceptingInput || mgState.finished) return;
+                const btn = keyEls[num];
+                if (num === sequence[playerIndex]) {
+                    btn.classList.add('lit');
+                    registerMgTimeout(() => btn.classList.remove('lit'), 180);
+                    playerIndex++;
+                    updateSlotsDisplay();
+
+                    if (playerIndex >= sequence.length) {
+                        acceptingInput = false;
+                        advanceMiniGameLevelOrWin();
+                    }
+                } else {
+                    acceptingInput = false;
+                    btn.classList.add('err-lit');
+                    statusEl.style.color = 'var(--color-char)';
+                    statusEl.innerText = 'Urutan salah! Mengulang kembali urutan kode...';
+                    registerMgTimeout(() => {
+                        btn.classList.remove('err-lit');
+                        startCountdownAndPlay(true);
+                    }, 900);
+                }
+            }
+
+            startCountdownAndPlay(false);
+        }
+
+        // ---------------------------------------------------------
+        // MINI GAME 2: RACIK KOPI (3 LEVEL)
+        // Mesin espresso realistis di tengah, sticky note 2 kolom,
+        // dan bahan-bahan diacak merata di sekeliling meja
+        // ---------------------------------------------------------
+        function initCoffeeMachineGame(level) {
+            document.getElementById('mg-title').innerText = 'RACIK KOPI';
+            const stage = document.getElementById('mg-stage');
+            const statusEl = document.getElementById('mg-status');
+            statusEl.style.color = 'var(--accent-yellow)';
+
+            const baseIngredients = [
+                { id: 'BEANS', name: 'Kopi' },
+                { id: 'WATER', name: 'Air' },
+                { id: 'MILK', name: 'Susu' },
+                { id: 'SUGAR', name: 'Gula' },
+                { id: 'ICE', name: 'Es' },
+                { id: 'CARAMEL', name: 'Karamel' }
+            ];
+            // Posisi bahan disebar merata di sisi kiri, kanan, atas rak, dan bawah meja agar benar-benar teracak
+            const safeDeskPositions = [
+                'left: 10px; top: 14px;',
+                'left: 65px; top: 14px;',
+                'right: 12px; top: 18px;',
+                'right: 75px; top: 18px;',
+                'left: 12px; bottom: 8px;',
+                'right: 14px; bottom: 8px;'
+            ].sort(() => Math.random() - 0.5);
+
+            const recipesByLevel = {
+                1: [
+                    { title: 'ESPRESSO PANAS', req: ['BEANS', 'WATER'] },
+                    { title: 'KOPI MANIS', req: ['BEANS', 'SUGAR'] }
+                ],
+                2: [
+                    { title: 'KOPI SUSU', req: ['BEANS', 'WATER', 'MILK'] },
+                    { title: 'ES AMERICANO', req: ['BEANS', 'WATER', 'ICE'] },
+                    { title: 'KOPI GULA HANGAT', req: ['BEANS', 'WATER', 'SUGAR'] }
+                ],
+                3: [
+                    { title: 'ES LATTE KARAMEL', req: ['BEANS', 'WATER', 'MILK', 'ICE', 'CARAMEL'] },
+                    { title: 'MACCHIATO SPESIAL', req: ['BEANS', 'WATER', 'MILK', 'SUGAR', 'CARAMEL'] }
+                ]
+            };
+
+            const targetRecipe = pickRandom(recipesByLevel[level] || recipesByLevel[1]);
+            const selectedSet = new Set();
+            let brewing = false;
+
+            const reqListHTML = targetRecipe.req.map(rId => {
+                const item = baseIngredients.find(x => x.id === rId);
+                return `<div>• ${item.name}</div>`;
+            }).join('');
+
+            stage.innerHTML = `
+                <div class="coffee-desk-scene" id="coffee-desk-scene">
+                    <div class="cm-wall-shelf shelf-top"></div>
+                    <div class="cm-wall-shelf shelf-mid"></div>
+                    <div class="cm-sticky-note">
+                        <div class="cm-sticky-title">${targetRecipe.title}</div>
+                        <div class="cm-sticky-grid">${reqListHTML}</div>
+                    </div>
+                    <div class="cm-center-machine">
+                        <div class="cm-hopper"></div>
+                        <div class="cm-body-top">
+                            <div class="cm-gauge"></div>
+                            <span class="cm-led-screen" id="cm-count-led">0/${targetRecipe.req.length}</span>
+                        </div>
+                        <div class="cm-brew-chamber">
+                            <div class="cm-steam-wand"></div>
+                            <div class="cm-portafilter"></div>
+                            <div class="cm-stream" id="cm-stream"></div>
+                            <div class="cm-cup"><div class="cm-cup-fill" id="cm-cup-fill"></div></div>
+                        </div>
+                        <div class="cm-base-tray">
+                            <button class="cm-brew-trigger" id="btn-brew-now">▶ SEDUH</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            statusEl.innerText = 'Cari dan klik bahan di atas meja sesuai resep, lalu tekan SEDUH!';
+            const deskScene = document.getElementById('coffee-desk-scene');
+
+            baseIngredients.forEach((ing, idx) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'cm-desk-item';
+                itemEl.style.cssText = safeDeskPositions[idx];
+                itemEl.innerHTML = `${PIXEL_ART.ingIcon(ing.id, 28)}<span class="cm-desk-item-label">${ing.name}</span>`;
+                itemEl.onclick = () => {
+                    if (brewing || mgState.finished) return;
+                    if (selectedSet.has(ing.id)) {
+                        selectedSet.delete(ing.id);
+                        itemEl.classList.remove('selected');
+                    } else {
+                        selectedSet.add(ing.id);
+                        itemEl.classList.add('selected');
+                    }
+                    const ledEl = document.getElementById('cm-count-led');
+                    if (ledEl) ledEl.innerText = `${selectedSet.size}/${targetRecipe.req.length}`;
+                    statusEl.style.color = 'var(--text-highlight)';
+                    statusEl.innerText = `Bahan dipilih: ${selectedSet.size} dari ${targetRecipe.req.length} bahan resep.`;
+                };
+                deskScene.appendChild(itemEl);
+            });
+
+            document.getElementById('btn-brew-now').onclick = () => {
+                if (brewing || mgState.finished) return;
+                if (selectedSet.size === 0) {
+                    statusEl.style.color = 'var(--color-char)';
+                    statusEl.innerText = 'Pilih bahan di atas meja terlebih dahulu!';
+                    return;
+                }
+                brewing = true;
+                statusEl.style.color = 'var(--accent-yellow)';
+                statusEl.innerText = 'Menyeduh kopi di mesin...';
+
+                const streamEl = document.getElementById('cm-stream');
+                const fillEl = document.getElementById('cm-cup-fill');
+                if (streamEl) streamEl.classList.add('pouring');
+                if (fillEl) fillEl.style.height = '85%';
+
+                registerMgTimeout(() => {
+                    if (streamEl) streamEl.classList.remove('pouring');
+                    const isExactMatch = selectedSet.size === targetRecipe.req.length &&
+                        targetRecipe.req.every(reqId => selectedSet.has(reqId));
+
+                    if (isExactMatch) {
+                        advanceMiniGameLevelOrWin();
+                    } else {
+                        brewing = false;
+                        if (fillEl) fillEl.style.height = '0%';
+                        statusEl.style.color = 'var(--color-char)';
+                        statusEl.innerText = 'Campuran bahan belum tepat! Cek lagi catatan resep.';
+                    }
+                }, 800);
+            };
+        }
+
+        // ---------------------------------------------------------
+        // MINI GAME 3: BASMI KECOAK (3 LEVEL)
+        // Kecepatan kecoak diturunkan (lebih santai), timer 30 detik
+        // ---------------------------------------------------------
+        function initCockroachSmasherGame(level) {
+            document.getElementById('mg-title').innerText = 'BASMI KECOAK';
+            const stage = document.getElementById('mg-stage');
+            const statusEl = document.getElementById('mg-status');
+            statusEl.style.color = 'var(--accent-yellow)';
+
+            let stageTimeLeft = 30;
+            const stageQuota = level === 1 ? 5 : (level === 2 ? 7 : 9);
+            const simultaneousCount = level === 1 ? 2 : (level === 2 ? 3 : 4);
+            let stageKills = 0;
+
+            stage.innerHTML = `
+                <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:6px; font-size:var(--fs-subtitle);">
+                    <span>TERBASMI: <strong id="roach-wave-score" style="color:var(--color-scene);">0 / ${stageQuota}</strong></span>
+                    <span>WAKTU: <strong id="roach-timer" style="color:var(--accent-yellow);">${stageTimeLeft}d</strong></span>
+                </div>
+                <div class="roach-arena" id="roach-arena"></div>
+            `;
+            statusEl.innerText = 'Ketuk kecoak-kecoak yang berkeliaran sebelum waktu habis!';
+
+            const arena = document.getElementById('roach-arena');
+            // Kecepatan kecoak diturunkan agar pemain level 1 tidak terlalu kesulitan
+            const speedProfiles = [
+                { moveMs: level === 1 ? 1200 : (level === 2 ? 950 : 720), stepTransition: '0.45s' }, // Lambat
+                { moveMs: level === 1 ? 900 : (level === 2 ? 720 : 550), stepTransition: '0.35s' },  // Sedang
+                { moveMs: level === 1 ? 700 : (level === 2 ? 550 : 420), stepTransition: '0.25s' },  // Cepat
+                { moveMs: level === 1 ? 550 : (level === 2 ? 420 : 320), stepTransition: '0.20s' }   // Lincah
+            ];
+
+            function moveSingleRoach(roach) {
+                if (mgState.finished || !arena || !roach || roach.dataset.smashed === '1') return;
+                const maxW = Math.max(40, arena.clientWidth - 48);
+                const maxH = Math.max(40, arena.clientHeight - 48);
+                const rot = Math.floor(Math.random() * 8) * 45;
+                roach.style.left = `${Math.floor(Math.random() * maxW)}px`;
+                roach.style.top = `${Math.floor(Math.random() * maxH)}px`;
+                roach.style.transform = `rotate(${rot}deg)`;
+            }
+
+            function spawnSingleRoach(profileIdx) {
+                if (mgState.finished || !arena) return;
+                const activeOnBoard = arena.querySelectorAll('.roach-target[data-smashed="0"]').length;
+                if (stageKills + activeOnBoard >= stageQuota) return;
+
+                const profile = speedProfiles[profileIdx % speedProfiles.length];
+                const roach = document.createElement('div');
+                roach.className = 'roach-target';
+                roach.innerHTML = PIXEL_ART.roach;
+                roach.dataset.smashed = '0';
+                roach.style.transition = `top ${profile.stepTransition} steps(5), left ${profile.stepTransition} steps(5), transform 0.12s steps(2)`;
+
+                const maxW = Math.max(40, arena.clientWidth - 48);
+                const maxH = Math.max(40, arena.clientHeight - 48);
+                roach.style.left = `${Math.floor(Math.random() * maxW)}px`;
+                roach.style.top = `${Math.floor(Math.random() * maxH)}px`;
+                roach.style.transform = `rotate(${Math.floor(Math.random() * 8) * 45}deg)`;
+
+                const moveId = registerMgInterval(() => {
+                    moveSingleRoach(roach);
+                }, profile.moveMs);
+
+                roach.onpointerdown = (e) => {
+                    e.stopPropagation();
+                    if (mgState.finished || roach.dataset.smashed === '1') return;
+                    roach.dataset.smashed = '1';
+                    clearInterval(moveId);
+                    stageKills++;
+
+                    const splat = document.createElement('div');
+                    splat.className = 'roach-splat';
+                    splat.style.left = roach.style.left;
+                    splat.style.top = roach.style.top;
+                    splat.innerHTML = PIXEL_ART.splat;
+                    arena.appendChild(splat);
+                    registerMgTimeout(() => splat.remove(), 400);
+
+                    roach.remove();
+                    const wEl = document.getElementById('roach-wave-score');
+                    if (wEl) wEl.innerText = `${stageKills} / ${stageQuota}`;
+
+                    if (stageKills >= stageQuota) {
+                        advanceMiniGameLevelOrWin();
+                    } else {
+                        registerMgTimeout(() => {
+                            spawnSingleRoach(Math.floor(Math.random() * speedProfiles.length));
+                        }, 180);
+                    }
+                };
+
+                arena.appendChild(roach);
+            }
+
+            for (let i = 0; i < simultaneousCount; i++) {
+                spawnSingleRoach(i);
+            }
+
+            registerMgInterval(() => {
+                if (mgState.finished) return;
+                stageTimeLeft--;
+                const tEl = document.getElementById('roach-timer');
+                if (tEl) tEl.innerText = `${Math.max(0, stageTimeLeft)}d`;
+                if (stageTimeLeft <= 0) {
+                    if (arena) arena.innerHTML = '';
+                    failMiniGame('Waktu habis! Kecoak berhasil kabur.');
+                }
+            }, 1000);
+        }
+
+        // ---------------------------------------------------------
+        // MINI GAME 4: SAMBUNG KABEL (3 LEVEL)
+        // ---------------------------------------------------------
+        function initCoffeeMachineGame(level) {
+            document.getElementById('mg-title').innerText = 'RACIK KOPI';
+            const stage = document.getElementById('mg-stage');
+            const statusEl = document.getElementById('mg-status');
+            statusEl.style.color = 'var(--accent-yellow)';
+
+            const baseIngredients = [
+                { id: 'BEANS', name: 'Kopi' },
+                { id: 'WATER', name: 'Air' },
+                { id: 'MILK', name: 'Susu' },
+                { id: 'SUGAR', name: 'Gula' },
+                { id: 'ICE', name: 'Es' },
+                { id: 'CARAMEL', name: 'Karamel' }
+            ];
+            // Titik posisi bahan diletakkan tepat di atas rak panjang dan permukaan meja (tidak tertutup sticky note maupun mesin)
+            const safeDeskPositions = [
+                'right: 14px; top: 18px;',
+                'right: 68px; top: 18px;',
+                'left: 14px; top: 76px;',
+                'right: 14px; top: 76px;',
+                'right: 68px; top: 76px;',
+                'left: 12px; bottom: 8px;',
+                'left: 68px; bottom: 10px;',
+                'right: 12px; bottom: 8px;',
+                'right: 68px; bottom: 10px;'
+            ].sort(() => Math.random() - 0.5);
+
+            const recipesByLevel = {
+                1: [
+                    { title: 'ESPRESSO PANAS', req: ['BEANS', 'WATER'] },
+                    { title: 'KOPI MANIS', req: ['BEANS', 'SUGAR'] }
+                ],
+                2: [
+                    { title: 'KOPI SUSU', req: ['BEANS', 'WATER', 'MILK'] },
+                    { title: 'ES AMERICANO', req: ['BEANS', 'WATER', 'ICE'] },
+                    { title: 'KOPI GULA HANGAT', req: ['BEANS', 'WATER', 'SUGAR'] }
+                ],
+                3: [
+                    { title: 'ES LATTE KARAMEL', req: ['BEANS', 'WATER', 'MILK', 'ICE', 'CARAMEL'] },
+                    { title: 'MACCHIATO SPESIAL', req: ['BEANS', 'WATER', 'MILK', 'SUGAR', 'CARAMEL'] }
+                ]
+            };
+
+            const targetRecipe = pickRandom(recipesByLevel[level] || recipesByLevel[1]);
+            const selectedSet = new Set();
+            let brewing = false;
+
+            const reqListHTML = targetRecipe.req.map(rId => {
+                const item = baseIngredients.find(x => x.id === rId);
+                return `<div>• ${item.name}</div>`;
+            }).join('');
+
+            stage.innerHTML = `
+                <div class="coffee-desk-scene" id="coffee-desk-scene">
+                    <div class="cm-wall-shelf shelf-top"></div>
+                    <div class="cm-wall-shelf shelf-mid"></div>
+                    <div class="cm-sticky-note">
+                        <div class="cm-sticky-title">${targetRecipe.title}</div>
+                        <div class="cm-sticky-grid">${reqListHTML}</div>
+                    </div>
+                    <div class="cm-center-machine">
+                        <div class="cm-hopper"></div>
+                        <div class="cm-body-top">
+                            <div class="cm-gauge"></div>
+                            <span class="cm-led-screen" id="cm-count-led">0/${targetRecipe.req.length}</span>
+                        </div>
+                        <div class="cm-brew-chamber">
+                            <div class="cm-steam-wand"></div>
+                            <div class="cm-portafilter"></div>
+                            <div class="cm-stream" id="cm-stream"></div>
+                            <div class="cm-cup"><div class="cm-cup-fill" id="cm-cup-fill"></div></div>
+                        </div>
+                        <div class="cm-base-tray">
+                            <button class="cm-brew-trigger" id="btn-brew-now">▶ SEDUH</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            statusEl.innerText = 'Klik bahan di meja sesuai catatan resep, lalu tekan SEDUH!';
+            const deskScene = document.getElementById('coffee-desk-scene');
+
+            baseIngredients.forEach((ing, idx) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'cm-desk-item';
+                itemEl.style.cssText = safeDeskPositions[idx];
+                itemEl.innerHTML = `${PIXEL_ART.ingIcon(ing.id, 28)}<span class="cm-desk-item-label">${ing.name}</span>`;
+                itemEl.onclick = () => {
+                    if (brewing || mgState.finished) return;
+                    if (selectedSet.has(ing.id)) {
+                        selectedSet.delete(ing.id);
+                        itemEl.classList.remove('selected');
+                    } else {
+                        selectedSet.add(ing.id);
+                        itemEl.classList.add('selected');
+                    }
+                    const ledEl = document.getElementById('cm-count-led');
+                    if (ledEl) ledEl.innerText = `${selectedSet.size}/${targetRecipe.req.length}`;
+                    statusEl.style.color = 'var(--text-highlight)';
+                    statusEl.innerText = `Bahan dipilih: ${selectedSet.size} dari ${targetRecipe.req.length} bahan resep.`;
+                };
+                deskScene.appendChild(itemEl);
+            });
+
+            document.getElementById('btn-brew-now').onclick = () => {
+                if (brewing || mgState.finished) return;
+                if (selectedSet.size === 0) {
+                    statusEl.style.color = 'var(--color-char)';
+                    statusEl.innerText = 'Pilih bahan di atas meja terlebih dahulu!';
+                    return;
+                }
+                brewing = true;
+                statusEl.style.color = 'var(--accent-yellow)';
+                statusEl.innerText = 'Menyeduh kopi di mesin...';
+
+                const streamEl = document.getElementById('cm-stream');
+                const fillEl = document.getElementById('cm-cup-fill');
+                if (streamEl) streamEl.classList.add('pouring');
+                if (fillEl) fillEl.style.height = '85%';
+
+                registerMgTimeout(() => {
+                    if (streamEl) streamEl.classList.remove('pouring');
+                    const isExactMatch = selectedSet.size === targetRecipe.req.length &&
+                        targetRecipe.req.every(reqId => selectedSet.has(reqId));
+
+                    if (isExactMatch) {
+                        advanceMiniGameLevelOrWin();
+                    } else {
+                        brewing = false;
+                        if (fillEl) fillEl.style.height = '0%';
+                        statusEl.style.color = 'var(--color-char)';
+                        statusEl.innerText = 'Campuran bahan belum tepat! Cek lagi catatan resep.';
+                    }
+                }, 800);
+            };
+        }
+
+        // ---------------------------------------------------------
+        // MINI GAME 3: BASMI KECOAK (3 LEVEL)
+        // Banyak kecoak sekaligus dengan kecepatan berbeda-beda,
+        // timer di-reset menjadi 30 detik setiap naik level baru
+        // ---------------------------------------------------------
+        function initCockroachSmasherGame(level) {
+            document.getElementById('mg-title').innerText = 'BASMI KECOAK';
+            const stage = document.getElementById('mg-stage');
+            const statusEl = document.getElementById('mg-status');
+            statusEl.style.color = 'var(--accent-yellow)';
+
+            let stageTimeLeft = 30;
+            const stageQuota = level === 1 ? 5 : (level === 2 ? 7 : 9);
+            const simultaneousCount = level === 1 ? 2 : (level === 2 ? 3 : 4);
+            let stageKills = 0;
+
+            stage.innerHTML = `
+                <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:6px; font-size:var(--fs-subtitle);">
+                    <span>TERBASMI: <strong id="roach-wave-score" style="color:var(--color-scene);">0 / ${stageQuota}</strong></span>
+                    <span>WAKTU: <strong id="roach-timer" style="color:var(--accent-yellow);">${stageTimeLeft}d</strong></span>
+                </div>
+                <div class="roach-arena" id="roach-arena"></div>
+            `;
+            statusEl.innerText = 'Ketuk kecoak-kecoak yang berkeliaran sebelum waktu habis!';
+
+            const arena = document.getElementById('roach-arena');
+            const speedProfiles = [
+                { moveMs: level === 1 ? 880 : (level === 2 ? 720 : 560), stepTransition: '0.36s' }, // Lambat
+                { moveMs: level === 1 ? 620 : (level === 2 ? 490 : 380), stepTransition: '0.24s' }, // Sedang
+                { moveMs: level === 1 ? 430 : (level === 2 ? 340 : 250), stepTransition: '0.15s' }, // Cepat
+                { moveMs: level === 1 ? 330 : (level === 2 ? 260 : 190), stepTransition: '0.11s' }  // Sangat lincah
+            ];
+
+            function moveSingleRoach(roach) {
+                if (mgState.finished || !arena || !roach || roach.dataset.smashed === '1') return;
+                const maxW = Math.max(40, arena.clientWidth - 48);
+                const maxH = Math.max(40, arena.clientHeight - 48);
+                const rot = Math.floor(Math.random() * 8) * 45;
+                roach.style.left = `${Math.floor(Math.random() * maxW)}px`;
+                roach.style.top = `${Math.floor(Math.random() * maxH)}px`;
+                roach.style.transform = `rotate(${rot}deg)`;
+            }
+
+            function spawnSingleRoach(profileIdx) {
+                if (mgState.finished || !arena) return;
+                const activeOnBoard = arena.querySelectorAll('.roach-target[data-smashed="0"]').length;
+                if (stageKills + activeOnBoard >= stageQuota) return;
+
+                const profile = speedProfiles[profileIdx % speedProfiles.length];
+                const roach = document.createElement('div');
+                roach.className = 'roach-target';
+                roach.innerHTML = PIXEL_ART.roach;
+                roach.dataset.smashed = '0';
+                roach.style.transition = `top ${profile.stepTransition} steps(5), left ${profile.stepTransition} steps(5), transform 0.12s steps(2)`;
+
+                const maxW = Math.max(40, arena.clientWidth - 48);
+                const maxH = Math.max(40, arena.clientHeight - 48);
+                roach.style.left = `${Math.floor(Math.random() * maxW)}px`;
+                roach.style.top = `${Math.floor(Math.random() * maxH)}px`;
+                roach.style.transform = `rotate(${Math.floor(Math.random() * 8) * 45}deg)`;
+
+                const moveId = registerMgInterval(() => {
+                    moveSingleRoach(roach);
+                }, profile.moveMs);
+
+                roach.onpointerdown = (e) => {
+                    e.stopPropagation();
+                    if (mgState.finished || roach.dataset.smashed === '1') return;
+                    roach.dataset.smashed = '1';
+                    clearInterval(moveId);
+                    stageKills++;
+
+                    const splat = document.createElement('div');
+                    splat.className = 'roach-splat';
+                    splat.style.left = roach.style.left;
+                    splat.style.top = roach.style.top;
+                    splat.innerHTML = PIXEL_ART.splat;
+                    arena.appendChild(splat);
+                    registerMgTimeout(() => splat.remove(), 400);
+
+                    roach.remove();
+                    const wEl = document.getElementById('roach-wave-score');
+                    if (wEl) wEl.innerText = `${stageKills} / ${stageQuota}`;
+
+                    if (stageKills >= stageQuota) {
+                        advanceMiniGameLevelOrWin();
+                    } else {
+                        registerMgTimeout(() => {
+                            spawnSingleRoach(Math.floor(Math.random() * speedProfiles.length));
+                        }, 180);
+                    }
+                };
+
+                arena.appendChild(roach);
+            }
+
+            for (let i = 0; i < simultaneousCount; i++) {
+                spawnSingleRoach(i);
+            }
+
+            registerMgInterval(() => {
+                if (mgState.finished) return;
+                stageTimeLeft--;
+                const tEl = document.getElementById('roach-timer');
+                if (tEl) tEl.innerText = `${Math.max(0, stageTimeLeft)}d`;
+                if (stageTimeLeft <= 0) {
+                    if (arena) arena.innerHTML = '';
+                    failMiniGame('Waktu habis! Kecoak berhasil kabur.');
+                }
+            }, 1000);
+        }
+
+        // ---------------------------------------------------------
+        // MINI GAME 4: SAMBUNG KABEL (3 LEVEL)
+        // Tanpa teks huruf/angka pada kotak, jarak kiri-kanan lebih dekat
+        // ---------------------------------------------------------
+        function initWireMatchingGame(level) {
+            document.getElementById('mg-title').innerText = 'SAMBUNG KABEL';
+            const stage = document.getElementById('mg-stage');
+            const statusEl = document.getElementById('mg-status');
+            statusEl.style.color = 'var(--accent-yellow)';
+
+            const wirePalette = [
+                { id: 'RED', color: '#e05a5a' },
+                { id: 'BLUE', color: '#5a9ce0' },
+                { id: 'YELLOW', color: '#e0c35a' },
+                { id: 'GREEN', color: '#68c47d' },
+                { id: 'PURPLE', color: '#b57ae0' }
+            ];
+
+            const wireCount = level === 1 ? 3 : (level === 2 ? 4 : 5);
+            const activeWires = wirePalette.slice(0, wireCount);
+            const leftOrder = [...activeWires].sort(() => Math.random() - 0.5);
+            let rightOrder = [...activeWires].sort(() => Math.random() - 0.5);
+            if (rightOrder.every((w, i) => w.id === leftOrder[i].id)) {
+                rightOrder.reverse();
+            }
+
+            stage.innerHTML = `
+                <div class="wire-board" id="wire-board">
+                    <svg class="wire-svg-layer" id="wire-svg"></svg>
+                    <div class="wire-col" id="wire-left-col"></div>
+                    <div class="wire-col" id="wire-right-col"></div>
+                </div>
+            `;
+            statusEl.innerText = 'Hubungkan kotak warna yang sama dari kiri ke kanan!';
+
+            const board = document.getElementById('wire-board');
+            const svg = document.getElementById('wire-svg');
+            const leftCol = document.getElementById('wire-left-col');
+            const rightCol = document.getElementById('wire-right-col');
+
+            const connections = {};
+            let selectedLeftId = null;
+            let isDraggingWire = false;
+
+            const leftEls = {};
+            const rightEls = {};
+
+            function getPinCenter(el) {
+                const bRect = board.getBoundingClientRect();
+                const r = el.getBoundingClientRect();
+                return {
+                    x: (r.left - bRect.left) + (r.width / 2),
+                    y: (r.top - bRect.top) + (r.height / 2)
+                };
+            }
+
+            function renderLines(dragPos = null) {
+                svg.innerHTML = '';
+                Object.keys(connections).forEach(cid => {
+                    const c = connections[cid];
+                    const p1 = getPinCenter(c.leftEl);
+                    const p2 = getPinCenter(c.rightEl);
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', p1.x);
+                    line.setAttribute('y1', p1.y);
+                    line.setAttribute('x2', p2.x);
+                    line.setAttribute('y2', p2.y);
+                    line.setAttribute('stroke', c.color);
+                    line.setAttribute('stroke-width', '6');
+                    line.setAttribute('stroke-linecap', 'round');
+                    svg.appendChild(line);
+                });
+
+                if (selectedLeftId && dragPos && leftEls[selectedLeftId]) {
+                    const wObj = activeWires.find(w => w.id === selectedLeftId);
+                    const p1 = getPinCenter(leftEls[selectedLeftId]);
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', p1.x);
+                    line.setAttribute('y1', p1.y);
+                    line.setAttribute('x2', dragPos.x);
+                    line.setAttribute('y2', dragPos.y);
+                    line.setAttribute('stroke', wObj ? wObj.color : '#fff');
+                    line.setAttribute('stroke-width', '5');
+                    line.setAttribute('stroke-dasharray', '6,4');
+                    svg.appendChild(line);
+                }
+            }
+
+            function selectLeftPin(cid) {
+                if (mgState.finished || connections[cid]) return;
+                Object.values(leftEls).forEach(el => el.classList.remove('active-pin'));
+                selectedLeftId = cid;
+                leftEls[cid].classList.add('active-pin');
+                renderLines();
+            }
+
+            function tryConnectRightPin(rightCid) {
+                if (mgState.finished || !selectedLeftId) return;
+                const leftCid = selectedLeftId;
+                Object.values(leftEls).forEach(el => el.classList.remove('active-pin'));
+                selectedLeftId = null;
+
+                if (leftCid === rightCid) {
+                    const wObj = activeWires.find(w => w.id === leftCid);
+                    connections[leftCid] = {
+                        leftEl: leftEls[leftCid],
+                        rightEl: rightEls[rightCid],
+                        color: wObj.color
+                    };
+                    leftEls[leftCid].classList.add('matched');
+                    rightEls[rightCid].classList.add('matched');
+                    renderLines();
+
+                    const doneCount = Object.keys(connections).length;
+                    statusEl.style.color = 'var(--color-scene)';
+                    statusEl.innerText = `Kabel terhubung (${doneCount}/${wireCount}).`;
+
+                    if (doneCount >= wireCount) {
+                        advanceMiniGameLevelOrWin();
+                    }
+                } else {
+                    renderLines();
+                    statusEl.style.color = 'var(--color-char)';
+                    statusEl.innerText = 'Warna tidak cocok! Sambungkan ke warna yang sama.';
+                }
+            }
+
+            leftOrder.forEach((w) => {
+                const pin = document.createElement('div');
+                pin.className = 'wire-node';
+                pin.style.backgroundColor = w.color;
+                pin.onpointerdown = (e) => {
+                    e.preventDefault();
+                    selectLeftPin(w.id);
+                    isDraggingWire = true;
+                };
+                leftCol.appendChild(pin);
+                leftEls[w.id] = pin;
+            });
+
+            rightOrder.forEach((w) => {
+                const pin = document.createElement('div');
+                pin.className = 'wire-node';
+                pin.style.backgroundColor = w.color;
+                pin.dataset.rightId = w.id;
+                pin.onpointerup = (e) => {
+                    e.preventDefault();
+                    isDraggingWire = false;
+                    tryConnectRightPin(w.id);
+                };
+                pin.onclick = () => tryConnectRightPin(w.id);
+                rightCol.appendChild(pin);
+                rightEls[w.id] = pin;
+            });
+
+            board.onpointermove = (e) => {
+                if (!isDraggingWire || !selectedLeftId || mgState.finished) return;
+                const bRect = board.getBoundingClientRect();
+                renderLines({
+                    x: e.clientX - bRect.left,
+                    y: e.clientY - bRect.top
+                });
+            };
+
+            board.onpointerup = (e) => {
+                if (!isDraggingWire) return;
+                isDraggingWire = false;
+                const hitEl = document.elementFromPoint(e.clientX, e.clientY);
+                if (hitEl && hitEl.dataset && hitEl.dataset.rightId) {
+                    tryConnectRightPin(hitEl.dataset.rightId);
+                } else {
+                    renderLines();
+                }
+            };
+        }
+
+        // ---------------------------------------------------------
+        // MINI GAME 5: LEMPAR KERTAS (3 LEVEL)
+        // Tanpa dispenser, rak buku, dan jam dinding
+        // ---------------------------------------------------------
+        let tossSharedAttempts = 5;
+
+        function initPaperTossGame(level) {
+            document.getElementById('mg-title').innerText = 'LEMPAR KERTAS';
+            const stage = document.getElementById('mg-stage');
+            const statusEl = document.getElementById('mg-status');
+            statusEl.style.color = 'var(--accent-yellow)';
+
+            if (level === 1) {
+                tossSharedAttempts = 5;
+            }
+
+            const madeCount = level - 1;
+
+            stage.innerHTML = `
+                <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:4px; font-size:var(--fs-subtitle);">
+                    <span>MASUK: <strong id="toss-score" style="color:var(--color-scene);">${madeCount} / 3</strong></span>
+                    <span>SISA BOLA: <strong id="toss-tries" style="color:var(--accent-yellow);">${tossSharedAttempts}</strong></span>
+                </div>
+                <div class="toss-arena" id="toss-arena">
+                    <div class="toss-bg-decor"></div>
+                    <div class="toss-ball" id="toss-ball" style="left: 18px; bottom: 14px;">${PIXEL_ART.paperBall}</div>
+                    <div class="toss-bin" id="toss-bin">${PIXEL_ART.trashBin}</div>
+                </div>
+                <div class="toss-controls">
+                    <div class="power-bar-wrap">
+                        <div class="power-bar-fill" id="toss-power-fill"></div>
+                        <div class="power-sweetspot" id="toss-sweetspot"></div>
+                    </div>
+                    <button class="toss-arcade-btn" id="btn-hold-toss" title="Tahan & Lepas">
+                        <svg class="pixel-svg" width="24" height="24" viewBox="0 0 12 12">
+                            <rect x="5" y="1" width="2" height="2" fill="#fff"/>
+                            <rect x="4" y="3" width="4" height="2" fill="#fff"/>
+                            <rect x="3" y="5" width="6" height="2" fill="#fff"/>
+                            <rect x="5" y="7" width="2" height="4" fill="#fff"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+
+            statusEl.innerText = 'Tahan tombol pelontar dan lepaskan tepat di zona hijau!';
+
+            const arena = document.getElementById('toss-arena');
+            const ballEl = document.getElementById('toss-ball');
+            const binEl = document.getElementById('toss-bin');
+            const fillEl = document.getElementById('toss-power-fill');
+            const sweetEl = document.getElementById('toss-sweetspot');
+            const tossBtn = document.getElementById('btn-hold-toss');
+
+            let binRatio = level === 1 ? 0.46 : (level === 2 ? 0.74 : (0.38 + Math.random() * 0.42));
+            let sweetMin = 50, sweetMax = 72;
+            let charging = false;
+            let flying = false;
+            let power = 0;
+            let powerDir = 1;
+            const barSpeed = level === 1 ? 3.5 : (level === 2 ? 4.5 : 5.8);
+            const halfMargin = level === 1 ? 12 : (level === 2 ? 10 : 8);
+
+            function positionBin() {
+                if (!arena || !binEl) return;
+                if (level === 3) {
+                    binRatio = 0.38 + Math.random() * 0.42;
+                }
+                const arenaW = arena.clientWidth || 320;
+                const binX = Math.floor(arenaW * binRatio);
+                binEl.style.left = `${binX}px`;
+
+                const centerPower = Math.round(binRatio * 95);
+                sweetMin = Math.max(16, centerPower - halfMargin);
+                sweetMax = Math.min(96, centerPower + halfMargin);
+                sweetEl.style.left = `${sweetMin}%`;
+                sweetEl.style.width = `${sweetMax - sweetMin}%`;
+            }
+
+            function resetBall() {
+                if (!ballEl) return;
+                ballEl.style.transition = 'none';
+                ballEl.style.left = '18px';
+                ballEl.style.bottom = '14px';
+                power = 0;
+                if (fillEl) fillEl.style.width = '0%';
+                flying = false;
+            }
+
+            registerMgInterval(() => {
+                if (!charging || flying || mgState.finished) return;
+                power += powerDir * barSpeed;
+                if (power >= 100) { power = 100; powerDir = -1; }
+                else if (power <= 0) { power = 0; powerDir = 1; }
+                if (fillEl) fillEl.style.width = `${power}%`;
+            }, 28);
+
+            function startCharge(e) {
+                if (e) e.preventDefault();
+                if (flying || mgState.finished || tossSharedAttempts <= 0) return;
+                charging = true;
+                power = 0;
+                powerDir = 1;
+                tossBtn.classList.add('pressing');
+            }
+
+            function releaseThrow(e) {
+                if (e) e.preventDefault();
+                if (!charging || flying || mgState.finished) return;
+                charging = false;
+                tossBtn.classList.remove('pressing');
+                flying = true;
+                tossSharedAttempts--;
+                const triesEl = document.getElementById('toss-tries');
+                if (triesEl) triesEl.innerText = tossSharedAttempts;
+
+                const arenaW = arena.clientWidth || 320;
+                const targetX = Math.min(arenaW - 28, Math.max(30, (power / 95) * arenaW));
+                const isHit = power >= sweetMin && power <= sweetMax;
+
+                const startX = 18;
+                const startY = 14;
+                const endX = isHit ? (parseInt(binEl.style.left) + 12) : targetX;
+                const endY = isHit ? 22 : 8;
+                let step = 0;
+                const totalSteps = 16;
+
+                const animId = registerMgInterval(() => {
+                    step++;
+                    const t = step / totalSteps;
+                    const curX = startX + (endX - startX) * t;
+                    const arcHeight = 88 * 4 * t * (1 - t);
+                    const curY = startY + (endY - startY) * t + arcHeight;
+
+                    ballEl.style.left = `${curX}px`;
+                    ballEl.style.bottom = `${curY}px`;
+                    ballEl.style.transform = `rotate(${step * 45}deg)`;
+
+                    if (step >= totalSteps) {
+                        clearInterval(animId);
+                        if (isHit) {
+                            const scEl = document.getElementById('toss-score');
+                            if (scEl) scEl.innerText = `${level} / 3`;
+                            advanceMiniGameLevelOrWin();
+                        } else {
+                            statusEl.style.color = 'var(--color-char)';
+                            statusEl.innerText = power < sweetMin ? 'Meleset! Lemparan kurang kuat.' : 'Meleset! Lemparan terlalu kencang.';
+                            if (tossSharedAttempts <= 0) {
+                                failMiniGame('Kesempatan habis! Bola kertasmu sudah habis.');
+                            } else {
+                                registerMgTimeout(() => {
+                                    positionBin();
+                                    resetBall();
+                                }, 480);
+                            }
+                        }
+                    }
+                }, 25);
+            }
+
+            tossBtn.addEventListener('pointerdown', startCharge);
+            window.addEventListener('pointerup', releaseThrow);
+            mgState.cleanupFn = () => {
+                window.removeEventListener('pointerup', releaseThrow);
+            };
+
+            requestAnimationFrame(() => positionBin());
+        }
         
         function processTextForGlossary(text) {
             let p = text;
@@ -1564,8 +3992,9 @@
 
             currentSlots.forEach(i => {
                 const row = document.createElement('div'); row.className = 'slot-row';
-                const num = document.createElement('div'); num.className = 'slot-number';
-                num.innerText = getSceneHeadingNumber(i);
+                const sceneNumText = getSceneHeadingNumber(i);
+                const numLeft = document.createElement('div'); numLeft.className = 'slot-number';
+                numLeft.innerText = sceneNumText;
 
                 const slot = document.createElement('div'); slot.className = 'drop-slot'; slot.dataset.index = i;
                 slot.addEventListener('dragover', handleDragOver);
@@ -1581,7 +4010,11 @@
                         slot.classList.add('filled-slot');
                     }
                 }
-                row.appendChild(num); row.appendChild(slot); sc.appendChild(row);
+
+                const numRight = document.createElement('div'); numRight.className = 'slot-number slot-number-right';
+                numRight.innerText = sceneNumText;
+
+                row.appendChild(numLeft); row.appendChild(slot); row.appendChild(numRight); sc.appendChild(row);
             });
 
             renderPaginationControls();
@@ -1630,7 +4063,6 @@
                 return;
             }
 
-            // 1. Sesuai plot klien: Menunggu sampai pemain mengisi SEMUA blok
             if (cBlocks) {
                 if (isAllSlotsFilled) {
                     const pIds = placedEntries.map(e => e.block.id);
@@ -1643,7 +4075,6 @@
                 }
             }
 
-            // 2. Transisi sesuai instruksi (Real-time)
             if (cTrans) {
                 const lastSlotIdx = gameState.placedBlocks.length - 1;
                 const hasCorrectTrans = placedEntries.some(e => e.block.type === 'TRANSITION' && e.block.isCorrect && e.slotIdx === lastSlotIdx);
@@ -1652,14 +4083,12 @@
                 else cTrans.classList.remove('done');
             }
 
-            // 3. Karakter sesuai profesi (Real-time)
             const profEntries = placedEntries.filter(e => e.block.sequenceOrder === 2 || e.block.sequenceOrder === 3 || (!e.block.isCorrect && e.block.type !== 'SCENE HEADING' && e.block.type !== 'TRANSITION'));
             const hasValidProf = profEntries.some(e => e.block.isCorrect);
             const hasInvalidProf = profEntries.some(e => !e.block.isCorrect);
             if (hasValidProf && !hasInvalidProf) cProf.classList.add('done');
             else cProf.classList.remove('done');
 
-            // 4. Urutan logis: Menunggu sampai pemain mengisi SEMUA blok
             if (isAllSlotsFilled) {
                 let logicOk = true;
                 let lastSeq = -1;
@@ -1710,12 +4139,31 @@
             gameState.selectedBlockId = null; selectedFromPreview = false;
             renderBlocksAndSlots(); updateChecklist(); updateSelectedPopup();
         }
-        function clearBoard() { gameState.placedBlocks.fill(null); gameState.currentPage = 1; deselectBlock(); renderBlocksAndSlots(); updateChecklist(); }
+        function clearBoard() { closeInGameModals(); gameState.placedBlocks.fill(null); gameState.currentPage = 1; deselectBlock(); renderBlocksAndSlots(); updateChecklist(); }
 
         function updateSelectedPopup() { const popup = document.getElementById('selected-block-popup'); if (!gameState.selectedBlockId || !selectedFromPreview) { popup.classList.remove('active'); return; } const b = gameState.currentBlocks.find(x => x.id === gameState.selectedBlockId); if (b) { document.getElementById('selected-popup-type').innerText = b.type; document.getElementById('selected-popup-text').innerHTML = formatScreenplayContent(b, false, null); popup.classList.add('active'); } }
-        function openPreviewBlocks() { const grid = document.getElementById('preview-blocks-grid'); grid.innerHTML = ''; const unplaced = gameState.currentBlocks.filter(b => !gameState.placedBlocks.includes(b.id)); unplaced.forEach(b => { const div = document.createElement('div'); div.className = 'script-block'; div.draggable = true; if (gameState.selectedBlockId === b.id) { div.style.borderColor = 'var(--accent-yellow)'; div.style.boxShadow = '0 0 6px var(--accent-yellow)'; } div.innerHTML = `<div class="block-type-label">${b.type}</div><div class="block-text">${formatScreenplayContent(b, false, null)}</div>`; div.addEventListener('click', (e) => { e.stopPropagation(); closeModal('modal-preview-blocks'); handleBlockClick(b.id, true); }); div.addEventListener('dragstart', (e) => { handleDragStart(e, b.id, false, null); setTimeout(() => closeModal('modal-preview-blocks'), 50); }); grid.appendChild(div); }); document.getElementById('modal-preview-blocks').classList.add('active'); }
+        
+        function openPreviewBlocks() {
+            syncHeaderOverlayOffset();
+            closeModal('modal-hint');
+            closeModal('modal-preview-script');
+            const grid = document.getElementById('preview-blocks-grid'); grid.innerHTML = '';
+            const unplaced = gameState.currentBlocks.filter(b => !gameState.placedBlocks.includes(b.id));
+            unplaced.forEach(b => {
+                const div = document.createElement('div'); div.className = 'script-block'; div.draggable = true;
+                if (gameState.selectedBlockId === b.id) { div.style.borderColor = 'var(--accent-yellow)'; div.style.boxShadow = '0 0 6px var(--accent-yellow)'; }
+                div.innerHTML = `<div class="block-type-label">${b.type}</div><div class="block-text">${formatScreenplayContent(b, false, null)}</div>`;
+                div.addEventListener('click', (e) => { e.stopPropagation(); closeModal('modal-preview-blocks'); handleBlockClick(b.id, true); });
+                div.addEventListener('dragstart', (e) => { handleDragStart(e, b.id, false, null); setTimeout(() => closeModal('modal-preview-blocks'), 50); });
+                grid.appendChild(div);
+            });
+            document.getElementById('modal-preview-blocks').classList.add('active');
+        }
         
         function openPreviewScript() {
+            syncHeaderOverlayOffset();
+            closeModal('modal-hint');
+            closeModal('modal-preview-blocks');
             const container = document.getElementById('preview-script-container');
             container.innerHTML = '';
             const pages = computeScriptPages();
@@ -1731,8 +4179,9 @@
                 `;
                 slotIndices.forEach(i => {
                     const row = document.createElement('div'); row.className = 'slot-row';
-                    const num = document.createElement('div'); num.className = 'slot-number';
-                    num.innerText = getSceneHeadingNumber(i);
+                    const sceneNumText = getSceneHeadingNumber(i);
+                    const numLeft = document.createElement('div'); numLeft.className = 'slot-number';
+                    numLeft.innerText = sceneNumText;
                     const slot = document.createElement('div'); slot.className = 'drop-slot';
                     const pId = gameState.placedBlocks[i];
                     if (pId) {
@@ -1742,15 +4191,17 @@
                             slot.classList.add('filled-slot');
                         }
                     }
-                    row.appendChild(num); row.appendChild(slot); sheet.appendChild(row);
+                    const numRight = document.createElement('div'); numRight.className = 'slot-number slot-number-right';
+                    numRight.innerText = sceneNumText;
+                    row.appendChild(numLeft); row.appendChild(slot); row.appendChild(numRight); sheet.appendChild(row);
                 });
                 container.appendChild(sheet);
             });
             document.getElementById('modal-preview-script').classList.add('active');
         }
 
-        function customAlert(text) { document.getElementById('msg-title').innerText = "PERHATIAN"; document.getElementById('msg-body').innerText = text; document.getElementById('btn-msg-cancel').style.display = "none"; document.getElementById('btn-msg-ok').onclick = () => closeModal('modal-msg'); document.getElementById('modal-msg').classList.add('active'); }
-        function customConfirm(text, onConfirm) { document.getElementById('msg-title').innerText = "KONFIRMASI"; document.getElementById('msg-body').innerText = text; document.getElementById('btn-msg-cancel').style.display = "block"; document.getElementById('btn-msg-ok').onclick = () => { closeModal('modal-msg'); if(onConfirm) onConfirm(); }; document.getElementById('modal-msg').classList.add('active'); }
+        function customAlert(text) { syncHeaderOverlayOffset(); document.getElementById('msg-title').innerText = "PERHATIAN"; document.getElementById('msg-body').innerText = text; document.getElementById('btn-msg-cancel').style.display = "none"; document.getElementById('btn-msg-ok').onclick = () => closeModal('modal-msg'); document.getElementById('modal-msg').classList.add('active'); }
+        function customConfirm(text, onConfirm) { syncHeaderOverlayOffset(); document.getElementById('msg-title').innerText = "KONFIRMASI"; document.getElementById('msg-body').innerText = text; document.getElementById('btn-msg-cancel').style.display = "block"; document.getElementById('btn-msg-ok').onclick = () => { closeModal('modal-msg'); if(onConfirm) onConfirm(); }; document.getElementById('modal-msg').classList.add('active'); }
         function showFloatingFeedback(msg, type = "error") { const fb = document.getElementById("floating-feedback"); fb.innerHTML = msg; fb.className = ""; if (type === "success") fb.classList.add("show", "success"); else if (type === "neutral") fb.classList.add("show", "neutral"); else fb.classList.add("show"); setTimeout(() => { fb.className = ""; }, 2000); }
 
         let w95Initialized = false;
@@ -1775,7 +4226,7 @@
             { id: 'center-panel', text: "SCRIPT PAPER — Susun blok naskah di sini secara berurutan dan logis. Susunan yang salah akan dikenai penalti.", pos: 'left' },
             { id: 'btn-reset', text: "RESET — Jika papan terlalu berantakan, kembalikan semua blok ke inventory tanpa menghapusnya.", pos: 'bottom' },
             { id: 'checklist-container', text: "CHECKLIST — Pantau apakah instruksi klien, alur logika, dan batasan profesi sudah terpenuhi.", pos: 'left' },
-            { id: 'btn-open-hint', text: "HINT — Gunakan tombol ini untuk membaca anatomi naskah jika kamu bingung.", pos: 'left' },
+            { id: 'btn-open-hint', text: "HINT — Gunakan tombol ini untuk memeriksa 1 kesalahan pada naskahmu jika kamu bingung.", pos: 'left' },
             { id: 'kamus-container', text: "KAMUS — Klik kata yang ditandai biru pada blok untuk memahami maknanya. Sangat berguna untuk riset!", pos: 'left' },
             { id: 'btn-preview-paper', text: "PREVIEW — Gunakan tombol ini untuk membaca keseluruhan naskah dengan jelas sebelum disubmit.", pos: 'top' },
             { id: 'btn-periksa', text: "SUBMIT — Kirim pekerjaanmu ke klien. Jika ada kesalahan, kamu harus merevisinya dan waktu akan dikurangi!", pos: 'bottom' },
