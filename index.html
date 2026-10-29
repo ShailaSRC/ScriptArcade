@@ -27,7 +27,7 @@
         .settings-btn { color: var(--text-normal); font-size: 1.5rem; cursor: pointer; transition: all 0.15s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; background: var(--bg-app); border: 2px solid var(--border-dark); box-shadow: 2px 2px 0 rgba(0,0,0,0.4); border-radius: 3px; }
         .settings-btn:hover { color: var(--accent-yellow); border-color: var(--border-light); transform: translate(-1px, -1px); box-shadow: 3px 3px 0 rgba(0,0,0,0.5); }
         .settings-btn:active { transform: translate(1px, 1px); box-shadow: none; }
-        .title-area { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; position: relative; flex: 1; min-width: 0; }
+        .title-area { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 3px; position: relative; flex: 1; min-width: 0; }
         .header-left h1 { margin: 0; font-size: var(--fs-head); color: var(--text-highlight); letter-spacing: 2px; font-weight: normal; line-height: 1.1; white-space: nowrap; display: flex; align-items: center; min-height: 32px; }
         .header-wordmark-img { height: 32px; max-height: 32px; width: auto; max-width: 170px; object-fit: contain; object-position: left center; display: none; flex-shrink: 0; filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.5)); }
         .main-menu-logo-img { max-width: 100%; width: auto; max-height: 105px; height: auto; object-fit: contain; display: none; margin: 0 auto 6px auto; filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.6)); }
@@ -118,7 +118,9 @@
         .drop-slot.drag-over { background: rgba(0,0,0,0.08); border-color: #555; }
         .drop-slot.filled-slot { border: 1px solid rgba(176, 166, 136, 0.45); background: transparent; }
         .drop-slot.locked-slot { border: 1.5px solid #78705a; background: rgba(90, 84, 66, 0.14); }
-        .drop-slot > .script-block { margin-bottom: 0 !important; width: 100%; box-shadow: none; background: transparent; border: none; padding: 4px 6px; font-size: var(--sp-font-size); line-height: var(--sp-line-height); }
+        .drop-slot > .script-block { margin-bottom: 0 !important; width: 100%; box-shadow: none; background: transparent; border: none; padding: 4px 6px; font-size: var(--sp-font-size); line-height: var(--sp-line-height); transition: background 0.1s, border-color 0.1s, box-shadow 0.1s, transform 0.1s; }
+        .drop-slot > .script-block:not(.locked-block):active,
+        .drop-slot > .script-block.dragging-block { background: var(--block-bg) !important; border: 2px solid var(--accent-yellow) !important; box-shadow: 4px 4px 0 rgba(0,0,0,0.45) !important; padding: 6px 8px !important; border-radius: 2px; z-index: 20; }
         .drop-slot > .script-block.locked-block { cursor: default !important; }
         .drop-slot > .script-block.locked-block:active { transform: none !important; }
         .drop-slot > .script-block .block-type-label { font-size: 10px; opacity: 1; color: rgba(28, 27, 24, 0.6); margin-bottom: 2px; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
@@ -201,23 +203,86 @@
         .modal-close-x:active { transform: translateY(-50%) translate(1px, 1px); box-shadow: none; }
         #main-menu { z-index: 2000; flex-direction: column; background: radial-gradient(circle at center, #2e2d2a 0%, var(--bg-app) 80%); position: fixed; inset: 0; }
         #main-menu::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 32px 32px; pointer-events: none; }
+        .main-menu-settings-btn { position: absolute; top: 18px; left: 24px; z-index: 5; }
         .main-menu-credit { position: absolute; top: 18px; right: 24px; font-size: var(--fs-subtitle); color: var(--text-muted); letter-spacing: 1.5px; z-index: 5; background: rgba(0,0,0,0.35); padding: 4px 10px; border: 1px solid var(--border-light); }
+        .settings-group-box { background: rgba(0,0,0,0.25); border: 1.5px solid var(--border-light); padding: 10px 12px; margin-bottom: 12px; text-align: left; display: flex; flex-direction: column; gap: 8px; }
+        .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: var(--fs-subtitle); color: var(--text-highlight); }
+        .settings-row-label { min-width: 70px; font-weight: bold; letter-spacing: 1px; color: var(--text-normal); display: flex; align-items: center; gap: 6px; }
+        .settings-ctrl-wrap { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+        .retro-range { -webkit-appearance: none; appearance: none; width: 100%; max-width: 140px; height: 8px; background: #161615; border: 1px solid var(--border-light); outline: none; cursor: pointer; }
+        .retro-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 18px; background: var(--accent-yellow); border: 1.5px solid #121211; cursor: pointer; box-shadow: 1px 1px 0 rgba(0,0,0,0.6); }
+        .retro-range::-moz-range-thumb { width: 14px; height: 18px; background: var(--accent-yellow); border: 1.5px solid #121211; cursor: pointer; border-radius: 0; }
+        .settings-val-badge { font-size: var(--fs-small); color: var(--accent-yellow); min-width: 36px; text-align: right; font-weight: bold; }
+        .settings-mute-btn { background: var(--bg-app); border: 1px solid var(--border-light); color: var(--text-highlight); width: 26px; height: 24px; padding: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; }
+        .settings-mute-btn.muted { color: var(--color-char); border-color: var(--color-char); opacity: 0.75; }
+        .scale-btn-group { display: flex; gap: 4px; }
+        .scale-opt-btn { background: var(--bg-app); border: 1.5px solid var(--border-light); color: var(--text-normal); padding: 2px 8px; font-size: var(--fs-small); cursor: pointer; text-transform: uppercase; }
+        .scale-opt-btn.active { background: var(--accent-yellow); color: #121211; border-color: #fff; font-weight: bold; }
+        .credit-box-area { background: #161615; border: 1px dashed var(--border-light); padding: 8px 10px; font-size: var(--fs-small); color: var(--text-normal); line-height: 1.35; text-align: center; max-height: 110px; overflow-y: auto; white-space: pre-line; }
         .main-menu-card { background: var(--bg-panel); border: 2px solid var(--border-dark); box-shadow: 8px 8px 0 rgba(0,0,0,0.6), inset 0 0 0 2px var(--border-light); padding: 35px 40px; display: flex; flex-direction: column; align-items: center; max-width: 90%; width: 420px; position: relative; z-index: 2; }
         .main-menu-title { font-size: 3.4rem; color: var(--accent-yellow); letter-spacing: 4px; text-shadow: 4px 4px 0 var(--border-dark); margin: 0 0 6px 0; text-align: center; line-height: 1; }
         .main-menu-subtitle { font-size: var(--fs-subtitle); color: var(--text-normal); letter-spacing: 2px; margin-bottom: 28px; text-align: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 10px; width: 100%; }
         .main-menu-buttons { display: flex; flex-direction: column; gap: 14px; width: 100%; }
         .main-menu-btn { font-size: var(--fs-head); padding: 12px 15px; text-align: center; width: 100%; letter-spacing: 2px; }
         .main-menu-btn:hover { filter: brightness(1.1); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 rgba(0,0,0,0.6); }
-        #tutorial-overlay { z-index: 2500; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; outline: none; }
-        .tutorial-spotlight { position: fixed; pointer-events: none; border: 2px solid var(--accent-yellow); box-shadow: 0 0 0 9999px rgba(0,0,0,0.82); transition: top 0.25s cubic-bezier(0.22, 1, 0.36, 1), left 0.25s cubic-bezier(0.22, 1, 0.36, 1), width 0.25s cubic-bezier(0.22, 1, 0.36, 1), height 0.25s cubic-bezier(0.22, 1, 0.36, 1); will-change: top, left, width, height; border-radius: 4px; z-index: 2500; }
-        .tutorial-dialog { position: fixed; background: var(--bg-panel); border: 2px solid var(--accent-yellow); padding: 14px 16px; color: var(--text-highlight); width: 290px; max-width: 90vw; box-shadow: 6px 6px 0 rgba(0,0,0,0.85); transition: top 0.25s cubic-bezier(0.22, 1, 0.36, 1), left 0.25s cubic-bezier(0.22, 1, 0.36, 1); will-change: top, left; z-index: 2501; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
-        .tutorial-dialog-text { font-size: var(--fs-subtitle); line-height: 1.4; text-align: left; }
-        .tutorial-tap-prompt { font-size: var(--fs-small); color: var(--accent-yellow); text-align: right; letter-spacing: 1px; margin-top: 4px; opacity: 0.9; }
-        .tutorial-arrow { position: absolute; width: 0; height: 0; border: 8px solid transparent; pointer-events: none; }
-        .tutorial-arrow.arrow-up { top: -16px; border-bottom-color: var(--accent-yellow); }
-        .tutorial-arrow.arrow-down { bottom: -16px; border-top-color: var(--accent-yellow); }
-        .tutorial-arrow.arrow-left { left: -16px; border-right-color: var(--accent-yellow); }
-        .tutorial-arrow.arrow-right { right: -16px; border-left-color: var(--accent-yellow); }
+        #tutorial-overlay { z-index: 2500; background: transparent !important; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; outline: none; display: none; }
+        #tutorial-overlay.active { display: flex; }
+        #tutorial-overlay:not(.active), #tutorial-overlay:not(.active) * { pointer-events: none !important; }
+        body.tutorial-running .in-game-modal { background: transparent !important; pointer-events: none !important; }
+        body.tutorial-running #modal-preview-blocks { align-items: center !important; justify-content: center !important; padding-bottom: 86px !important; }
+        body.tutorial-running #modal-preview-blocks .modal-content { max-height: 36dvh !important; padding: 6px 10px !important; width: auto !important; max-width: min(540px, 86vw) !important; }
+        body.tutorial-running #modal-preview-blocks .modal-header-row { margin-bottom: 4px !important; padding-bottom: 4px !important; min-height: 20px !important; }
+        body.tutorial-running #modal-preview-blocks #preview-blocks-grid { padding-top: 4px !important; gap: 6px !important; }
+        body.tutorial-running #modal-preview-blocks #preview-blocks-grid .script-block { padding: 5px 7px !important; }
+        @media (orientation: portrait) {
+        body.tutorial-running #modal-preview-blocks { align-items: flex-start !important; justify-content: center !important; padding-top: 10px !important; padding-bottom: 0 !important; }
+        body.tutorial-running #modal-preview-blocks .modal-content { max-height: 30dvh !important; width: 90% !important; max-width: 90vw !important; padding: 6px 8px !important; }
+        }
+        body.tutorial-running #modal-preview-script { align-items: flex-start !important; padding-top: 6px !important; }
+        body.tutorial-running #modal-preview-script .modal-content { max-height: 42dvh !important; width: 84% !important; margin-right: auto !important; margin-left: 8px !important; padding: 8px 10px !important; }
+        body.tutorial-running #modal-preview-script #preview-script-container { height: 28dvh !important; max-height: 28dvh !important; padding: 8px !important; }
+        body.tutorial-running #modal-start { background: transparent !important; pointer-events: none !important; align-items: center !important; justify-content: center !important; }
+        body.tutorial-running #modal-start .modal-content { padding: 10px 14px !important; max-width: 300px !important; width: 86% !important; max-height: none !important; }
+        body.tutorial-running #modal-start .profile-logo-icon { display: none !important; }
+        body.tutorial-running #modal-start h1 { font-size: 1.2rem !important; margin-bottom: 6px !important; padding-bottom: 4px !important; }
+        body.tutorial-running #modal-start #ingame-audio-settings { padding: 6px 8px !important; margin-bottom: 6px !important; gap: 4px !important; }
+        body.tutorial-running #modal-start .retro-input { padding: 4px 8px !important; margin-bottom: 6px !important; }
+        body.tutorial-running #modal-start #profile-stats { padding: 6px 8px !important; margin-bottom: 8px !important; }
+        @media (orientation: portrait) {
+        body.tutorial-running #modal-start { top: var(--header-overlay-offset, 112px) !important; align-items: flex-start !important; padding-top: 6px !important; }
+        body.tutorial-running #modal-start .modal-content { max-width: 285px !important; width: 88% !important; padding: 8px 12px !important; }
+        }
+        .tutorial-spotlight, .tutorial-spotlight-secondary { position: fixed; pointer-events: none; border: 2.5px solid var(--accent-yellow); box-shadow: 0 0 10px rgba(214, 176, 84, 0.7), inset 0 0 6px rgba(214, 176, 84, 0.25); background: transparent; transition: top 0.22s cubic-bezier(0.22, 1, 0.36, 1), left 0.22s cubic-bezier(0.22, 1, 0.36, 1), width 0.22s cubic-bezier(0.22, 1, 0.36, 1), height 0.22s cubic-bezier(0.22, 1, 0.36, 1); will-change: top, left, width, height; border-radius: 4px; z-index: 2500; }
+        .tutorial-spotlight-secondary { border-style: dashed; border-color: #67b2d6; box-shadow: 0 0 10px rgba(103, 178, 214, 0.75), inset 0 0 6px rgba(103, 178, 214, 0.25); display: none; }
+        .tutorial-dialog { position: fixed; background: rgba(42, 42, 40, 0.96); border: 2px solid var(--accent-yellow); padding: 8px 10px; color: var(--text-highlight); width: 250px; max-width: 80vw; box-shadow: 4px 4px 0 rgba(0,0,0,0.75); transition: top 0.22s cubic-bezier(0.22, 1, 0.36, 1), left 0.22s cubic-bezier(0.22, 1, 0.36, 1); will-change: top, left; z-index: 2502; display: flex; flex-direction: column; gap: 5px; pointer-events: auto; cursor: pointer; }
+        .tutorial-dialog.wide-showcase { width: 310px; max-width: 88vw; }
+        @media (orientation: portrait) {
+        .tutorial-dialog { width: 215px; max-width: 74vw; padding: 6px 8px; gap: 4px; }
+        .tutorial-dialog.wide-showcase { width: 265px; max-width: 86vw; }
+        }
+        .tut-header-bar { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px dashed var(--border-light); padding-bottom: 4px; gap: 6px; }
+        .tut-step-badge { font-size: var(--fs-small); color: var(--accent-yellow); font-weight: bold; letter-spacing: 0.8px; }
+        .tut-header-controls { display: flex; align-items: center; gap: 4px; }
+        .tut-icon-btn { background: var(--bg-app); color: var(--text-highlight); border: 1px solid var(--border-light); width: 22px; height: 20px; padding: 0; font-size: 0.75rem; line-height: 1; cursor: pointer; box-shadow: 1px 1px 0 rgba(0,0,0,0.5); display: inline-flex; align-items: center; justify-content: center; border-radius: 2px; }
+        .tut-icon-btn.primary { background: var(--accent-yellow); color: #121211; border-color: #fff; font-weight: bold; }
+        .tut-icon-btn.exit { background: var(--color-char); color: #fff; border-color: #5c2f2f; font-weight: bold; margin-left: 2px; }
+        .tut-icon-btn.disabled { opacity: 0.3; pointer-events: none; }
+        .tut-icon-btn:active { transform: translate(1px, 1px); box-shadow: none; }
+        .tutorial-dialog-text { font-size: var(--fs-small); line-height: 1.28; text-align: left; color: var(--text-highlight); }
+        .tut-example-box { background: #181715; border: 1px solid var(--border-light); padding: 4px 6px; border-radius: 2px; font-size: 0.65rem; line-height: 1.2; color: var(--text-normal); text-align: left; display: flex; flex-direction: column; gap: 3px; pointer-events: none; }
+        .tut-example-pill { display: inline-flex; align-items: center; gap: 4px; color: var(--accent-yellow); font-weight: bold; font-size: 0.65rem; }
+        .tut-mg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; margin-top: 2px; pointer-events: none; }
+        @media (orientation: portrait) {
+        .tut-mg-grid { grid-template-columns: repeat(3, 1fr); gap: 3px; }
+        }
+        .tut-mg-card { background: #141413; border: 1px solid var(--border-light); padding: 3px 2px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 2px; border-radius: 2px; text-align: center; }
+        .tut-mg-art { width: 100%; height: 30px; background: #1f1e1c; border: 1px solid var(--border-dark); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .tut-mg-name { font-size: 0.58rem; color: var(--accent-yellow); font-weight: bold; letter-spacing: 0.3px; line-height: 1.05; }
+        .tutorial-arrow { position: absolute; width: 0; height: 0; border: 7px solid transparent; pointer-events: none; }
+        .tutorial-arrow.arrow-up { top: -14px; border-bottom-color: var(--accent-yellow); }
+        .tutorial-arrow.arrow-down { bottom: -14px; border-top-color: var(--accent-yellow); }
+        .tutorial-arrow.arrow-left { left: -14px; border-right-color: var(--accent-yellow); }
+        .tutorial-arrow.arrow-right { right: -14px; border-left-color: var(--accent-yellow); }
         #modal-highscore { z-index: 3000; background: var(--bg-app); padding: 0; align-items: stretch; justify-content: stretch; }
         .hs-window-frame { width: 100vw; height: 100dvh; max-width: none; max-height: none; background: var(--bg-app); border: none; box-shadow: none; display: flex; flex-direction: column; overflow: hidden; }
         .hs-window-bar { background: var(--bg-panel); color: var(--accent-yellow); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed var(--border-light); flex-shrink: 0; }
@@ -237,16 +302,21 @@
         .rank-3 .hs-podium-badge { color: #e69d53; border-color: #cd7f32; }
         .hs-podium-name { font-size: var(--fs-title); color: var(--text-highlight); font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .hs-top3-right { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
-        .hs-podium-meta { font-size: var(--fs-text); color: var(--text-muted); display: flex; gap: 10px; }
+        .hs-podium-meta { font-size: var(--fs-text); color: var(--text-muted); display: flex; align-items: center; gap: 10px; }
+        .hs-meta-item { white-space: nowrap; }
+        .hs-meta-mg { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
         .hs-podium-score { font-size: var(--fs-title); color: var(--accent-yellow); font-weight: bold; letter-spacing: 1px; min-width: 80px; text-align: right; }
         .hs-list-container { background: var(--bg-panel); border: 2px solid var(--border-dark); padding: 15px; box-shadow: 4px 4px 0 rgba(0,0,0,0.4); width: 100%; }
         .hs-section-divider { font-size: var(--fs-title); color: var(--text-muted); letter-spacing: 1px; border-bottom: 2px dashed var(--border-light); padding-bottom: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         @media (orientation: portrait) {
         .hs-top3-row { flex-direction: column; align-items: flex-start; gap: 6px; padding: 8px 10px; }
         .hs-top3-right { width: 100%; justify-content: space-between; border-top: 1px dashed var(--border-light); padding-top: 4px; }
+        .hs-podium-meta { align-items: center; gap: 8px; }
+        .hs-meta-mg { display: inline-flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 0; line-height: 1.05; white-space: nowrap; }
         .hs-window-bar { padding: 10px 14px; }
         .hs-window-body { padding: 12px; }
         .main-menu-card { padding: 25px 20px; }
+        .main-menu-settings-btn { top: 12px; left: 12px; width: 34px !important; height: 32px !important; font-size: 1.3rem !important; }
         .main-menu-credit { top: 12px; right: 12px; }
         }
         .ending-img-container { width: 100%; max-width: 440px; aspect-ratio: 16 / 9; height: auto; margin: 0 auto 8px auto; background: #111; border: 2px solid var(--border-light); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
@@ -286,7 +356,7 @@
         #modal-start .retro-input { padding: 7px 10px; margin-bottom: 12px; }
         #modal-start #profile-stats { margin-bottom: 12px !important; padding: 8px 10px !important; }
         }
-        #preview-script-container { width: 100%; height: 55vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 16px; padding: 15px; overflow-x: hidden; overflow-y: auto; background: #1c1c1b; border: 1px solid var(--border-light); }
+        #preview-script-container { width: 100%; height: 68dvh; max-height: calc(100dvh - var(--header-overlay-offset, 112px) - 95px); display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 16px; padding: 15px; overflow-x: hidden; overflow-y: auto; background: #1c1c1b; border: 1px solid var(--border-light); }
         #selected-block-popup { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 380px; background: var(--bg-panel); border: 2px solid var(--accent-yellow); padding: 10px 12px; z-index: 900; box-shadow: 4px 4px 0 rgba(0,0,0,0.6); display: none; flex-direction: column; gap: 4px; pointer-events: auto; }
         #selected-block-popup.active { display: flex; }
         #selected-block-popup .script-block { color: var(--text-highlight) !important; }
@@ -326,13 +396,14 @@
         @media (orientation: portrait) {
         #game-layout { max-width: none; height: 100dvh; padding: 6px; gap: 6px; }
         #game-header { min-height: 0; display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto; gap: 4px; padding: 4px 8px; position: relative; }
-        .header-left { grid-row: 1; grid-column: 1; justify-content: flex-start; gap: 12px; width: 100%; position: static; z-index: 1; }
-        .header-right { grid-row: 1; grid-column: 1; justify-content: flex-end; position: relative; right: auto; top: auto; gap: 6px; width: 100%; pointer-events: none; z-index: 2; }
+        .header-left { grid-row: 1; grid-column: 1; justify-content: flex-start; align-items: center !important; gap: 6px !important; width: 100%; height: 24px; position: static; z-index: 1; }
+        .header-right { grid-row: 1; grid-column: 1; justify-content: flex-end; align-items: center; position: relative; right: auto; top: auto; gap: 6px; width: 100%; height: 24px; pointer-events: none; z-index: 2; }
         .header-right button { pointer-events: auto; }
         .header-center { grid-row: 2; grid-column: 1; justify-content: flex-start; align-items: center !important; flex-direction: row !important; flex-wrap: nowrap !important; }
-        .title-area { flex-direction: row; align-items: baseline; gap: 6px; position: static !important; }
-        .header-left h1 { position: absolute !important; left: 50% !important; top: 18px !important; transform: translate(-50%, -50%) !important; margin: 0 !important; font-weight: bold !important; white-space: nowrap !important; z-index: 10; font-size: var(--fs-head) !important; letter-spacing: 1px !important; }
-        .settings-btn { font-size: 18px !important; width: 28px !important; height: 24px !important; margin-right: 4px; }
+        .title-area { flex-direction: row !important; align-items: center !important; justify-content: flex-start !important; gap: 4px; position: static !important; flex: 0 0 auto !important; }
+        .header-left .day-text { font-size: var(--fs-small) !important; line-height: 1 !important; white-space: nowrap !important; letter-spacing: 0.3px !important; }
+        .header-left h1 { position: absolute !important; left: 50% !important; top: 16px !important; transform: translate(-50%, -50%) !important; margin: 0 !important; min-height: 0 !important; height: 24px !important; font-weight: bold !important; white-space: nowrap !important; z-index: 10; font-size: var(--fs-head) !important; letter-spacing: 1px !important; pointer-events: none; }
+        .settings-btn { font-size: 18px !important; width: 26px !important; height: 24px !important; margin-right: 0 !important; }
         .retro-btn { padding: 0 8px !important; border-width: 1px !important; height: 24px !important; box-sizing: border-box !important; margin: 0 !important; }
         #btn-reset { width: 24px !important; padding: 0 !important; justify-content: center !important; }
         .avatar-wrapper { width: 38px !important; }
@@ -395,10 +466,20 @@
         #preview-blocks-grid .script-block .sp-dialogue,
         #preview-blocks-grid .script-block .sp-transition { font-size: clamp(11.5px, 3.1vw, 14px) !important; line-height: 1.34 !important; }
         #modal-preview-script .modal-content { padding: 12px 14px !important; width: 95% !important; }
-        #preview-script-container { height: 48vh !important; }
+        #preview-script-container { height: 65dvh !important; max-height: calc(100dvh - var(--header-overlay-offset, 112px) - 90px) !important; }
+        #modal-minigame { align-items: flex-start !important; padding-top: 6px !important; }
+        #modal-minigame .modal-content { padding: 12px 14px !important; }
+        #modal-minigame .mg-stage { height: 298px !important; min-height: 298px !important; max-height: 298px !important; padding: 8px !important; }
+        #modal-minigame .coffee-desk-scene { height: 278px !important; }
+        #modal-minigame .cm-wall-shelf.shelf-top { top: 52px !important; left: 132px !important; right: 6px !important; }
+        #modal-minigame .cm-wall-shelf.shelf-mid { top: 108px !important; left: 6px !important; right: 6px !important; }
+        #modal-minigame .cm-wall-shelf.shelf-low { top: 168px !important; left: 6px !important; right: 6px !important; }
+        #modal-minigame .cm-center-machine { width: 112px !important; height: 152px !important; bottom: 6px !important; }
+        #modal-minigame .cm-body-top, #modal-minigame .cm-base-tray { width: 108px !important; }
+        #modal-minigame .cm-brew-chamber { width: 96px !important; height: 70px !important; }
         .main-menu-title { font-size: 2.2rem; }
         .main-menu-logo-img { max-height: 82px; }
-        .header-wordmark-img { height: 22px; max-height: 22px; width: auto; max-width: 140px; object-position: center center; }
+        .header-wordmark-img { height: 20px; max-height: 20px; width: auto; max-width: 120px; object-position: center center; }
         }
         @media (orientation: portrait) and (pointer: coarse) { #block-container { padding-right: 25px !important; } }
         @media print {
@@ -422,7 +503,7 @@
         .mg-pip.active { background: var(--accent-yellow); color: #121211; border-color: #fff; font-weight: bold; box-shadow: 0 0 6px rgba(214, 176, 84, 0.5); }
         .mg-pip.done { background: var(--color-scene); color: #121211; border-color: #c2dec2; font-weight: bold; }
         .mg-badge { background: #242320; border: 1.5px solid var(--accent-yellow); color: var(--accent-yellow); padding: 2px 8px; font-size: var(--fs-text); white-space: nowrap; }
-        .mg-stage { background: #181715; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 8px 8px; border: 3px solid var(--border-dark); outline: 1px solid var(--border-light); box-shadow: inset 0 0 18px rgba(0,0,0,0.85); padding: 12px; height: 256px; min-height: 256px; max-height: 256px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .mg-stage { background: #181715; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 8px 8px; border: 3px solid var(--border-dark); outline: 1px solid var(--border-light); box-shadow: inset 0 0 18px rgba(0,0,0,0.85); padding: 10px; height: 268px; min-height: 268px; max-height: 268px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .mg-status-bar { margin-top: 10px; height: 44px; min-height: 44px; max-height: 44px; font-size: var(--fs-subtitle); color: var(--accent-yellow); text-align: center; letter-spacing: 0.5px; background: #141413; border: 1px dashed var(--border-light); padding: 4px 8px; display: flex; align-items: center; justify-content: center; line-height: 1.15; overflow: hidden; }
         .pixel-svg { shape-rendering: crispEdges; image-rendering: pixelated; display: block; }
         .simon-casing { background: #363532; border: 3px solid #121211; box-shadow: inset -3px -3px 0 #22211f, inset 3px 3px 0 #52504b, 4px 4px 0 rgba(0,0,0,0.6); padding: 10px 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; }
@@ -442,14 +523,15 @@
         .simon-key:active { transform: translate(1px, 2px); box-shadow: inset 1px 1px 0 #999075; }
         .simon-key.lit { background: #ffdf6b !important; color: #121211 !important; box-shadow: inset 0 0 0 2px #fff, 0 0 12px #ffdf6b !important; transform: translate(1px, 1px); }
         .simon-key.err-lit { background: #e05a5a !important; color: #fff !important; box-shadow: inset 0 0 0 2px #ffaaaa, 0 0 10px #e05a5a !important; }
-        .coffee-desk-scene { width: 100%; height: 230px; background: linear-gradient(180deg, #252422 0%, #1f1e1c 64%, #4a3828 64%, #3b2c1f 100%); border: 3px solid #121211; box-shadow: inset 0 0 16px rgba(0,0,0,0.85); position: relative; overflow: hidden; user-select: none; }
-        .coffee-desk-scene::before { content: ""; position: absolute; left: 0; right: 0; top: 64%; height: 3px; background: #121211; z-index: 1; }
-        .cm-wall-shelf { position: absolute; left: 140px; right: 8px; height: 7px; background: linear-gradient(180deg, #6e5239 0%, #423020 100%); border: 2px solid #121211; box-shadow: 0 4px 0 rgba(0,0,0,0.55); z-index: 2; pointer-events: none; }
+        .coffee-desk-scene { width: 100%; height: 246px; background: linear-gradient(180deg, #252422 0%, #1f1e1c 72%, #4a3828 72%, #3b2c1f 100%); border: 3px solid #121211; box-shadow: inset 0 0 16px rgba(0,0,0,0.85); position: relative; overflow: hidden; user-select: none; }
+        .coffee-desk-scene::before { content: ""; position: absolute; left: 0; right: 0; top: 72%; height: 3px; background: #121211; z-index: 1; }
+        .cm-wall-shelf { position: absolute; left: 136px; right: 8px; height: 7px; background: linear-gradient(180deg, #6e5239 0%, #423020 100%); border: 2px solid #121211; box-shadow: 0 4px 0 rgba(0,0,0,0.55); z-index: 2; pointer-events: none; }
         .cm-wall-shelf::before, .cm-wall-shelf::after { content: ""; position: absolute; top: 5px; width: 5px; height: 7px; background: #1c1b18; }
         .cm-wall-shelf::before { left: 16px; }
         .cm-wall-shelf::after { right: 16px; }
-        .cm-wall-shelf.shelf-top { top: 64px; }
-        .cm-wall-shelf.shelf-mid { top: 122px; left: 8px; right: 8px; }
+        .cm-wall-shelf.shelf-top { top: 52px; left: 136px; right: 8px; }
+        .cm-wall-shelf.shelf-mid { top: 106px; left: 8px; right: 8px; }
+        .cm-wall-shelf.shelf-low { top: 162px; left: 8px; right: 8px; }
         .cm-sticky-note { position: absolute; top: 6px; left: 6px; background: #e8d882; color: #1c1b18; border: 2px solid #121211; box-shadow: 2px 2px 0 rgba(0,0,0,0.55); padding: 4px 6px; z-index: 6; width: 128px; font-size: 0.65rem; line-height: 1.1; transform: rotate(-1.5deg); pointer-events: none; }
         .cm-sticky-title { font-weight: bold; border-bottom: 1px dashed #5c5328; padding-bottom: 2px; margin-bottom: 3px; color: #121211; font-size: 0.68rem; text-align: center; }
         .cm-sticky-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 4px; }
@@ -500,9 +582,9 @@
     </style>
 </head>
 <body>
-    <div id="main-menu" class="modal-overlay active" style="display: flex;"><div class="main-menu-credit">credit by SSRC</div><div class="main-menu-card"><div class="main-menu-title"><img id="main-menu-logo-img" class="main-menu-logo-img" alt=""><span id="main-menu-title-text">SCRIPT ARCADE</span></div><div class="main-menu-subtitle">SCRIPT EDITING ON ARCADE DESK</div><div class="main-menu-buttons"><button class="retro-btn primary main-menu-btn" onclick="openStartModal()">▶ PLAY</button><button class="retro-btn main-menu-btn" onclick="showHighscores()">★ HIGHSCORE</button><button class="retro-btn main-menu-btn" onclick="startTutorial()">? TUTORIAL</button></div></div></div>
+    <div id="main-menu" class="modal-overlay active" style="display: flex;"><div class="settings-btn main-menu-settings-btn" id="btn-main-menu-settings" onclick="openMainMenuSettings()" title="Pengaturan">⚙</div><div class="main-menu-credit">credit by SSRC</div><div class="main-menu-card"><div class="main-menu-title"><img id="main-menu-logo-img" class="main-menu-logo-img" alt=""><span id="main-menu-title-text">SCRIPT ARCADE</span></div><div class="main-menu-subtitle">SCRIPT EDITING ON ARCADE DESK</div><div class="main-menu-buttons"><button class="retro-btn primary main-menu-btn" onclick="openStartModal()">▶ PLAY</button><button class="retro-btn main-menu-btn" onclick="showHighscores()">★ HIGHSCORE</button><button class="retro-btn main-menu-btn" onclick="startTutorial()">? TUTORIAL</button></div></div></div>
     <div id="game-layout" style="display: none;">
-    <header id="game-header"><div class="header-left"><div class="settings-btn" id="btn-settings" onclick="showProfile()" title="Profil & Progress">⚙</div><div class="title-area"><h1><img id="header-wordmark-img" class="header-wordmark-img" alt=""><span id="header-title-text">SCRIPT ARCADE</span></h1><div class="day-text" id="level-display">HARI 01</div></div></div><div class="header-center"><div class="avatar-wrapper"><div class="client-avatar" id="client-avatar-box"><img id="client-avatar-img" alt="Client Icon" style="display:none;"><svg id="client-avatar-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/><circle cx="9" cy="9" r="1.5" fill="#3b3a36"/><circle cx="15" cy="9" r="1.5" fill="#3b3a36"/><path id="svg-mouth" d="M8 8.5h2M14 8.5h2M10.5 12h3" stroke="#3b3a36" stroke-width="1.5"/></svg></div><div class="avatar-title">CLIENT BRIEF</div></div><div class="client-brief-wrapper" id="client-brief-box"><div class="client-brief-box"><div class="brief-content" id="client-brief-content"></div></div><div class="deadline-area"><div class="timer-wrapper"><span class="timer-label">DEADLINE</span><div class="progress-bar-container"><div id="progress-bar"></div><div class="coffee-boost-bar" id="coffee-boost-bar"></div></div><span class="time-text" id="ui-time">03:00</span></div><div class="coffee-area" id="ui-coffee"></div></div></div></div><div class="header-right"><button id="btn-reset" class="retro-btn" onclick="clearBoard()" title="Kembalikan semua blok ke inventory"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg><span class="hide-mobile">RESET</span></button><button id="btn-periksa" class="retro-btn primary" onclick="checkScript()">SUBMIT</button></div></header>
+    <header id="game-header"><div class="header-left"><div class="settings-btn" id="btn-settings" onclick="showProfile()" title="Profil & Progress">⚙</div><div class="title-area"><h1><img id="header-wordmark-img" class="header-wordmark-img" alt=""><span id="header-title-text">SCRIPT ARCADE</span></h1><div class="day-text" id="level-display">SCRIPT #01</div></div></div><div class="header-center"><div class="avatar-wrapper"><div class="client-avatar" id="client-avatar-box"><img id="client-avatar-img" alt="Client Icon" style="display:none;"><svg id="client-avatar-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/><circle cx="9" cy="9" r="1.5" fill="#3b3a36"/><circle cx="15" cy="9" r="1.5" fill="#3b3a36"/><path id="svg-mouth" d="M8 8.5h2M14 8.5h2M10.5 12h3" stroke="#3b3a36" stroke-width="1.5"/></svg></div><div class="avatar-title">CLIENT BRIEF</div></div><div class="client-brief-wrapper" id="client-brief-box"><div class="client-brief-box"><div class="brief-content" id="client-brief-content"></div></div><div class="deadline-area"><div class="timer-wrapper"><span class="timer-label">DEADLINE</span><div class="progress-bar-container"><div id="progress-bar"></div><div class="coffee-boost-bar" id="coffee-boost-bar"></div></div><span class="time-text" id="ui-time">03:00</span></div><div class="coffee-area" id="ui-coffee"></div></div></div></div><div class="header-right"><button id="btn-reset" class="retro-btn" onclick="clearBoard()" title="Kembalikan semua blok ke inventory"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg><span class="hide-mobile">RESET</span></button><button id="btn-periksa" class="retro-btn primary" onclick="checkScript()">SUBMIT</button></div></header>
     <div id="main-area">
     <div id="left-panel" class="panel"><div class="panel-header"><div class="panel-header-text"><h2 class="panel-title">SCRIPT BLOCKS</h2><div class="panel-subtitle" style="font-size: var(--fs-text);">(TARIK KE HALAMAN)</div></div><button class="retro-btn btn-expand" id="btn-preview-blocks" onclick="openPreviewBlocks()" title="Lihat semua blok">➚</button></div><div class="scroll-container"><div class="retro-scrollbar" id="block-container" ondragover="handleDragOverPanel(event)" ondrop="handleDropToPanel(event)"></div><div class="w95-scrollbar" id="script-scrollbar"><div class="w95-scroll-track"><div class="w95-scroll-thumb"></div></div></div></div></div>
     <div id="center-panel" class="panel"><div class="center-scroll-area" id="center-scroll-area"><div class="paper-sheet" id="script-paper"><div class="paper-header empty-header" id="paper-header-bar"><span class="page-num" id="page-number"></span></div><div id="slots-container"></div></div></div><button class="retro-btn btn-expand btn-expand-paper" id="btn-preview-paper" onclick="openPreviewScript()" title="Perbesar Halaman">➚</button></div>
@@ -514,10 +596,12 @@
     <div id="modal-hint" class="modal-overlay in-game-modal"><div class="modal-content" style="max-width: 500px; text-align: left;"><div class="modal-header-row"><h2>HINT</h2><button class="modal-close-x" onclick="closeHint()">X</button></div><div id="hint-diagnostic-body" style="color: var(--text-normal); line-height: 1.6; max-height: 50vh; padding-right: 10px; overflow-y: auto; font-size: var(--fs-subtitle);"></div><div class="flex justify-center mt-6"><button class="retro-btn primary" onclick="closeHint()">SAYA MENGERTI (TUTUP)</button></div></div></div>
     <div id="modal-resource-empty" class="modal-overlay in-game-modal"><div class="modal-content" style="max-width: 420px;"><div class="modal-header-row"><h2 id="res-empty-title">KOPI HABIS!</h2></div><p id="res-empty-desc" class="mb-4" style="line-height: 1.45; color: var(--text-normal); font-size: var(--fs-subtitle);"></p><p class="mb-6" style="color: var(--accent-yellow); font-size: var(--fs-title); letter-spacing: 1px;">Mainkan mini game?</p><div class="flex justify-between items-center mt-2"><button class="retro-btn" id="btn-res-no" onclick="cancelPlayMiniGame()">TIDAK</button><button class="retro-btn primary" id="btn-res-yes" onclick="confirmPlayMiniGame()">YA</button></div></div></div>
     <div id="modal-minigame" class="modal-overlay in-game-modal"><div class="modal-content"><div class="modal-header-row"><h2 id="mg-title">MINI GAME</h2><button class="modal-close-x" onclick="abortMiniGame()" title="Tutup">X</button></div><div class="mg-HeaderMeta"><div class="mg-level-pips" id="mg-level-pips"><span class="mg-pip active">LV.1</span><span class="mg-pip">LV.2</span><span class="mg-pip">LV.3</span></div><span class="mg-badge" id="mg-reward-badge">HADIAH: +1 KOPI</span></div><div class="mg-stage" id="mg-stage"></div><div class="mg-status-bar" id="mg-status">Siapkan dirimu...</div></div></div>
-    <div id="modal-start" class="modal-overlay"><div class="modal-content" style="max-width: 380px;"><img id="profile-logo-icon" class="profile-logo-icon" alt="Logo Icon"><h1>PROFIL EDITOR</h1><p class="mb-4" style="color: var(--text-muted); font-size: var(--fs-text);">Setiap cerita memiliki masalah. Tugasmu memastikan setiap bagian memiliki alasan yang logis. Waktu terus berjalan!</p><input type="text" id="player-name" class="retro-input" placeholder="MASUKKAN NAMA" maxlength="10"><div id="profile-stats" class="mb-6 hidden border p-3 text-left" style="color: var(--text-normal); border-color: var(--border-light);"><div class="grid grid-cols-2 gap-2" style="font-size: var(--fs-text);"><div>Hari Dicapai:</div><div id="stat-day" class="text-right" style="color: var(--text-highlight);">1</div><div>Kasus Selesai:</div><div id="stat-cases" class="text-right" style="color: var(--text-highlight);">0</div><div>Rata-rata Skor:</div><div id="stat-score" class="text-right" style="color: var(--text-highlight);">0</div></div></div><div class="flex justify-between items-center mt-2"><button class="retro-btn" onclick="returnToMenuFromProfile()">MENU</button><button class="retro-btn primary" id="btn-start-game" onclick="startGame()">MULAI KERJA</button></div></div></div>
-    <div id="modal-gameover" class="modal-overlay"><div class="modal-content" style="max-width: 550px; padding: 18px 22px;"><h1 id="go-title" style="color: var(--color-char);">GAME OVER</h1><div class="ending-img-container"><img id="go-img" alt="Ending Illustration" style="display:none;"><div id="go-img-fallback" class="ending-fallback-text" style="display:none;">[ ILUSTRASI ENDING BELUM TERSEDIA ]</div></div><div id="go-ending-name" class="ending-badge-title">BURNOUT</div><p id="go-epilog" style="margin: 0 0 12px 0; font-size: var(--fs-text); line-height: 1.3; color: var(--text-normal); font-style: italic;"></p><div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); padding: 12px; margin-bottom: 14px; text-align: left;"><div style="color: var(--text-highlight); font-size: var(--fs-subtitle); margin-bottom: 8px; text-align: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 4px;">PLAYER: <span id="go-player" style="color: var(--accent-yellow);"></span></div><table class="hs-table" style="margin-bottom:0;"><tr><th>SKOR AKHIR</th><td id="go-score" style="text-align: right; color: var(--text-highlight);">0</td></tr><tr><th>DURASI BERMAIN</th><td id="go-duration" style="text-align: right; color: var(--text-highlight);">00m 00d</td></tr><tr><th>MINI GAME</th><td id="go-minigames" style="text-align: right; color: var(--text-highlight);">0x</td></tr><tr><th>HARI TERTINGGI</th><td id="go-level" style="text-align: right; color: var(--text-highlight);">0</td></tr><tr><th>TOTAL KASUS</th><td id="go-jobs" style="text-align: right; color: var(--text-highlight);">0</td></tr></table></div><p id="go-rank-msg" style="font-size: var(--fs-small); color: var(--color-scene); margin-top: -6px; margin-bottom: 12px; text-align: center; font-weight: bold;"></p><div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;"><button class="retro-btn" onclick="showHighscores()">HIGHSCORE</button><button class="retro-btn" onclick="returnToMenu()">MAIN MENU</button><button class="retro-btn primary" onclick="restartGame()">PLAY AGAIN</button></div></div></div>
-    <div id="modal-highscore" class="modal-overlay"><div class="hs-window-frame"><div class="hs-window-bar"><span class="hs-window-title"><img id="hs-logo-icon" class="hs-logo-icon" alt=""><span id="hs-trophy-fallback">🏆 </span>LEADERBOARD — TOP 100 EDITORS</span><button class="modal-close-x" style="position: static; transform: none; width: 24px; height: 24px;" onclick="closeHighscores()">X</button></div><div class="hs-window-body"><div class="hs-content-wrapper"><div id="hs-top3-container" class="hs-top3-box"></div><div class="hs-list-container" id="hs-others-wrapper"><div class="hs-section-divider"><span>PERINGKAT #4 — #100</span></div><table class="hs-table" id="hs-table-body" style="margin-bottom: 0;"><tr><th>NO</th><th>NAMA</th><th>SKOR</th><th>DURASI</th><th>MINI GAME</th><th style="text-align:right;">TOTAL KASUS</th></tr></table></div></div></div></div></div>
-    <div id="tutorial-overlay" class="modal-overlay" onclick="nextTutorialStep()"><div class="tutorial-spotlight" id="tutorial-spotlight"></div><div class="tutorial-dialog" id="tutorial-dialog"><div class="tutorial-arrow" id="tutorial-arrow"></div><div class="tutorial-dialog-text" id="tutorial-text">Teks Tutorial</div><div class="tutorial-tap-prompt" id="tut-tap-prompt">[ KLIK DI MANA SAJA UNTUK LANJUT ]</div></div></div>
+    <div id="modal-main-settings" class="modal-overlay" style="z-index: 2600;"><div class="modal-content" style="max-width: 400px;"><div class="modal-header-row"><h2>SETTINGS</h2><button class="modal-close-x" onclick="closeMainMenuSettings()">X</button></div><div class="settings-group-box"><div class="settings-row"><span class="settings-row-label">🎵 MUSIC</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="mm-btn-music-mute" onclick="toggleAudioMute('music')" title="Mute/Unmute Music">🔊</button><input type="range" class="retro-range" id="mm-slider-music" min="0" max="100" value="70" oninput="updateAudioVolume('music', this.value)"><span class="settings-val-badge" id="mm-val-music">70%</span></div></div><div class="settings-row"><span class="settings-row-label">🔊 SOUND</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="mm-btn-sound-mute" onclick="toggleAudioMute('sound')" title="Mute/Unmute Sound">🔊</button><input type="range" class="retro-range" id="mm-slider-sound" min="0" max="100" value="80" oninput="updateAudioVolume('sound', this.value)"><span class="settings-val-badge" id="mm-val-sound">80%</span></div></div><div class="settings-row"><span class="settings-row-label">🖥 SCALE</span><div class="settings-ctrl-wrap"><div class="scale-btn-group"><button class="scale-opt-btn" data-scale="0.9" onclick="setGameScale(0.9)">90%</button><button class="scale-opt-btn active" data-scale="1" onclick="setGameScale(1)">100%</button><button class="scale-opt-btn" data-scale="1.1" onclick="setGameScale(1.1)">110%</button></div></div></div></div><div class="settings-group-box" style="margin-bottom: 14px;"><div class="settings-row" style="margin-bottom: 4px;"><span class="settings-row-label" style="color: var(--accent-yellow);">★ CREDIT</span></div><div class="credit-box-area" id="main-settings-credit-text">SCRIPT ARCADE
+Credit by SSRC</div></div><div class="flex justify-center"><button class="retro-btn primary" onclick="closeMainMenuSettings()">SIMPAN & TUTUP</button></div></div></div>
+    <div id="modal-start" class="modal-overlay"><div class="modal-content" style="max-width: 380px;"><img id="profile-logo-icon" class="profile-logo-icon" alt="Logo Icon"><h1>PROFIL EDITOR</h1><div id="ingame-audio-settings" class="settings-group-box hidden" style="padding: 8px 10px; margin-bottom: 10px;"><div style="font-size: var(--fs-small); color: var(--accent-yellow); letter-spacing: 1px; border-bottom: 1px dashed var(--border-light); padding-bottom: 3px; margin-bottom: 2px; font-weight: bold;">PENGATURAN AUDIO</div><div class="settings-row"><span class="settings-row-label">🎵 MUSIC</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="ig-btn-music-mute" onclick="toggleAudioMute('music')" title="Mute/Unmute Music">🔊</button><input type="range" class="retro-range" id="ig-slider-music" min="0" max="100" value="70" oninput="updateAudioVolume('music', this.value)"><span class="settings-val-badge" id="ig-val-music">70%</span></div></div><div class="settings-row"><span class="settings-row-label">🔊 SOUND</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="ig-btn-sound-mute" onclick="toggleAudioMute('sound')" title="Mute/Unmute Sound">🔊</button><input type="range" class="retro-range" id="ig-slider-sound" min="0" max="100" value="80" oninput="updateAudioVolume('sound', this.value)"><span class="settings-val-badge" id="ig-val-sound">80%</span></div></div></div><p id="profile-desc-text" class="mb-4" style="color: var(--text-muted); font-size: var(--fs-text);">Setiap cerita memiliki masalah. Tugasmu memastikan setiap bagian memiliki alasan yang logis. Waktu terus berjalan!</p><input type="text" id="player-name" class="retro-input" placeholder="MASUKKAN NAMA" maxlength="10"><div id="profile-stats" class="mb-6 hidden border p-3 text-left" style="color: var(--text-normal); border-color: var(--border-light);"><div class="grid grid-cols-2 gap-2" style="font-size: var(--fs-text);"><span id="stat-day" class="hidden">1</span><div>Total Script:</div><div id="stat-cases" class="text-right" style="color: var(--text-highlight);">0</div><div>Durasi Bermain:</div><div id="stat-duration" class="text-right" style="color: var(--text-highlight);">00d 00m</div><div>Mini Game:</div><div id="stat-minigames" class="text-right" style="color: var(--text-highlight);">0x</div><div>Skor:</div><div id="stat-score" class="text-right" style="color: var(--accent-yellow); font-weight: bold;">0</div></div></div><div class="flex justify-between items-center mt-2"><button class="retro-btn" onclick="returnToMenuFromProfile()">MENU</button><button class="retro-btn primary" id="btn-start-game" onclick="startGame()">MULAI KERJA</button></div></div></div>
+    <div id="modal-gameover" class="modal-overlay"><div class="modal-content" style="max-width: 550px; padding: 18px 22px;"><h1 id="go-title" style="color: var(--color-char);">GAME OVER</h1><div class="ending-img-container"><img id="go-img" alt="Ending Illustration" style="display:none;"><div id="go-img-fallback" class="ending-fallback-text" style="display:none;">[ ILUSTRASI ENDING BELUM TERSEDIA ]</div></div><div id="go-ending-name" class="ending-badge-title">BURNOUT</div><p id="go-epilog" style="margin: 0 0 12px 0; font-size: var(--fs-text); line-height: 1.3; color: var(--text-normal); font-style: italic;"></p><div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); padding: 12px; margin-bottom: 14px; text-align: left;"><div style="color: var(--text-highlight); font-size: var(--fs-subtitle); margin-bottom: 8px; text-align: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 4px;">PLAYER: <span id="go-player" style="color: var(--accent-yellow);"></span></div><table class="hs-table" style="margin-bottom:0;"><tr><th>SKOR AKHIR</th><td id="go-score" style="text-align: right; color: var(--accent-yellow); font-weight: bold;">0</td></tr><tr><th>DURASI BERMAIN</th><td id="go-duration" style="text-align: right; color: var(--text-highlight);">00d 00m</td></tr><tr><th>MINI GAME</th><td id="go-minigames" style="text-align: right; color: var(--text-highlight);">0x</td></tr><tr class="hidden"><th>LEVEL</th><td id="go-level">0</td></tr><tr><th>TOTAL SCRIPT</th><td id="go-jobs" style="text-align: right; color: var(--text-highlight);">0</td></tr></table></div><p id="go-rank-msg" style="font-size: var(--fs-small); color: var(--color-scene); margin-top: -6px; margin-bottom: 12px; text-align: center; font-weight: bold;"></p><div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;"><button class="retro-btn" onclick="showHighscores()">HIGHSCORE</button><button class="retro-btn" onclick="returnToMenu()">MAIN MENU</button><button class="retro-btn primary" onclick="restartGame()">PLAY AGAIN</button></div></div></div>
+    <div id="modal-highscore" class="modal-overlay"><div class="hs-window-frame"><div class="hs-window-bar"><span class="hs-window-title"><img id="hs-logo-icon" class="hs-logo-icon" alt=""><span id="hs-trophy-fallback">🏆 </span>LEADERBOARD — TOP 100 EDITORS</span><button class="modal-close-x" style="position: static; transform: none; width: 24px; height: 24px;" onclick="closeHighscores()">X</button></div><div class="hs-window-body"><div class="hs-content-wrapper"><div id="hs-top3-container" class="hs-top3-box"></div><div class="hs-list-container" id="hs-others-wrapper"><div class="hs-section-divider"><span>PERINGKAT #4 — #100</span></div><table class="hs-table" id="hs-table-body" style="margin-bottom: 0;"><tr><th>RANK</th><th>NAMA</th><th>TOTAL SCRIPT</th><th>DURASI</th><th>MINI GAME</th><th style="text-align:right;">SKOR</th></tr></table></div></div></div></div></div>
+    <div id="tutorial-overlay" class="modal-overlay" onclick="handleTutorialOverlayClick(event)"><div class="tutorial-spotlight" id="tutorial-spotlight"></div><div class="tutorial-spotlight-secondary" id="tutorial-spotlight-2"></div><div class="tutorial-dialog" id="tutorial-dialog"><div class="tutorial-arrow" id="tutorial-arrow"></div><div class="tut-header-bar"><span class="tut-step-badge" id="tut-step-badge">1 / 17</span><div class="tut-header-controls"><button class="tut-icon-btn" id="btn-tut-prev" onclick="event.stopPropagation(); prevTutorialStep()" title="Sebelumnya">◄</button><button class="tut-icon-btn primary" id="btn-tut-next" onclick="event.stopPropagation(); nextTutorialStep()" title="Selanjutnya">►</button><button class="tut-icon-btn exit" onclick="event.stopPropagation(); endTutorial()" title="Keluar Tutorial">✕</button></div></div><div class="tutorial-dialog-text" id="tutorial-text">Teks Tutorial</div><div id="tutorial-example-container" class="tut-example-box"></div><span id="tut-tap-prompt" class="hidden"></span></div></div>
     <script>
         const _memStore = {};
         const _safeLS = {
@@ -561,7 +645,7 @@
         let clientAngryTimeout = null;
         function triggerClientSubmitAngry(durationMs = 2500) { gameState.isSubmitAngry = true; updateClientAvatarState(); if (clientAngryTimeout) clearTimeout(clientAngryTimeout); clientAngryTimeout = setTimeout(() => { gameState.isSubmitAngry = false; updateClientAvatarState(); }, durationMs); }
         function updateClientAvatarState() { const imgEl = document.getElementById('client-avatar-img'); const svgEl = document.getElementById('client-avatar-svg'); const boxEl = document.getElementById('client-avatar-box'); const svgMouth = document.getElementById('svg-mouth'); if (!imgEl || !svgEl) return; const clientId = gameState.clientId || 'client1'; const pct = gameState.maxTime > 0 ? (gameState.timeLeft / gameState.maxTime) * 100 : 100; const isTimerRed = gameState.isGameActive && pct <= 30; const isAngry = Boolean(gameState.isSubmitAngry || isTimerRed); if (boxEl) { if (isAngry) boxEl.classList.add('angry-active'); else boxEl.classList.remove('angry-active'); } if (svgMouth) { if (isAngry) { svgMouth.setAttribute('d', 'M7.5 7.5L10.5 9M16.5 7.5L13.5 9M10 13c1-1.2 3-1.2 4 0'); } else { svgMouth.setAttribute('d', 'M8 8.5h2M14 8.5h2M10.5 12h3'); } } const clientData = (ASSET_CONFIG.clients && ASSET_CONFIG.clients[clientId]) ? ASSET_CONFIG.clients[clientId] : ASSET_CONFIG.clients.client1; const targetSrc = clientData ? (isAngry ? clientData.angry : clientData.normal) : ""; if (targetSrc && targetSrc.trim() !== "") { if (imgEl.getAttribute('data-current-key') !== targetSrc) { imgEl.setAttribute('data-current-key', targetSrc); loadSmartImage( imgEl, targetSrc, () => { imgEl.style.display = 'block'; svgEl.style.display = 'none'; }, () => { imgEl.style.display = 'none'; svgEl.style.display = 'block'; } ); } } else { imgEl.style.display = 'none'; svgEl.style.display = 'block'; } }
-        function formatPlayDuration(sec) { const totalSec = Math.max(0, Math.round(Number(sec) || 0)); const mins = Math.floor(totalSec / 60); const secs = totalSec % 60; if (mins >= 60) { const hrs = Math.floor(mins / 60); const remMins = mins % 60; return `${hrs}j ${String(remMins).padStart(2, '0')}m ${String(secs).padStart(2, '0')}d`; } return `${String(mins).padStart(2, '0')}m ${String(secs).padStart(2, '0')}d`; }
+        function formatPlayDuration(sec) { const totalSec = Math.max(0, Math.round(Number(sec) || 0)); const mins = Math.floor(totalSec / 60); const secs = totalSec % 60; if (mins >= 60) { const hrs = Math.floor(mins / 60); const remMins = mins % 60; return `${String(secs).padStart(2, '0')}d ${String(remMins).padStart(2, '0')}m ${hrs}j`; } return `${String(secs).padStart(2, '0')}d ${String(mins).padStart(2, '0')}m`; }
         const LeaderboardManager = { async saveScore(record) { let localScores = JSON.parse(_safeLS.getItem('es_arcade_hs_top100')) || []; const existingLocalIdx = localScores.findIndex(s => s && s.sessionId === record.sessionId); if (existingLocalIdx === -1) localScores.push(record); else localScores[existingLocalIdx] = record; localScores.sort((a, b) => (b.score || 0) - (a.score || 0) || (b.jobs || 0) - (a.jobs || 0) || (a.duration || 0) - (b.duration || 0)); localScores = localScores.slice(0, 100); _safeLS.setItem('es_arcade_hs_top100', JSON.stringify(localScores)); try { if (!firebaseDB) throw new Error("Firebase belum aktif."); const dbRef = firebaseDB.ref('highscores'); const snapshot = await dbRef.once('value'); let scores = snapshot.val() || []; if (!Array.isArray(scores)) scores = Object.values(scores); const existingIdx = scores.findIndex(s => s && s.sessionId === record.sessionId); if (existingIdx === -1) scores.push(record); else scores[existingIdx] = record; scores.sort((a, b) => (b.score || 0) - (a.score || 0) || (b.jobs || 0) - (a.jobs || 0) || (a.duration || 0) - (b.duration || 0)); scores = scores.slice(0, 100); await dbRef.set(scores); const rank = scores.findIndex(s => s && s.sessionId === record.sessionId) + 1; return rank > 0 ? rank : null; } catch (err) { const rank = localScores.findIndex(s => s && s.sessionId === record.sessionId) + 1; return rank > 0 ? rank : null; } }, async getTop100() { try { if (!firebaseDB) throw new Error("Firebase belum aktif."); const snapshot = await firebaseDB.ref('highscores').once('value'); let data = snapshot.val(); if (!data) return []; let scores = Array.isArray(data) ? data : Object.values(data); scores.sort((a, b) => (b.score || 0) - (a.score || 0) || (b.jobs || 0) - (a.jobs || 0) || (a.duration || 0) - (b.duration || 0)); return scores.slice(0, 100); } catch (err) { return JSON.parse(_safeLS.getItem('es_arcade_hs_top100')) || []; } } };
         const BASE_TIME = 180;
         const COFFEE_BOOST = 35;
@@ -898,7 +982,7 @@
         }
         const endingCatalog = [ { id: 'INDUSTRY_STAR', title: 'INDUSTRY STAR', epilog: 'Keahlian dan kecepatanmu menjadikanmu editor legendaris di industri perfilman.', getImg: () => ASSET_CONFIG.endings.INDUSTRY_STAR, check: (s) => s.totalScore >= 1000 && s.day >= 10  }, { id: 'CLIENT_MAGNET', title: 'CLIENT MAGNET', epilog: 'Naskahmu selalu rapi tanpa cela sehingga klien besar terus berdatangan.', getImg: () => ASSET_CONFIG.endings.CLIENT_MAGNET, check: (s) => s.casesCompleted >= 15 && s.mistakes < 5  }, { id: 'ESTABLISHED_EDITOR', title: 'ESTABLISHED EDITOR', epilog: 'Sebuah studio ternama mengontrakmu secara eksklusif berkat kinerjamu yang stabil.', getImg: () => ASSET_CONFIG.endings.ESTABLISHED_EDITOR, check: (s) => s.totalScore >= 500 && s.day >= 5  }, { id: 'FREELANCE_SURVIVOR', title: 'FREELANCE SURVIVOR', epilog: 'Kamu bertahan dari proyek ke proyek dengan penghasilan yang cukup untuk kopi harianmu.', getImg: () => ASSET_CONFIG.endings.FREELANCE_SURVIVOR, check: (s) => s.day >= 3  }, { id: 'BURNOUT', title: 'BURNOUT', epilog: 'Tumpukan revisi dan tekanan deadline membuatmu kelelahan hingga harus rehat panjang.', getImg: () => ASSET_CONFIG.endings.BURNOUT, check: (s) => s.mistakes >= 5 || s.day < 3  } ];
         const MAX_HINTS_PER_CASE = 2;
-        let gameState = { sessionId: '', day: 1, casesCompleted: 0, totalScore: 0, mistakes: 0, playDuration: 0, miniGamesCount: 0, lastTickTime: 0, caseRevisions: 0, revisedSlots: [], currentPage: 1, totalPages: 1, history: [], currentBible: null, currentBlocks: [], placedBlocks: [], lockedSlots: [], selectedBlockId: null, hintUsed: false, hintsLeft: MAX_HINTS_PER_CASE, playerName: "ANONIM", timeLeft: BASE_TIME, maxTime: BASE_TIME, coffeesLeft: MAX_COFFEE_PER_CASE, isGameActive: false, clientId: 'client1', isSubmitAngry: false };
+        let gameState = { sessionId: '', day: 1, casesCompleted: 0, totalScore: 0, mistakes: 0, playDuration: 0, miniGamesCount: 0, caseMiniGamesUsed: 0, caseStartTime: 0, lastTickTime: 0, caseRevisions: 0, revisedSlots: [], currentPage: 1, totalPages: 1, history: [], currentBible: null, currentBlocks: [], placedBlocks: [], lockedSlots: [], selectedBlockId: null, hintUsed: false, hintsLeft: MAX_HINTS_PER_CASE, playerName: "ANONIM", timeLeft: BASE_TIME, maxTime: BASE_TIME, coffeesLeft: MAX_COFFEE_PER_CASE, isGameActive: false, clientId: 'client1', isSubmitAngry: false };
         let timerState = { endTime: 0, interval: null, isPaused: false, pausedTimeLeft: 0 };
         let selectedFromPreview = false; let isSubmitting = false;
         function generateSessionId() { return 'sess_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 6); }
@@ -1085,9 +1169,9 @@
         function getSceneHeadingNumber(slotIdx) { const currentId = gameState.placedBlocks[slotIdx]; if (!currentId) return ""; const currentBlock = gameState.currentBlocks.find(x => x.id === currentId); if (!currentBlock || currentBlock.type !== 'SCENE HEADING') return ""; let sceneCount = 0; for (let i = 0; i <= slotIdx; i++) { const bId = gameState.placedBlocks[i]; if (bId) { const b = gameState.currentBlocks.find(x => x.id === bId); if (b && b.type === 'SCENE HEADING') sceneCount++; } } return sceneCount > 0 ? sceneCount : ""; }
         function formatScreenplayContent(block, isPlaced = false, slotIdx = null) { if (!block) return ''; const type = block.type; if (type === 'SCENE HEADING') { const slugText = processTextForGlossary(block.text.toUpperCase(), true); return `<div class="sp-slugline-row"><span class="sp-slugline-text">${slugText}</span></div>`; } if (type === 'DIALOGUE' || type === 'CHARACTER') { const lines = block.text.split('\n').map(l => l.trim()).filter(Boolean); const charCue = lines[0] ? processTextForGlossary(lines[0].toUpperCase(), true) : 'CHARACTER'; let parentheticalHTML = ''; let dialogueLines = []; for (let i = 1; i < lines.length; i++) { if (lines[i].startsWith('(') && lines[i].endsWith(')')) { const inner = lines[i].slice(1, -1).trim(); if (inner.length > 0) { parentheticalHTML += `<div class="sp-parenthetical">(${processTextForGlossary(inner)})</div>`; } } else { dialogueLines.push(processTextForGlossary(lines[i])); } } const dialHTML = dialogueLines.join('<br>'); return `<div class="sp-dialogue-group"><div class="sp-character">${charCue}</div>${parentheticalHTML}<div class="sp-dialogue">${dialHTML}</div></div>`; } if (type === 'TRANSITION') { return `<div class="sp-transition">${processTextForGlossary(block.text.toUpperCase(), true)}</div>`; } const paragraphs = block.text.split('\n').map(p => processTextForGlossary(p.trim())).filter(Boolean); return paragraphs.map(p => `<div class="sp-action">${p}</div>`).join(''); }
         function goToScriptPage(pageNum) { if (pageNum < 1 || pageNum > gameState.totalPages) return; gameState.currentPage = pageNum; renderBlocksAndSlots(); }
-        function setupNewCase(isNewGame = false) { closeInGameModals(); gameState.currentBible = generateStoryBible(); const casePrep = prepareCaseBlocksAndLocks(gameState.currentBible); gameState.currentBlocks = casePrep.blocks; gameState.placedBlocks = casePrep.placedBlocks; gameState.lockedSlots = casePrep.lockedSlots; gameState.caseRevisions = 0; gameState.revisedSlots = []; gameState.currentPage = 1; gameState.clientId = pickRandom(['client1', 'client2', 'client3', 'client4']); gameState.isSubmitAngry = false; if (clientAngryTimeout) clearTimeout(clientAngryTimeout); deselectBlock(); gameState.hintsLeft = MAX_HINTS_PER_CASE; gameState.hintUsed = false; updateHintButtonUI(); document.getElementById('glossary-empty').classList.remove('hidden'); document.getElementById('glossary-content').classList.add('hidden'); if (isNewGame) { closeModal('modal-gameover'); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = BASE_TIME; gameState.sessionId = generateSessionId(); gameState.maxTime = BASE_TIME; gameState.timeLeft = BASE_TIME; gameState.coffeesLeft = MAX_COFFEE_PER_CASE; gameState.mistakes = 0; gameState.playDuration = 0; gameState.miniGamesCount = 0; gameState.lastTickTime = Date.now(); } else { let timeBonus = Math.max(30, 60 - (gameState.day * 2)); gameState.timeLeft = Math.min(BASE_TIME, gameState.timeLeft + timeBonus); gameState.maxTime = Math.max(gameState.timeLeft, BASE_TIME); gameState.coffeesLeft = MAX_COFFEE_PER_CASE; } gameState.isGameActive = true; isSubmitting = false; updateUI(); startTimer(); }
+        function setupNewCase(isNewGame = false) { closeInGameModals(); gameState.currentBible = generateStoryBible(); const casePrep = prepareCaseBlocksAndLocks(gameState.currentBible); gameState.currentBlocks = casePrep.blocks; gameState.placedBlocks = casePrep.placedBlocks; gameState.lockedSlots = casePrep.lockedSlots; gameState.caseRevisions = 0; gameState.caseMiniGamesUsed = 0; gameState.caseStartTime = Date.now(); gameState.revisedSlots = []; gameState.currentPage = 1; gameState.clientId = pickRandom(['client1', 'client2', 'client3', 'client4']); gameState.isSubmitAngry = false; if (clientAngryTimeout) clearTimeout(clientAngryTimeout); deselectBlock(); gameState.hintsLeft = MAX_HINTS_PER_CASE; gameState.hintUsed = false; updateHintButtonUI(); document.getElementById('glossary-empty').classList.remove('hidden'); document.getElementById('glossary-content').classList.add('hidden'); if (isNewGame) { closeModal('modal-gameover'); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = BASE_TIME; gameState.sessionId = generateSessionId(); gameState.maxTime = BASE_TIME; gameState.timeLeft = BASE_TIME; gameState.coffeesLeft = MAX_COFFEE_PER_CASE; gameState.mistakes = 0; gameState.playDuration = 0; gameState.miniGamesCount = 0; gameState.lastTickTime = Date.now(); } else { let timeBonus = Math.max(30, 60 - (gameState.day * 2)); gameState.timeLeft = Math.min(BASE_TIME, gameState.timeLeft + timeBonus); gameState.maxTime = Math.max(gameState.timeLeft, BASE_TIME); gameState.coffeesLeft = MAX_COFFEE_PER_CASE; } gameState.isGameActive = true; isSubmitting = false; updateUI(); startTimer(); }
         function updateHintButtonUI() { const badge = document.getElementById('hint-badge'); const btn = document.getElementById('btn-open-hint'); if (!badge || !btn) return; if (gameState.hintsLeft > 0) { badge.style.display = 'flex'; badge.innerText = gameState.hintsLeft; btn.classList.remove('hint-disabled'); } else { badge.style.display = 'none'; btn.classList.add('hint-disabled'); } }
-        function updateUI() { document.getElementById('level-display').innerText = `HARI 0${gameState.day}`; let notes = gameState.currentBible.reqText; if (gameState.currentBible.formatText !== '') notes += ' ' + gameState.currentBible.formatText; const processedNotes = processTextForGlossary(notes); document.getElementById('client-brief-content').innerHTML = `<div class="brief-line"><span class="label">GENRE</span><span class="colon">:</span><span class="value">${gameState.currentBible.genre}</span></div><div class="brief-line"><span class="label">TEMA</span><span class="colon">:</span><span class="value">${gameState.currentBible.theme}</span></div><div class="brief-line quote-line"><span class="value">"${processedNotes}"</span></div>`; let checklistHTML = ''; if (gameState.currentBible.reqText !== "") checklistHTML += `<div class="checklist-item" id="chk-blocks"><span class="checklist-box"></span>Sesuai plot klien</div>`; if (gameState.currentBible.formatId === 'CUT_TO' || gameState.currentBible.formatId === 'FADE_OUT') checklistHTML += `<div class="checklist-item" id="chk-trans"><span class="checklist-box"></span>Transisi penutup adegan</div>`; checklistHTML += `<div class="checklist-item" id="chk-logic"><span class="checklist-box"></span>Urutan sebab-akibat logis</div><div class="checklist-item" id="chk-prof"><span class="checklist-box"></span>Konsistensi karakter & aksi</div>`; document.getElementById('checklist-container').innerHTML = checklistHTML; initBrandLogos(); updateHintButtonUI(); updateClientAvatarState(); renderCoffee(); updateTimerUI(); renderBlocksAndSlots(); updateChecklist(); requestAnimationFrame(syncHeaderOverlayOffset); }
+        function updateUI() { document.getElementById('level-display').innerText = `SCRIPT #${String(gameState.day).padStart(2, '0')}`; let notes = gameState.currentBible.reqText; if (gameState.currentBible.formatText !== '') notes += ' ' + gameState.currentBible.formatText; const processedNotes = processTextForGlossary(notes); document.getElementById('client-brief-content').innerHTML = `<div class="brief-line"><span class="label">GENRE</span><span class="colon">:</span><span class="value">${gameState.currentBible.genre}</span></div><div class="brief-line"><span class="label">TEMA</span><span class="colon">:</span><span class="value">${gameState.currentBible.theme}</span></div><div class="brief-line quote-line"><span class="value">"${processedNotes}"</span></div>`; let checklistHTML = ''; if (gameState.currentBible.reqText !== "") checklistHTML += `<div class="checklist-item" id="chk-blocks"><span class="checklist-box"></span>Sesuai plot klien</div>`; if (gameState.currentBible.formatId === 'CUT_TO' || gameState.currentBible.formatId === 'FADE_OUT') checklistHTML += `<div class="checklist-item" id="chk-trans"><span class="checklist-box"></span>Transisi penutup adegan</div>`; checklistHTML += `<div class="checklist-item" id="chk-logic"><span class="checklist-box"></span>Urutan sebab-akibat logis</div><div class="checklist-item" id="chk-prof"><span class="checklist-box"></span>Konsistensi karakter & aksi</div>`; document.getElementById('checklist-container').innerHTML = checklistHTML; initBrandLogos(); updateHintButtonUI(); updateClientAvatarState(); renderCoffee(); updateTimerUI(); renderBlocksAndSlots(); updateChecklist(); requestAnimationFrame(syncHeaderOverlayOffset); }
         function isFlexibleOrderValid(placedBlockObjs, bible) {
             const totalSlots = gameState.placedBlocks.length;
             if (!placedBlockObjs || placedBlockObjs.length !== totalSlots || totalSlots === 0) return false;
@@ -1157,23 +1241,115 @@
             scoreSt = Math.max(0, scoreSt);
             scoreLg = Math.max(0, scoreLg);
             scoreCh = Math.max(0, scoreCh);
-            let finalScore = Math.round((scoreSt + scoreLg + scoreCh + (allReq ? 100 : 0)) / 4);
-            return { isPass: (finalScore >= 80 && !hasErr && allReq && !seqErr), msgs: msgs, score: finalScore };
+            const rawCheckScore = Math.round((scoreSt + scoreLg + scoreCh + (allReq ? 100 : 0)) / 4);
+            const isPass = (rawCheckScore >= 80 && !hasErr && allReq && !seqErr);
+            let finalScore = rawCheckScore;
+            if (isPass) {
+                const caseElapsedSec = gameState.caseStartTime > 0 ? Math.max(1, (Date.now() - gameState.caseStartTime) / 1000) : Math.max(1, (gameState.maxTime || BASE_TIME) - (gameState.timeLeft || 0));
+                const baseLevelPts = 72 + ((gameState.day || 1) * 3);
+                const timeRatio = (gameState.maxTime || BASE_TIME) > 0 ? Math.max(0, Math.min(1, (gameState.timeLeft || 0) / (gameState.maxTime || BASE_TIME))) : 0.5;
+                const speedBonusPts = Math.round((timeRatio * 34) + Math.max(0, (110 - caseElapsedSec) * 0.17));
+                const mgReducePts = (gameState.caseMiniGamesUsed || 0) * 19;
+                finalScore = Math.max(24, baseLevelPts + speedBonusPts - mgReducePts);
+                if (finalScore % 10 === 0) finalScore += 3;
+                if (((gameState.totalScore || 0) + finalScore) % 100 === 0) finalScore += 2;
+            }
+            return { isPass: isPass, msgs: msgs, score: finalScore };
         }
         function closeInGameModals() { closeModal('modal-hint'); closeModal('modal-preview-blocks'); closeModal('modal-preview-script'); closeModal('modal-resource-empty'); if (mgState && mgState.isOpen) { cleanupMiniGame(); closeModal('modal-minigame'); } }
         function checkScript() { if (isSubmitting || !gameState.isGameActive) return; isSubmitting = true; closeInGameModals(); const pIds = gameState.placedBlocks.filter(i => i !== null); if (pIds.length === 0 || pIds.length < gameState.placedBlocks.length) { triggerClientSubmitAngry(2200); showFloatingFeedback("SCRIPT BELUM LENGKAP!", "neutral"); const ws = document.getElementById("center-panel"); ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)"; setTimeout(() => ws.style.transform = "translateX(-5px)", 50); setTimeout(() => ws.style.transform = "translateX(5px)", 100); setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150); isSubmitting = false; return; } const evalResult = evaluateScript(pIds); updateChecklist(); if (evalResult.isPass) { gameState.isSubmitAngry = false; if (clientAngryTimeout) clearTimeout(clientAngryTimeout); updateClientAvatarState(); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } if (gameState.lastTickTime > 0) { gameState.playDuration = (gameState.playDuration || 0) + Math.max(0, (Date.now() - gameState.lastTickTime) / 1000); gameState.lastTickTime = 0; } timerState.isPaused = false; gameState.isGameActive = false; showFloatingFeedback("CLIENT MENERIMA!<br>+WAKTU", "success"); gameState.casesCompleted++; gameState.totalScore += evalResult.score; gameState.history.push({ id: gameState.currentBible.id, genre: gameState.currentBible.genre }); saveData(); setTimeout(() => { isSubmitting = false; nextDay(); }, 2000); } else { triggerClientSubmitAngry(2800); gameState.mistakes++; gameState.caseRevisions++; let subtract = PENALTY_TIME; gameState.timeLeft -= subtract; if (gameState.timeLeft <= 0) gameState.timeLeft = 0; else timerState.endTime -= (subtract * 1000); let firstErr = evalResult.msgs.length > 0 ? evalResult.msgs[0] : "KONTINUITAS SALAH"; showFloatingFeedback(`REVISI! -${subtract} DETIK<br><span style="font-size:var(--fs-text);">${firstErr}</span>`, "error"); updateUI(); const ws = document.getElementById("center-panel"); ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)"; setTimeout(() => ws.style.transform = "translateX(-5px)", 50); setTimeout(() => ws.style.transform = "translateX(5px)", 100); setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150); if (gameState.timeLeft <= 0) setTimeout(() => { isSubmitting = false; triggerGameOver(); }, 500); else isSubmitting = false; } }
         function determineEnding(state) { for (let i = 0; i < endingCatalog.length; i++) { if (endingCatalog[i].check(state)) return endingCatalog[i]; } return endingCatalog[4]; }
         async function triggerGameOver() { if (!gameState.isGameActive && document.getElementById("modal-gameover").classList.contains("active")) return; closeInGameModals(); if (gameState.lastTickTime > 0) { gameState.playDuration = (gameState.playDuration || 0) + Math.max(0, (Date.now() - gameState.lastTickTime) / 1000); gameState.lastTickTime = 0; } gameState.isGameActive = false; if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = 0; gameState.timeLeft = 0; updateTimerUI(); const finalDuration = Math.max(1, Math.round(gameState.playDuration || 0)); const finalMiniGames = gameState.miniGamesCount || 0; const ending = determineEnding(gameState); document.getElementById("go-title").innerText = "GAME OVER"; document.getElementById("go-ending-name").innerText = ending.title; document.getElementById("go-epilog").innerText = ending.epilog; document.getElementById("go-player").innerText = gameState.playerName; document.getElementById("go-score").innerText = gameState.totalScore; const durEl = document.getElementById("go-duration"); if (durEl) durEl.innerText = formatPlayDuration(finalDuration); const mgEl = document.getElementById("go-minigames"); if (mgEl) mgEl.innerText = `${finalMiniGames}x`; document.getElementById("go-level").innerText = gameState.day; document.getElementById("go-jobs").innerText = gameState.casesCompleted; const imgEl = document.getElementById("go-img"); const fallbackEl = document.getElementById("go-img-fallback"); imgEl.style.display = 'none'; fallbackEl.style.display = 'none'; loadSmartImage( imgEl, ending.getImg(), () => { imgEl.style.display = 'block'; fallbackEl.style.display = 'none'; }, () => { imgEl.style.display = 'none'; fallbackEl.style.display = 'block'; } ); _safeLS.removeItem('edsave'); document.getElementById("modal-gameover").classList.add("active"); const record = { sessionId: gameState.sessionId || generateSessionId(), name: gameState.playerName, score: gameState.totalScore, duration: finalDuration, miniGames: finalMiniGames, level: gameState.day, jobs: gameState.casesCompleted, mistakes: gameState.mistakes, date: new Date().toISOString(), endingId: ending.id }; document.getElementById("go-rank-msg").innerText = "Menyimpan skor ke server Firebase..."; const rank = await LeaderboardManager.saveScore(record); const rankMsgEl = document.getElementById("go-rank-msg"); if (rank && rank <= 100) rankMsgEl.innerText = `🏆 Luar Biasa! Kamu masuk TOP 100 di Peringkat #${rank}`; else rankMsgEl.innerText = "Skor tercatat! Terus berlatih untuk menembus Top 100!"; }
-        async function showHighscores() { document.getElementById("modal-highscore").classList.add("active"); const scores = await LeaderboardManager.getTop100(); const top3Container = document.getElementById("hs-top3-container"); const othersWrapper = document.getElementById("hs-others-wrapper"); const tbody = document.getElementById("hs-table-body"); top3Container.innerHTML = ""; tbody.innerHTML = "<tr><th>NO</th><th>NAMA</th><th>SKOR</th><th>DURASI</th><th>MINI GAME</th><th style='text-align:right;'>TOTAL KASUS</th></tr>"; if (scores.length === 0) { top3Container.style.display = "none"; othersWrapper.style.display = "block"; tbody.innerHTML += "<tr><td colspan='6' style='text-align:center; padding: 30px; color: var(--text-muted);'>Belum ada catatan rekor. Jadilah yang pertama!</td></tr>"; } else { top3Container.style.display = "flex"; const top3 = scores.slice(0, 3); const medals = ["👑 TOP #1", "🥈 TOP #2", "🥉 TOP #3"]; let top3HTML = `<div class="hs-top3-header"><span>★ HALL OF FAME — TOP 3 EDITORS</span><span style="font-size: var(--fs-small); color: var(--text-muted); font-weight: normal;">PODIUM UTAMA</span></div>`; for (let i = 0; i < 3; i++) { const s = top3[i]; if (s) { let nameSafe = (s.name || "ANONIM").replace(/</g, "&lt;").replace(/>/g, "&gt;"); const durText = formatPlayDuration(s.duration); const mgCount = s.miniGames || 0; const jobsCount = s.jobs || 0; top3HTML += `<div class="hs-top3-row rank-${i + 1}"><div class="hs-top3-left"><span class="hs-podium-badge">${medals[i]}</span><span class="hs-podium-name">${nameSafe}</span></div><div class="hs-top3-right"><div class="hs-podium-meta"><span>⏱ ${durText}</span><span>•</span><span>🎮 ${mgCount}x MINI GAME</span><span>•</span><span>📁 ${jobsCount} KASUS</span></div><div class="hs-podium-score">${s.score || 0} PTS</div></div></div>`; } else { top3HTML += `<div class="hs-top3-row rank-${i + 1}" style="opacity: 0.45;"><div class="hs-top3-left"><span class="hs-podium-badge">${medals[i]}</span><span class="hs-podium-name">---</span></div><div class="hs-top3-right"><div class="hs-podium-meta"><span>BELUM ADA REKOR</span></div><div class="hs-podium-score">0 PTS</div></div></div>`; } } top3Container.innerHTML = top3HTML; const restScores = scores.slice(3, 100); if (restScores.length === 0) { tbody.innerHTML += "<tr><td colspan='6' style='text-align:center; padding: 20px; color: var(--text-muted);'>Belum ada peringkat #4 dan seterusnya.</td></tr>"; } else { restScores.forEach((s, idx) => { let nameSafe = (s.name || "ANONIM").replace(/</g, "&lt;").replace(/>/g, "&gt;"); const durText = formatPlayDuration(s.duration); const mgCount = s.miniGames || 0; const jobsCount = s.jobs || 0; tbody.innerHTML += `<tr><td>#${idx + 4}</td><td style="color:var(--text-highlight); font-weight:bold;">${nameSafe}</td><td style="color:var(--accent-yellow); font-weight:bold;">${s.score || 0}</td><td>${durText}</td><td>${mgCount}x</td><td style="text-align:right;">${jobsCount} Kasus</td></tr>`; }); } } }
+        async function showHighscores() { document.getElementById("modal-highscore").classList.add("active"); const scores = await LeaderboardManager.getTop100(); const top3Container = document.getElementById("hs-top3-container"); const othersWrapper = document.getElementById("hs-others-wrapper"); const tbody = document.getElementById("hs-table-body"); top3Container.innerHTML = ""; tbody.innerHTML = "<tr><th>RANK</th><th>NAMA</th><th>TOTAL SCRIPT</th><th>DURASI</th><th>MINI GAME</th><th style='text-align:right;'>SKOR</th></tr>"; if (scores.length === 0) { top3Container.style.display = "none"; othersWrapper.style.display = "block"; tbody.innerHTML += "<tr><td colspan='6' style='text-align:center; padding: 30px; color: var(--text-muted);'>Belum ada catatan rekor. Jadilah yang pertama!</td></tr>"; } else { top3Container.style.display = "flex"; const top3 = scores.slice(0, 3); const medals = ["👑 TOP #1", "🥈 TOP #2", "🥉 TOP #3"]; let top3HTML = `<div class="hs-top3-header"><span>★ HALL OF FAME — TOP 3 EDITORS</span><span style="font-size: var(--fs-small); color: var(--text-muted); font-weight: normal;">PODIUM UTAMA</span></div>`; for (let i = 0; i < 3; i++) { const s = top3[i]; if (s) { let nameSafe = (s.name || "ANONIM").replace(/</g, "&lt;").replace(/>/g, "&gt;"); const durText = formatPlayDuration(s.duration); const mgCount = s.miniGames || 0; const jobsCount = s.jobs || 0; top3HTML += `<div class="hs-top3-row rank-${i + 1}"><div class="hs-top3-left"><span class="hs-podium-badge">${medals[i]}</span><span class="hs-podium-name">${nameSafe}</span></div><div class="hs-top3-right"><div class="hs-podium-meta"><span class="hs-meta-item">⏱ ${durText}</span><span>•</span><span class="hs-meta-mg"><span>🎮 ${mgCount}x</span><span>MINI GAME</span></span><span>•</span><span class="hs-meta-item">📁 ${jobsCount} SCRIPT</span></div><div class="hs-podium-score">${s.score || 0} PTS</div></div></div>`; } else { top3HTML += `<div class="hs-top3-row rank-${i + 1}" style="opacity: 0.45;"><div class="hs-top3-left"><span class="hs-podium-badge">${medals[i]}</span><span class="hs-podium-name">---</span></div><div class="hs-top3-right"><div class="hs-podium-meta"><span>BELUM ADA REKOR</span></div><div class="hs-podium-score">0 PTS</div></div></div>`; } } top3Container.innerHTML = top3HTML; const restScores = scores.slice(3, 100); if (restScores.length === 0) { tbody.innerHTML += "<tr><td colspan='6' style='text-align:center; padding: 20px; color: var(--text-muted);'>Belum ada peringkat #4 dan seterusnya.</td></tr>"; } else { restScores.forEach((s, idx) => { let nameSafe = (s.name || "ANONIM").replace(/</g, "&lt;").replace(/>/g, "&gt;"); const durText = formatPlayDuration(s.duration); const mgCount = s.miniGames || 0; const jobsCount = s.jobs || 0; tbody.innerHTML += `<tr><td>#${idx + 4}</td><td style="color:var(--text-highlight); font-weight:bold;">${nameSafe}</td><td>${jobsCount} Script</td><td>${durText}</td><td>${mgCount}x</td><td style="text-align:right; color:var(--accent-yellow); font-weight:bold;">${s.score || 0}</td></tr>`; }); } } }
         function closeHighscores() { document.getElementById("modal-highscore").classList.remove("active"); }
         function returnToMenu() { closeInGameModals(); closeModal('modal-gameover'); closeModal('modal-start'); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = 0; gameState.isGameActive = false; gameState.lastTickTime = 0; document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; }
         function returnToMenuFromProfile() { saveData(); closeInGameModals(); closeModal('modal-gameover'); closeModal('modal-start'); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; }
-        function openStartModal() { closeInGameModals(); closeModal('modal-gameover'); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = BASE_TIME; document.getElementById("main-menu").classList.remove("active"); document.getElementById("main-menu").style.display = "none"; _safeLS.removeItem('edsave'); gameState.day = 1; gameState.casesCompleted = 0; gameState.totalScore = 0; gameState.mistakes = 0; gameState.playDuration = 0; gameState.miniGamesCount = 0; gameState.lastTickTime = 0; gameState.history = []; gameState.currentBible = null; gameState.currentBlocks = []; gameState.placedBlocks = []; gameState.isGameActive = false; document.getElementById('profile-stats').classList.add('hidden'); document.getElementById('btn-start-game').innerText = "MULAI KERJA"; document.getElementById('player-name').value = ""; document.getElementById('modal-start').classList.add('active'); }
+        let appSettings = { musicVol: 70, soundVol: 80, musicMuted: false, soundMuted: false, scale: 1, creditText: "SCRIPT ARCADE\nCredit by SSRC" };
+        function loadAppSettings() {
+            try {
+                const saved = JSON.parse(_safeLS.getItem('sa_app_settings'));
+                if (saved && typeof saved === 'object') {
+                    appSettings = { ...appSettings, ...saved };
+                }
+            } catch (e) {}
+            applyAppSettingsUI();
+        }
+        function saveAppSettings() {
+            _safeLS.setItem('sa_app_settings', JSON.stringify(appSettings));
+        }
+        function applyAppSettingsUI() {
+            const effMusic = appSettings.musicMuted ? 0 : appSettings.musicVol;
+            const effSound = appSettings.soundMuted ? 0 : appSettings.soundVol;
+            ['mm', 'ig'].forEach(prefix => {
+                const mSlider = document.getElementById(`${prefix}-slider-music`);
+                const sSlider = document.getElementById(`${prefix}-slider-sound`);
+                const mVal = document.getElementById(`${prefix}-val-music`);
+                const sVal = document.getElementById(`${prefix}-val-sound`);
+                const mBtn = document.getElementById(`${prefix}-btn-music-mute`);
+                const sBtn = document.getElementById(`${prefix}-btn-sound-mute`);
+                if (mSlider) mSlider.value = effMusic;
+                if (sSlider) sSlider.value = effSound;
+                if (mVal) mVal.innerText = `${effMusic}%`;
+                if (sVal) sVal.innerText = `${effSound}%`;
+                if (mBtn) {
+                    mBtn.innerText = (appSettings.musicMuted || effMusic === 0) ? '🔇' : '🔊';
+                    mBtn.classList.toggle('muted', Boolean(appSettings.musicMuted || effMusic === 0));
+                }
+                if (sBtn) {
+                    sBtn.innerText = (appSettings.soundMuted || effSound === 0) ? '🔇' : '🔊';
+                    sBtn.classList.toggle('muted', Boolean(appSettings.soundMuted || effSound === 0));
+                }
+            });
+            document.querySelectorAll('.scale-opt-btn').forEach(btn => {
+                const sc = parseFloat(btn.getAttribute('data-scale') || '1');
+                btn.classList.toggle('active', Math.abs(sc - appSettings.scale) < 0.02);
+            });
+            document.documentElement.style.fontSize = `${Math.round((appSettings.scale || 1) * 100)}%`;
+            const creditEl = document.getElementById('main-settings-credit-text');
+            if (creditEl && appSettings.creditText) creditEl.innerText = appSettings.creditText;
+        }
+        function updateAudioVolume(type, val) {
+            const num = Math.max(0, Math.min(100, parseInt(val, 10) || 0));
+            if (type === 'music') {
+                appSettings.musicVol = num;
+                appSettings.musicMuted = (num === 0);
+            } else {
+                appSettings.soundVol = num;
+                appSettings.soundMuted = (num === 0);
+            }
+            applyAppSettingsUI();
+            saveAppSettings();
+        }
+        function toggleAudioMute(type) {
+            if (type === 'music') {
+                appSettings.musicMuted = !appSettings.musicMuted;
+                if (!appSettings.musicMuted && appSettings.musicVol === 0) appSettings.musicVol = 70;
+            } else {
+                appSettings.soundMuted = !appSettings.soundMuted;
+                if (!appSettings.soundMuted && appSettings.soundVol === 0) appSettings.soundVol = 80;
+            }
+            applyAppSettingsUI();
+            saveAppSettings();
+        }
+        function setGameScale(sc) {
+            appSettings.scale = Number(sc) || 1;
+            applyAppSettingsUI();
+            saveAppSettings();
+            requestAnimationFrame(syncHeaderOverlayOffset);
+        }
+        function openMainMenuSettings() {
+            applyAppSettingsUI();
+            document.getElementById('modal-main-settings').classList.add('active');
+        }
+        function closeMainMenuSettings() {
+            document.getElementById('modal-main-settings').classList.remove('active');
+        }
+        function openStartModal() { closeInGameModals(); closeModal('modal-gameover'); closeMainMenuSettings(); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = BASE_TIME; document.getElementById("main-menu").classList.remove("active"); document.getElementById("main-menu").style.display = "none"; _safeLS.removeItem('edsave'); gameState.day = 1; gameState.casesCompleted = 0; gameState.totalScore = 0; gameState.mistakes = 0; gameState.playDuration = 0; gameState.miniGamesCount = 0; gameState.lastTickTime = 0; gameState.history = []; gameState.currentBible = null; gameState.currentBlocks = []; gameState.placedBlocks = []; gameState.isGameActive = false; const igAudio = document.getElementById('ingame-audio-settings'); if (igAudio) igAudio.classList.add('hidden'); const profDesc = document.getElementById('profile-desc-text'); if (profDesc) profDesc.classList.remove('hidden'); document.getElementById('profile-stats').classList.add('hidden'); document.getElementById('btn-start-game').innerText = "MULAI KERJA"; document.getElementById('player-name').value = ""; document.getElementById('modal-start').classList.add('active'); }
         function startGame() { let nameInput = document.getElementById("player-name").value.trim().replace(/[^a-zA-Z0-9 ]/g, ""); gameState.playerName = nameInput ? nameInput.substring(0, 10).toUpperCase() : "ANONIM"; closeModal('modal-gameover'); document.getElementById('modal-start').classList.remove('active'); document.getElementById("game-layout").style.display = "flex"; initBrandLogos(); if (!gameState.currentBible || gameState.currentBlocks.length === 0) setupNewCase(true); else { gameState.isGameActive = true; updateUI(); startTimer(); } initW95Scrollbars(); requestAnimationFrame(syncHeaderOverlayOffset); }
         function nextDay() { gameState.day++; setupNewCase(false); saveData(); }
         function restartGame() { closeInGameModals(); closeModal('modal-gameover'); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = BASE_TIME; gameState.day = 1; gameState.casesCompleted = 0; gameState.totalScore = 0; gameState.mistakes = 0; gameState.playDuration = 0; gameState.miniGamesCount = 0; gameState.lastTickTime = 0; gameState.history = []; _safeLS.removeItem('edsave'); setupNewCase(true); }
         function saveData() { if(!gameState.isGameActive) return; _safeLS.setItem('edsave', JSON.stringify({ sessId: gameState.sessionId, d: gameState.day, c: gameState.casesCompleted, s: gameState.totalScore, dur: Math.round(gameState.playDuration || 0), mg: gameState.miniGamesCount || 0, h: gameState.history, pName: gameState.playerName, tLeft: gameState.timeLeft, mTime: gameState.maxTime, cLeft: gameState.coffeesLeft, hLeft: gameState.hintsLeft, m: gameState.mistakes, cr: gameState.caseRevisions, rs: gameState.revisedSlots, b: gameState.currentBible, cb: gameState.currentBlocks, pb: gameState.placedBlocks, cid: gameState.clientId })); }
-        function showProfile() { closeInGameModals(); pauseTimer(); saveData(); document.getElementById('stat-day').innerText = gameState.day; document.getElementById('stat-cases').innerText = gameState.casesCompleted; document.getElementById('stat-score').innerText = gameState.casesCompleted > 0 ? Math.round(gameState.totalScore / gameState.casesCompleted) : 0; document.getElementById('profile-stats').classList.remove('hidden'); document.getElementById('modal-start').classList.add('active'); document.getElementById('btn-start-game').innerText = "LANJUTKAN"; if(gameState.playerName !== "ANONIM") document.getElementById('player-name').value = gameState.playerName; }
+        function showProfile() { closeInGameModals(); pauseTimer(); saveData(); applyAppSettingsUI(); const igAudio = document.getElementById('ingame-audio-settings'); if (igAudio) igAudio.classList.remove('hidden'); const profDesc = document.getElementById('profile-desc-text'); if (profDesc) profDesc.classList.add('hidden'); const casesEl = document.getElementById('stat-cases'); if (casesEl) casesEl.innerText = gameState.casesCompleted; const durEl = document.getElementById('stat-duration'); if (durEl) durEl.innerText = formatPlayDuration(gameState.playDuration || 0); const mgEl = document.getElementById('stat-minigames'); if (mgEl) mgEl.innerText = `${gameState.miniGamesCount || 0}x`; const scoreEl = document.getElementById('stat-score'); if (scoreEl) scoreEl.innerText = gameState.totalScore || 0; document.getElementById('profile-stats').classList.remove('hidden'); document.getElementById('modal-start').classList.add('active'); document.getElementById('btn-start-game').innerText = "LANJUTKAN"; document.getElementById('player-name').value = gameState.playerName || "ANONIM"; }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
         function highlightBlockSnippet(rawText, targetPhrase, hlClass) {
             const safeText = rawText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -1321,7 +1497,7 @@
         function promptResourceMiniGame(resourceType) { if (!gameState.isGameActive || mgState.isOpen || mgState.isPromptOpen) return; syncHeaderOverlayOffset(); closeModal('modal-hint'); closeModal('modal-preview-blocks'); closeModal('modal-preview-script'); mgState.pendingResource = resourceType; mgState.isPromptOpen = true; const titleEl = document.getElementById('res-empty-title'); const descEl = document.getElementById('res-empty-desc'); if (resourceType === 'COFFEE') { titleEl.innerText = 'KOPI HABIS!'; descEl.innerText = 'Persediaan kopimu sudah habis. Selesaikan mini game untuk mendapatkan secangkir kopi tambahan agar tetap terjaga!'; } else { titleEl.innerText = 'HINT HABIS!'; descEl.innerText = 'Butuh sedikit bantuan? Selesaikan mini game untuk mendapatkan tambahan Hint.'; } document.getElementById('modal-resource-empty').classList.add('active'); }
         function cancelPlayMiniGame() { mgState.isPromptOpen = false; mgState.pendingResource = null; closeModal('modal-resource-empty'); }
         function confirmPlayMiniGame() { if (!mgState.pendingResource || mgState.isOpen) return; const targetRes = mgState.pendingResource; closeModal('modal-resource-empty'); mgState.isPromptOpen = false; pauseTimer(); saveData(); launchRandomMiniGame(targetRes); }
-        function launchRandomMiniGame(resourceType) { cleanupMiniGame(); gameState.miniGamesCount = (gameState.miniGamesCount || 0) + 1; mgState.startedAt = Date.now(); mgState.isOpen = true; mgState.finished = false; mgState.pendingResource = resourceType; mgState.currentLevel = 1; simonMasterSequence = []; const gameId = pickRandomMiniGame(); mgState.currentGameId = gameId; const rewardLabel = resourceType === 'COFFEE' ? 'HADIAH: +1 KOPI ☕' : 'HADIAH: +1 HINT 💡'; document.getElementById('mg-reward-badge').innerText = rewardLabel; syncHeaderOverlayOffset(); document.getElementById('modal-minigame').classList.add('active'); startCurrentMiniGameStage(); }
+        function launchRandomMiniGame(resourceType) { cleanupMiniGame(); gameState.miniGamesCount = (gameState.miniGamesCount || 0) + 1; gameState.caseMiniGamesUsed = (gameState.caseMiniGamesUsed || 0) + 1; mgState.startedAt = Date.now(); mgState.isOpen = true; mgState.finished = false; mgState.pendingResource = resourceType; mgState.currentLevel = 1; simonMasterSequence = []; const gameId = pickRandomMiniGame(); mgState.currentGameId = gameId; const rewardLabel = resourceType === 'COFFEE' ? 'HADIAH: +1 KOPI ☕' : 'HADIAH: +1 HINT 💡'; document.getElementById('mg-reward-badge').innerText = rewardLabel; syncHeaderOverlayOffset(); document.getElementById('modal-minigame').classList.add('active'); startCurrentMiniGameStage(); }
         function startCurrentMiniGameStage() { clearMiniGameTimersOnly(); mgState.finished = false; updateMiniGameLevelHeader(); const lv = mgState.currentLevel; const gameId = mgState.currentGameId; if (gameId === 'SIMON_KEYPAD') initSimonKeypadGame(lv); else if (gameId === 'COFFEE_MACHINE') initCoffeeMachineGame(lv); else if (gameId === 'COCKROACH_SMASHER') initCockroachSmasherGame(lv); else if (gameId === 'WIRE_MATCHING') initWireMatchingGame(lv); else if (gameId === 'PAPER_TOSS') initPaperTossGame(lv); }
         function advanceMiniGameLevelOrWin() { if (mgState.finished) return; clearMiniGameTimersOnly(); if (mgState.currentLevel < MG_MAX_LEVEL) { mgState.currentLevel++; updateMiniGameLevelHeader(); const statusEl = document.getElementById('mg-status'); if (statusEl) { statusEl.style.color = 'var(--color-scene)'; statusEl.innerText = 'Berhasil! Bersiap ke tahap berikutnya...'; } registerMgTimeout(() => { startCurrentMiniGameStage(); }, 750); } else { completeMiniGameSuccess(); } }
         function completeMiniGameSuccess() { if (mgState.finished) return; mgState.finished = true; const rewardType = mgState.pendingResource; cleanupMiniGame(); closeModal('modal-minigame'); if (rewardType === 'COFFEE') { gameState.coffeesLeft = Math.min(MAX_COFFEE_PER_CASE, gameState.coffeesLeft + 1); renderCoffee(); showFloatingFeedback('MINI GAME SELESAI!<br>+1 KOPI ☕', 'success'); } else if (rewardType === 'HINT') { gameState.hintsLeft = Math.min(MAX_HINTS_PER_CASE, gameState.hintsLeft + 1); gameState.hintUsed = false; updateHintButtonUI(); showFloatingFeedback('MINI GAME SELESAI!<br>+1 HINT 💡', 'success'); } mgState.pendingResource = null; saveData(); if (gameState.isGameActive) startTimer(); }
@@ -1329,7 +1505,7 @@
         function abortMiniGame() { cleanupMiniGame(); mgState.pendingResource = null; closeModal('modal-minigame'); saveData(); if (gameState.isGameActive) startTimer(); }
         let simonMasterSequence = [];
         function initSimonKeypadGame(level) { document.getElementById('mg-title').innerText = 'KODE NUMPAD'; const seqLength = level === 1 ? 3 : (level === 2 ? 5 : 7); const flashSpeed = 680; if (level === 1 || simonMasterSequence.length === 0) { simonMasterSequence = []; for (let i = 0; i < 7; i++) { simonMasterSequence.push(Math.floor(Math.random() * 10)); } } const sequence = simonMasterSequence.slice(0, seqLength); const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = 'Bersiap mengamati urutan angka pada numpad...'; const initialSlots = Array(seqLength).fill('_').join(' '); stage.innerHTML = `<div class="simon-casing"><div class="simon-countdown-overlay" id="simon-cd-overlay"><span class="simon-countdown-num" id="simon-cd-num">3</span></div><div class="simon-lcd"><span id="simon-prog">${initialSlots}</span></div><div class="simon-grid" id="simon-grid"></div></div>`; const grid = document.getElementById('simon-grid'); const keysLayout = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]; const keyEls = {}; keysLayout.forEach(num => { const btn = document.createElement('button'); btn.className = `simon-key ${num === 0 ? 'zero-key' : ''}`; btn.innerText = num; btn.onclick = () => handleSimonPress(num); grid.appendChild(btn); keyEls[num] = btn; }); let playerIndex = 0; let acceptingInput = false; function updateSlotsDisplay() { const progEl = document.getElementById('simon-prog'); if (!progEl) return; const arr = []; for (let i = 0; i < seqLength; i++) { arr.push(i < playerIndex ? sequence[i] : '_'); } progEl.innerText = arr.join(' '); } function startCountdownAndPlay(isReplay = false) { acceptingInput = false; playerIndex = 0; updateSlotsDisplay(); const cdOverlay = document.getElementById('simon-cd-overlay'); const cdNum = document.getElementById('simon-cd-num'); let count = 3; statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = isReplay ? 'Perhatikan kembali urutan angkanya...' : (level > 1 ? 'Hafalkan tambahan angka berikutnya...' : 'Bersiap menghafal urutan angka...'); function triggerCountdownTick(val) { if (!cdNum) return; cdNum.innerText = val; cdNum.classList.remove('pop-tick'); void cdNum.offsetWidth; cdNum.classList.add('pop-tick'); } if (cdOverlay && cdNum) { cdOverlay.classList.add('active'); triggerCountdownTick(count); } const cdId = registerMgInterval(() => { count--; if (count > 0) { triggerCountdownTick(count); } else { clearInterval(cdId); if (cdOverlay) cdOverlay.classList.remove('active'); if (cdNum) cdNum.classList.remove('pop-tick'); playSequence(); } }, 650); } function playSequence() { acceptingInput = false; playerIndex = 0; updateSlotsDisplay(); statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = 'Perhatikan tombol yang menyala...'; sequence.forEach((digit, idx) => { registerMgTimeout(() => { const el = keyEls[digit]; if (el) { el.classList.add('lit'); registerMgTimeout(() => el.classList.remove('lit'), Math.floor(flashSpeed * 0.65)); } }, 300 + idx * flashSpeed); }); registerMgTimeout(() => { acceptingInput = true; statusEl.style.color = 'var(--color-scene)'; statusEl.innerText = 'Tekan angka sesuai urutan yang ditampilkan!'; }, 350 + sequence.length * flashSpeed); } function handleSimonPress(num) { if (!acceptingInput || mgState.finished) return; const btn = keyEls[num]; if (num === sequence[playerIndex]) { btn.classList.add('lit'); registerMgTimeout(() => btn.classList.remove('lit'), 180); playerIndex++; updateSlotsDisplay(); if (playerIndex >= sequence.length) { acceptingInput = false; advanceMiniGameLevelOrWin(); } } else { acceptingInput = false; btn.classList.add('err-lit'); statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Urutan salah! Mengulang kembali urutan kode...'; registerMgTimeout(() => { btn.classList.remove('err-lit'); startCountdownAndPlay(true); }, 900); } } startCountdownAndPlay(false); }
-        function initCoffeeMachineGame(level) { document.getElementById('mg-title').innerText = 'RACIK KOPI'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; const baseIngredients = [{ id: 'BEANS', name: 'Kopi' }, { id: 'WATER', name: 'Air' }, { id: 'MILK', name: 'Susu' }, { id: 'SUGAR', name: 'Gula' }, { id: 'ICE', name: 'Es' }, { id: 'CARAMEL', name: 'Karamel' }]; const safeDeskPositions = ['right: 14px; top: 18px;', 'right: 68px; top: 18px;', 'left: 14px; top: 76px;', 'right: 14px; top: 76px;', 'right: 68px; top: 76px;', 'left: 12px; bottom: 8px;', 'left: 68px; bottom: 10px;', 'right: 12px; bottom: 8px;', 'right: 68px; bottom: 10px;'].sort(() => Math.random() - 0.5); const recipesByLevel = { 1: [ { title: 'ESPRESSO PANAS', req: ['BEANS', 'WATER'] }, { title: 'KOPI MANIS', req: ['BEANS', 'SUGAR'] } ], 2: [ { title: 'KOPI SUSU', req: ['BEANS', 'WATER', 'MILK'] }, { title: 'ES AMERICANO', req: ['BEANS', 'WATER', 'ICE'] }, { title: 'KOPI GULA HANGAT', req: ['BEANS', 'WATER', 'SUGAR'] } ], 3: [ { title: 'ES LATTE KARAMEL', req: ['BEANS', 'WATER', 'MILK', 'ICE', 'CARAMEL'] }, { title: 'MACCHIATO SPESIAL', req: ['BEANS', 'WATER', 'MILK', 'SUGAR', 'CARAMEL'] } ] }; const targetRecipe = pickRandom(recipesByLevel[level] || recipesByLevel[1]); const selectedSet = new Set(); let brewing = false; const reqListHTML = targetRecipe.req.map(rId => { const item = baseIngredients.find(x => x.id === rId); return `<div>• ${item.name}</div>`; }).join(''); stage.innerHTML = `<div class="coffee-desk-scene" id="coffee-desk-scene"><div class="cm-wall-shelf shelf-top"></div><div class="cm-wall-shelf shelf-mid"></div><div class="cm-sticky-note"><div class="cm-sticky-title">${targetRecipe.title}</div><div class="cm-sticky-grid">${reqListHTML}</div></div><div class="cm-center-machine"><div class="cm-hopper"></div><div class="cm-body-top"><div class="cm-gauge"></div><span class="cm-led-screen" id="cm-count-led">0/${targetRecipe.req.length}</span></div><div class="cm-brew-chamber"><div class="cm-steam-wand"></div><div class="cm-portafilter"></div><div class="cm-stream" id="cm-stream"></div><div class="cm-cup"><div class="cm-cup-fill" id="cm-cup-fill"></div></div></div><div class="cm-base-tray"><button class="cm-brew-trigger" id="btn-brew-now">▶ SEDUH</button></div></div></div>`; statusEl.innerText = 'Cari dan klik bahan di atas meja sesuai resep, lalu tekan SEDUH!'; const deskScene = document.getElementById('coffee-desk-scene'); baseIngredients.forEach((ing, idx) => { const itemEl = document.createElement('div'); itemEl.className = 'cm-desk-item'; itemEl.style.cssText = safeDeskPositions[idx]; itemEl.innerHTML = `${PIXEL_ART.ingIcon(ing.id, 28)}<span class="cm-desk-item-label">${ing.name}</span>`; itemEl.onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.has(ing.id)) { selectedSet.delete(ing.id); itemEl.classList.remove('selected'); } else { selectedSet.add(ing.id); itemEl.classList.add('selected'); } const ledEl = document.getElementById('cm-count-led'); if (ledEl) ledEl.innerText = `${selectedSet.size}/${targetRecipe.req.length}`; statusEl.style.color = 'var(--text-highlight)'; statusEl.innerText = `Bahan dipilih: ${selectedSet.size} dari ${targetRecipe.req.length} bahan resep.`; }; deskScene.appendChild(itemEl); }); document.getElementById('btn-brew-now').onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.size === 0) { statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Pilih bahan di atas meja terlebih dahulu!'; return; } brewing = true; statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = 'Menyeduh kopi di mesin...'; const streamEl = document.getElementById('cm-stream'); const fillEl = document.getElementById('cm-cup-fill'); if (streamEl) streamEl.classList.add('pouring'); if (fillEl) fillEl.style.height = '85%'; registerMgTimeout(() => { if (streamEl) streamEl.classList.remove('pouring'); const isExactMatch = selectedSet.size === targetRecipe.req.length && targetRecipe.req.every(reqId => selectedSet.has(reqId)); if (isExactMatch) { advanceMiniGameLevelOrWin(); } else { brewing = false; if (fillEl) fillEl.style.height = '0%'; statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Campuran bahan belum tepat! Cek lagi catatan resep.'; } }, 800); }; }
+        function initCoffeeMachineGame(level) { document.getElementById('mg-title').innerText = 'RACIK KOPI'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; const baseIngredients = [{ id: 'BEANS', name: 'Kopi' }, { id: 'WATER', name: 'Air' }, { id: 'MILK', name: 'Susu' }, { id: 'SUGAR', name: 'Gula' }, { id: 'ICE', name: 'Es' }, { id: 'CARAMEL', name: 'Karamel' }]; const isPortraitMode = window.matchMedia('(orientation: portrait)').matches; const safeDeskPositions = (isPortraitMode ? ['right: 8px; top: 4px;', 'right: 58px; top: 4px;', 'left: 8px; top: 60px;', 'right: 8px; top: 60px;', 'left: 8px; top: 120px;', 'right: 8px; top: 120px;', 'left: 8px; bottom: 8px;', 'right: 8px; bottom: 8px;'] : ['right: 12px; top: 4px;', 'right: 68px; top: 4px;', 'left: 12px; top: 58px;', 'right: 12px; top: 58px;', 'left: 12px; top: 114px;', 'right: 12px; top: 114px;', 'left: 12px; bottom: 8px;', 'right: 12px; bottom: 8px;']).sort(() => Math.random() - 0.5); const recipesByLevel = { 1: [ { title: 'ESPRESSO PANAS', req: ['BEANS', 'WATER'] }, { title: 'KOPI MANIS', req: ['BEANS', 'SUGAR'] } ], 2: [ { title: 'KOPI SUSU', req: ['BEANS', 'WATER', 'MILK'] }, { title: 'ES AMERICANO', req: ['BEANS', 'WATER', 'ICE'] }, { title: 'KOPI GULA HANGAT', req: ['BEANS', 'WATER', 'SUGAR'] } ], 3: [ { title: 'ES LATTE KARAMEL', req: ['BEANS', 'WATER', 'MILK', 'ICE', 'CARAMEL'] }, { title: 'MACCHIATO SPESIAL', req: ['BEANS', 'WATER', 'MILK', 'SUGAR', 'CARAMEL'] } ] }; const targetRecipe = pickRandom(recipesByLevel[level] || recipesByLevel[1]); const selectedSet = new Set(); let brewing = false; const reqListHTML = targetRecipe.req.map(rId => { const item = baseIngredients.find(x => x.id === rId); return `<div>• ${item.name}</div>`; }).join(''); stage.innerHTML = `<div class="coffee-desk-scene" id="coffee-desk-scene"><div class="cm-wall-shelf shelf-top"></div><div class="cm-wall-shelf shelf-mid"></div><div class="cm-wall-shelf shelf-low"></div><div class="cm-sticky-note"><div class="cm-sticky-title">${targetRecipe.title}</div><div class="cm-sticky-grid">${reqListHTML}</div></div><div class="cm-center-machine"><div class="cm-hopper"></div><div class="cm-body-top"><div class="cm-gauge"></div><span class="cm-led-screen" id="cm-count-led">0/${targetRecipe.req.length}</span></div><div class="cm-brew-chamber"><div class="cm-steam-wand"></div><div class="cm-portafilter"></div><div class="cm-stream" id="cm-stream"></div><div class="cm-cup"><div class="cm-cup-fill" id="cm-cup-fill"></div></div></div><div class="cm-base-tray"><button class="cm-brew-trigger" id="btn-brew-now">▶ SEDUH</button></div></div></div>`; statusEl.innerText = 'Cari dan klik bahan di atas meja sesuai resep, lalu tekan SEDUH!'; const deskScene = document.getElementById('coffee-desk-scene'); baseIngredients.forEach((ing, idx) => { const itemEl = document.createElement('div'); itemEl.className = 'cm-desk-item'; itemEl.style.cssText = safeDeskPositions[idx]; itemEl.innerHTML = `${PIXEL_ART.ingIcon(ing.id, 28)}<span class="cm-desk-item-label">${ing.name}</span>`; itemEl.onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.has(ing.id)) { selectedSet.delete(ing.id); itemEl.classList.remove('selected'); } else { selectedSet.add(ing.id); itemEl.classList.add('selected'); } const ledEl = document.getElementById('cm-count-led'); if (ledEl) ledEl.innerText = `${selectedSet.size}/${targetRecipe.req.length}`; statusEl.style.color = 'var(--text-highlight)'; statusEl.innerText = `Bahan dipilih: ${selectedSet.size} dari ${targetRecipe.req.length} bahan resep.`; }; deskScene.appendChild(itemEl); }); document.getElementById('btn-brew-now').onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.size === 0) { statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Pilih bahan di atas meja terlebih dahulu!'; return; } brewing = true; statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = 'Menyeduh kopi di mesin...'; const streamEl = document.getElementById('cm-stream'); const fillEl = document.getElementById('cm-cup-fill'); if (streamEl) streamEl.classList.add('pouring'); if (fillEl) fillEl.style.height = '85%'; registerMgTimeout(() => { if (streamEl) streamEl.classList.remove('pouring'); const isExactMatch = selectedSet.size === targetRecipe.req.length && targetRecipe.req.every(reqId => selectedSet.has(reqId)); if (isExactMatch) { advanceMiniGameLevelOrWin(); } else { brewing = false; if (fillEl) fillEl.style.height = '0%'; statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Campuran bahan belum tepat! Cek lagi catatan resep.'; } }, 800); }; }
         function initCockroachSmasherGame(level) { document.getElementById('mg-title').innerText = 'BASMI KECOAK'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; let stageTimeLeft = 30; const stageQuota = level === 1 ? 5 : (level === 2 ? 7 : 9); const simultaneousCount = level === 1 ? 2 : (level === 2 ? 3 : 4); let stageKills = 0; stage.innerHTML = `<div style="display:flex; justify-content:space-between; width:100%; margin-bottom:6px; font-size:var(--fs-subtitle);"><span>TERBASMI: <strong id="roach-wave-score" style="color:var(--color-scene);">0 / ${stageQuota}</strong></span><span>WAKTU: <strong id="roach-timer" style="color:var(--accent-yellow);">${stageTimeLeft}d</strong></span></div><div class="roach-arena" id="roach-arena"></div>`; statusEl.innerText = 'Ketuk kecoak-kecoak yang berkeliaran sebelum waktu habis!'; const arena = document.getElementById('roach-arena'); const speedProfiles = [ { moveMs: level === 1 ? 1200 : (level === 2 ? 950 : 720), stepTransition: '0.45s' }, { moveMs: level === 1 ? 900 : (level === 2 ? 720 : 550), stepTransition: '0.35s' }, { moveMs: level === 1 ? 700 : (level === 2 ? 550 : 420), stepTransition: '0.25s' }, { moveMs: level === 1 ? 550 : (level === 2 ? 420 : 320), stepTransition: '0.20s' } ]; function moveSingleRoach(roach) { if (mgState.finished || !arena || !roach || roach.dataset.smashed === '1') return; const maxW = Math.max(40, arena.clientWidth - 48); const maxH = Math.max(40, arena.clientHeight - 48); const rot = Math.floor(Math.random() * 8) * 45; roach.style.left = `${Math.floor(Math.random() * maxW)}px`; roach.style.top = `${Math.floor(Math.random() * maxH)}px`; roach.style.transform = `rotate(${rot}deg)`; } function spawnSingleRoach(profileIdx) { if (mgState.finished || !arena) return; const activeOnBoard = arena.querySelectorAll('.roach-target[data-smashed="0"]').length; if (stageKills + activeOnBoard >= stageQuota) return; const profile = speedProfiles[profileIdx % speedProfiles.length]; const roach = document.createElement('div'); roach.className = 'roach-target'; roach.innerHTML = PIXEL_ART.roach; roach.dataset.smashed = '0'; roach.style.transition = `top ${profile.stepTransition} steps(5), left ${profile.stepTransition} steps(5), transform 0.12s steps(2)`; const maxW = Math.max(40, arena.clientWidth - 48); const maxH = Math.max(40, arena.clientHeight - 48); roach.style.left = `${Math.floor(Math.random() * maxW)}px`; roach.style.top = `${Math.floor(Math.random() * maxH)}px`; roach.style.transform = `rotate(${Math.floor(Math.random() * 8) * 45}deg)`; const moveId = registerMgInterval(() => { moveSingleRoach(roach); }, profile.moveMs); roach.onpointerdown = (e) => { e.stopPropagation(); if (mgState.finished || roach.dataset.smashed === '1') return; roach.dataset.smashed = '1'; clearInterval(moveId); stageKills++; const splat = document.createElement('div'); splat.className = 'roach-splat'; splat.style.left = roach.style.left; splat.style.top = roach.style.top; splat.innerHTML = PIXEL_ART.splat; arena.appendChild(splat); registerMgTimeout(() => splat.remove(), 400); roach.remove(); const wEl = document.getElementById('roach-wave-score'); if (wEl) wEl.innerText = `${stageKills} / ${stageQuota}`; if (stageKills >= stageQuota) { advanceMiniGameLevelOrWin(); } else { registerMgTimeout(() => { spawnSingleRoach(Math.floor(Math.random() * speedProfiles.length)); }, 180); } }; arena.appendChild(roach); } for (let i = 0; i < simultaneousCount; i++) { spawnSingleRoach(i); } registerMgInterval(() => { if (mgState.finished) return; stageTimeLeft--; const tEl = document.getElementById('roach-timer'); if (tEl) tEl.innerText = `${Math.max(0, stageTimeLeft)}d`; if (stageTimeLeft <= 0) { if (arena) arena.innerHTML = ''; failMiniGame('Waktu habis! Kecoak berhasil kabur.'); } }, 1000); }
         function initWireMatchingGame(level) { document.getElementById('mg-title').innerText = 'SAMBUNG KABEL'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; const wirePalette = [{ id: 'RED', color: '#e05a5a' }, { id: 'BLUE', color: '#5a9ce0' }, { id: 'YELLOW', color: '#e0c35a' }, { id: 'GREEN', color: '#68c47d' }, { id: 'PURPLE', color: '#b57ae0' }]; const wireCount = level === 1 ? 3 : (level === 2 ? 4 : 5); const activeWires = wirePalette.slice(0, wireCount); const leftOrder = [...activeWires].sort(() => Math.random() - 0.5); let rightOrder = [...activeWires].sort(() => Math.random() - 0.5); if (rightOrder.every((w, i) => w.id === leftOrder[i].id)) { rightOrder.reverse(); } stage.innerHTML = `<div class="wire-board" id="wire-board"><svg class="wire-svg-layer" id="wire-svg"></svg><div class="wire-col" id="wire-left-col"></div><div class="wire-col" id="wire-right-col"></div></div>`; statusEl.innerText = 'Hubungkan kotak warna yang sama dari kiri ke kanan!'; const board = document.getElementById('wire-board'); const svg = document.getElementById('wire-svg'); const leftCol = document.getElementById('wire-left-col'); const rightCol = document.getElementById('wire-right-col'); const connections = {}; let selectedLeftId = null; let isDraggingWire = false; const leftEls = {}; const rightEls = {}; function getPinCenter(el) { const bRect = board.getBoundingClientRect(); const r = el.getBoundingClientRect(); return { x: (r.left - bRect.left) + (r.width / 2), y: (r.top - bRect.top) + (r.height / 2) }; } function renderLines(dragPos = null) { svg.innerHTML = ''; Object.keys(connections).forEach(cid => { const c = connections[cid]; const p1 = getPinCenter(c.leftEl); const p2 = getPinCenter(c.rightEl); const line = document.createElementNS('http://www.w3.org/2000/svg', 'line'); line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y); line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y); line.setAttribute('stroke', c.color); line.setAttribute('stroke-width', '6'); line.setAttribute('stroke-linecap', 'round'); svg.appendChild(line); }); if (selectedLeftId && dragPos && leftEls[selectedLeftId]) { const wObj = activeWires.find(w => w.id === selectedLeftId); const p1 = getPinCenter(leftEls[selectedLeftId]); const line = document.createElementNS('http://www.w3.org/2000/svg', 'line'); line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y); line.setAttribute('x2', dragPos.x); line.setAttribute('y2', dragPos.y); line.setAttribute('stroke', wObj ? wObj.color : '#fff'); line.setAttribute('stroke-width', '5'); line.setAttribute('stroke-dasharray', '6,4'); svg.appendChild(line); } } function selectLeftPin(cid) { if (mgState.finished || connections[cid]) return; Object.values(leftEls).forEach(el => el.classList.remove('active-pin')); selectedLeftId = cid; leftEls[cid].classList.add('active-pin'); renderLines(); } function tryConnectRightPin(rightCid) { if (mgState.finished || !selectedLeftId) return; const leftCid = selectedLeftId; Object.values(leftEls).forEach(el => el.classList.remove('active-pin')); selectedLeftId = null; if (leftCid === rightCid) { const wObj = activeWires.find(w => w.id === leftCid); connections[leftCid] = { leftEl: leftEls[leftCid], rightEl: rightEls[rightCid], color: wObj.color }; leftEls[leftCid].classList.add('matched'); rightEls[rightCid].classList.add('matched'); renderLines(); const doneCount = Object.keys(connections).length; statusEl.style.color = 'var(--color-scene)'; statusEl.innerText = `Kabel terhubung (${doneCount}/${wireCount}).`; if (doneCount >= wireCount) { advanceMiniGameLevelOrWin(); } } else { renderLines(); statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Warna tidak cocok! Sambungkan ke warna yang sama.'; } } leftOrder.forEach((w) => { const pin = document.createElement('div'); pin.className = 'wire-node'; pin.style.backgroundColor = w.color; pin.onpointerdown = (e) => { e.preventDefault(); selectLeftPin(w.id); isDraggingWire = true; }; leftCol.appendChild(pin); leftEls[w.id] = pin; }); rightOrder.forEach((w) => { const pin = document.createElement('div'); pin.className = 'wire-node'; pin.style.backgroundColor = w.color; pin.dataset.rightId = w.id; pin.onpointerup = (e) => { e.preventDefault(); isDraggingWire = false; tryConnectRightPin(w.id); }; pin.onclick = () => tryConnectRightPin(w.id); rightCol.appendChild(pin); rightEls[w.id] = pin; }); board.onpointermove = (e) => { if (!isDraggingWire || !selectedLeftId || mgState.finished) return; const bRect = board.getBoundingClientRect(); renderLines({ x: e.clientX - bRect.left, y: e.clientY - bRect.top }); }; board.onpointerup = (e) => { if (!isDraggingWire) return; isDraggingWire = false; const hitEl = document.elementFromPoint(e.clientX, e.clientY); if (hitEl && hitEl.dataset && hitEl.dataset.rightId) { tryConnectRightPin(hitEl.dataset.rightId); } else { renderLines(); } }; }
         let tossSharedAttempts = 5;
@@ -1623,6 +1799,14 @@
             const lockBadgeHTML = locked ? `<span class="locked-badge" title="Posisi blok terkunci"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 7V5a3 3 0 0 1 6 0v2h1.2a.8.8 0 0 1 .8.8v6.4a.8.8 0 0 1-.8.8H3.8a.8.8 0 0 1-.8-.8V7.8a.8.8 0 0 1 .8-.8H5zm1.6 0h2.8V5a1.4 1.4 0 0 0-2.8 0v2zm1.4 2.4a1.1 1.1 0 0 0-.55 2.05V13h1.1v-1.55A1.1 1.1 0 0 0 8 9.4z"/></svg></span>` : '';
             div.innerHTML = `<div class="block-type-label"><span>${b.type}</span>${lockBadgeHTML}</div><div class="block-text">${formatScreenplayContent(b, isPlaced, slotIdx)}</div>`;
             if (!locked) {
+                const addDragLook = () => { if (isPlaced) div.classList.add('dragging-block'); };
+                const removeDragLook = () => div.classList.remove('dragging-block');
+                div.addEventListener('pointerdown', addDragLook);
+                div.addEventListener('pointerup', removeDragLook);
+                div.addEventListener('pointercancel', removeDragLook);
+                div.addEventListener('touchstart', addDragLook, { passive: true });
+                div.addEventListener('touchend', removeDragLook);
+                div.addEventListener('touchcancel', removeDragLook);
                 div.addEventListener('dragstart', e => handleDragStart(e, b.id, isPlaced, slotIdx));
                 div.addEventListener('dragend', handleDragEnd);
                 div.addEventListener('click', e => {
@@ -1697,10 +1881,11 @@
             if (isPlaced && isSlotLocked(idx)) { e.preventDefault(); return; }
             draggedId = id;
             draggedFrom = isPlaced ? idx : null;
+            e.target.classList.add('dragging-block');
             e.dataTransfer.setData('text/plain', id);
-            setTimeout(() => { e.target.style.opacity = '0.5'; }, 0);
+            setTimeout(() => { e.target.style.opacity = '0.65'; }, 0);
         }
-        function handleDragEnd(e) { e.target.style.opacity = '1'; draggedId = null; draggedFrom = null; }
+        function handleDragEnd(e) { e.target.classList.remove('dragging-block'); e.target.style.opacity = '1'; draggedId = null; draggedFrom = null; }
         function handleDragOver(e) {
             const idx = parseInt(e.currentTarget.dataset.index);
             if (isSlotLocked(idx)) return;
@@ -1900,13 +2085,646 @@
         function showFloatingFeedback(msg, type = "error") { const fb = document.getElementById("floating-feedback"); fb.innerHTML = msg; fb.className = ""; if (type === "success") fb.classList.add("show", "success"); else if (type === "neutral") fb.classList.add("show", "neutral"); else fb.classList.add("show"); setTimeout(() => { fb.className = ""; }, 2000); }
         let w95Initialized = false;
         function initW95Scrollbars() { const container = document.getElementById('block-container'); const scrollbar = document.getElementById('script-scrollbar'); if (!container || !scrollbar) return; const track = scrollbar.querySelector('.w95-scroll-track'); const thumb = scrollbar.querySelector('.w95-scroll-thumb'); if (!track || !thumb) return; function updateScrollbar() { const scrollHeight = container.scrollHeight; const clientHeight = container.clientHeight; const maxScrollTop = Math.max(0, scrollHeight - clientHeight); if (maxScrollTop <= 0 || scrollHeight <= clientHeight) { scrollbar.classList.add('disabled'); thumb.style.height = '100%'; thumb.style.transform = 'translate3d(0, 0, 0)'; return; } scrollbar.classList.remove('disabled'); const trackHeight = track.clientHeight; const ratio = clientHeight / scrollHeight; const minThumbHeight = window.matchMedia('(pointer: coarse)').matches ? 50 : 40; const thumbHeight = Math.max(minThumbHeight, trackHeight * ratio); const finalThumbHeight = Math.min(thumbHeight, trackHeight); thumb.style.height = `${finalThumbHeight}px`; const maxThumbTop = Math.max(0, trackHeight - finalThumbHeight); let scrollTop = Math.max(0, Math.min(container.scrollTop, maxScrollTop)); const scrollRatio = maxScrollTop > 0 ? scrollTop / maxScrollTop : 0; const thumbTop = scrollRatio * maxThumbTop; thumb.style.transform = `translate3d(0, ${thumbTop}px, 0)`; } if (!w95Initialized) { w95Initialized = true; container.addEventListener('scroll', updateScrollbar, { passive: true }); window.addEventListener('resize', updateScrollbar); const observer = new MutationObserver(() => requestAnimationFrame(updateScrollbar)); observer.observe(container, { childList: true, subtree: true, attributes: true, characterData: true }); let isDragging = false; let pointerStartY = 0; let scrollStartTop = 0; function onPointerDown(e) { if (scrollbar.classList.contains('disabled')) return; if (e.pointerType === 'mouse' && e.button !== 0) return; isDragging = true; pointerStartY = e.clientY; scrollStartTop = container.scrollTop; thumb.classList.add('dragging'); try { thumb.setPointerCapture(e.pointerId); } catch (err) {} window.addEventListener('pointermove', onPointerMove, { passive: false }); window.addEventListener('pointerup', onPointerUp); window.addEventListener('pointercancel', onPointerUp); e.preventDefault(); e.stopPropagation(); } function onPointerMove(e) { if (!isDragging) return; e.preventDefault(); e.stopPropagation(); const deltaY = e.clientY - pointerStartY; const trackHeight = track.clientHeight; const thumbHeight = thumb.offsetHeight; const maxThumbTop = Math.max(0, trackHeight - thumbHeight); const maxScrollTop = Math.max(0, container.scrollHeight - container.clientHeight); if (maxThumbTop <= 0 || maxScrollTop <= 0) return; const scrollPerPixel = maxScrollTop / maxThumbTop; let newScrollTop = scrollStartTop + (deltaY * scrollPerPixel); container.scrollTop = Math.max(0, Math.min(newScrollTop, maxScrollTop)); } function onPointerUp(e) { if (!isDragging) return; isDragging = false; thumb.classList.remove('dragging'); try { thumb.releasePointerCapture(e.pointerId); } catch (err) {} window.removeEventListener('pointermove', onPointerMove); window.removeEventListener('pointerup', onPointerUp); window.removeEventListener('pointercancel', onPointerUp); requestAnimationFrame(updateScrollbar); } thumb.addEventListener('pointerdown', onPointerDown); track.addEventListener('pointerdown', function(e) { if (e.target === thumb || scrollbar.classList.contains('disabled')) return; const rect = track.getBoundingClientRect(); const clickY = e.clientY - rect.top; const thumbRect = thumb.getBoundingClientRect(); const thumbTop = thumbRect.top - rect.top; const thumbBottom = thumbTop + thumb.offsetHeight; const pageAmount = container.clientHeight * 0.85; if (clickY < thumbTop) container.scrollBy({ top: -pageAmount, behavior: 'smooth' }); else if (clickY > thumbBottom) container.scrollBy({ top: pageAmount, behavior: 'smooth' }); e.preventDefault(); }); } requestAnimationFrame(() => updateScrollbar()); setTimeout(updateScrollbar, 100); setTimeout(updateScrollbar, 300); }
-        const tutorialSteps = [ { id: 'client-brief-box', text: "CLIENT BRIEF — Baca instruksi klien di sini. Perhatikan genre, tema, dan permintaan khususnya. Waktu terus berjalan!", pos: 'bottom' }, { id: 'left-panel', text: "SCRIPT BLOCKS — Pilih dan tarik blok naskah dari inventory ini. Tidak semua blok benar atau diperlukan.", pos: 'right' }, { id: 'center-panel', text: "SCRIPT PAPER — Susun blok naskah di sini secara berurutan dan logis. Susunan yang salah akan dikenai penalti.", pos: 'left' }, { id: 'btn-reset', text: "RESET — Jika papan terlalu berantakan, kembalikan semua blok ke inventory tanpa menghapusnya.", pos: 'bottom' }, { id: 'checklist-container', text: "CHECKLIST — Pantau apakah instruksi klien, alur logika, dan batasan profesi sudah terpenuhi.", pos: 'left' }, { id: 'btn-open-hint', text: "HINT — Gunakan tombol ini untuk memeriksa 1 kesalahan pada naskahmu jika kamu bingung.", pos: 'left' }, { id: 'kamus-container', text: "KAMUS — Klik kata yang ditandai biru pada blok untuk memahami maknanya. Sangat berguna untuk riset!", pos: 'left' }, { id: 'btn-preview-paper', text: "PREVIEW — Gunakan tombol ini untuk membaca keseluruhan naskah dengan jelas sebelum disubmit.", pos: 'top' }, { id: 'btn-periksa', text: "SUBMIT — Kirim pekerjaanmu ke klien. Jika ada kesalahan, kamu harus merevisinya dan waktu akan dikurangi!", pos: 'bottom' }, { id: 'btn-settings', text: "SETTING — Buka menu ini untuk melihat profil atau kembali ke menu utama. Selamat bekerja!", pos: 'bottom' } ];
+        function buildMiniGameShowcaseHTML() {
+            const numpadSVG = `<svg class="pixel-svg" width="34" height="28" viewBox="0 0 22 18"><rect x="3" y="1" width="16" height="16" fill="#363532" stroke="#121211" stroke-width="1"/><rect x="5" y="2.5" width="12" height="3.5" fill="#233022"/><text x="11" y="5.2" fill="#9cd689" font-size="3" text-anchor="middle" font-family="monospace">3 8 5</text><rect x="5" y="7.5" width="3.2" height="2.6" fill="#d9d1ba"/><rect x="9.4" y="7.5" width="3.2" height="2.6" fill="#ffdf6b"/><rect x="13.8" y="7.5" width="3.2" height="2.6" fill="#d9d1ba"/><rect x="5" y="11" width="3.2" height="2.6" fill="#d9d1ba"/><rect x="9.4" y="11" width="3.2" height="2.6" fill="#d9d1ba"/><rect x="13.8" y="11" width="3.2" height="2.6" fill="#ffdf6b"/></svg>`;
+            const coffeeSVG = `<svg class="pixel-svg" width="34" height="28" viewBox="0 0 22 18"><rect x="6" y="2" width="10" height="4" fill="#8c2d2d" stroke="#121211" stroke-width="1"/><rect x="7" y="6" width="8" height="7" fill="#181716"/><rect x="10.5" y="6" width="1" height="4" fill="#6f4e37"/><rect x="9" y="10" width="4" height="3" fill="#e6dfc8"/><rect x="6" y="13" width="10" height="3" fill="#689c68" stroke="#121211" stroke-width="1"/></svg>`;
+            const roachHTML = `<div style="display:flex;align-items:center;justify-content:center;gap:1px;transform:scale(0.62);">${PIXEL_ART.roach}${PIXEL_ART.splat}</div>`;
+            const wireSVG = `<svg class="pixel-svg" width="34" height="28" viewBox="0 0 22 18"><rect x="1" y="1" width="20" height="16" fill="#1d2621" stroke="#121211" stroke-width="1"/><rect x="2.5" y="3" width="3" height="2.5" fill="#e05a5a"/><rect x="2.5" y="7.8" width="3" height="2.5" fill="#5a9ce0"/><rect x="2.5" y="12.5" width="3" height="2.5" fill="#e0c35a"/><rect x="16.5" y="3" width="3" height="2.5" fill="#5a9ce0"/><rect x="16.5" y="7.8" width="3" height="2.5" fill="#e0c35a"/><rect x="16.5" y="12.5" width="3" height="2.5" fill="#e05a5a"/><line x1="5.5" y1="4.2" x2="16.5" y2="13.7" stroke="#e05a5a" stroke-width="1.4"/><line x1="5.5" y1="9" x2="16.5" y2="4.2" stroke="#5a9ce0" stroke-width="1.4"/><line x1="5.5" y1="13.7" x2="16.5" y2="9" stroke="#e0c35a" stroke-width="1.4"/></svg>`;
+            const tossHTML = `<div style="display:flex;align-items:center;justify-content:center;gap:2px;transform:scale(0.60);">${PIXEL_ART.paperBall}${PIXEL_ART.trashBin}</div>`;
+            return `<div class="tut-mg-grid">
+                <div class="tut-mg-card"><div class="tut-mg-art">${numpadSVG}</div><div class="tut-mg-name">NUMPAD</div></div>
+                <div class="tut-mg-card"><div class="tut-mg-art">${coffeeSVG}</div><div class="tut-mg-name">RACIK KOPI</div></div>
+                <div class="tut-mg-card"><div class="tut-mg-art">${roachHTML}</div><div class="tut-mg-name">KECOAK</div></div>
+                <div class="tut-mg-card"><div class="tut-mg-art">${wireSVG}</div><div class="tut-mg-name">KABEL</div></div>
+                <div class="tut-mg-card" style="grid-column: span 2;"><div class="tut-mg-art">${tossHTML}</div><div class="tut-mg-name">LEMPAR KERTAS</div></div>
+            </div>`;
+        }
+        const allTutorialSteps = [
+            {
+                key: 'brief',
+                id: 'client-brief-box',
+                pos: 'bottom',
+                text: "CLIENT BRIEF — Baca genre, tema, dan permintaan cerita klien pada kutipan kuning.",
+                exampleHTML: `<div class="tut-example-pill">📋 Contoh: "Akhiri dengan FADE OUT."</div>`,
+                onEnter: () => { tutPlaceSampleBlocks(0); }
+            },
+            {
+                key: 'blocks',
+                id: 'left-panel',
+                pos: 'right',
+                text: "SCRIPT BLOCKS — Setelah paham brief, lihat pilihan potongan blok naskah di sini.",
+                exampleHTML: `<div class="tut-example-pill">🧩 Pilih blok yang sesuai cerita</div>`,
+                onEnter: () => { tutPlaceSampleBlocks(0); }
+            },
+            {
+                key: 'preview_blocks',
+                id: 'modal-preview-blocks-content',
+                secondaryId: 'btn-preview-blocks',
+                pos: 'bottom',
+                text: "PREVIEW BLOCK — Klik tombol ➚ (kotak biru) untuk membuka panel Available Blocks (kotak kuning).",
+                exampleHTML: `<div class="tut-example-pill">➚ Lihat semua blok secara jelas</div>`,
+                onEnter: () => { tutPlaceSampleBlocks(0); openPreviewBlocks(); }
+            },
+            {
+                key: 'drag_click',
+                id: 'center-panel',
+                secondaryId: 'left-panel',
+                pos: 'right',
+                forceRightPanel: true,
+                text: "DRAG & DROP / KLIK — Tarik blok ke kertas, atau klik blok lalu klik baris tujuan.",
+                exampleHTML: `<div class="tut-example-pill">✋ Contoh: 3 blok terpasang di kertas</div>`,
+                onEnter: () => { tutPlaceSampleBlocks(3, true); }
+            },
+            {
+                key: 'preview_script',
+                portraitOnly: true,
+                id: 'modal-preview-script-content',
+                secondaryId: 'btn-preview-paper',
+                pos: 'bottom',
+                text: "PREVIEW SCRIPT — Klik tombol ➚ di kertas (kotak biru) untuk mengecek keseluruhan naskah (kotak kuning).",
+                exampleHTML: `<div class="tut-example-pill">📄 Baca naskah lebih luas</div>`,
+                onEnter: () => { tutPlaceSampleBlocks(4, false); openPreviewScript(); }
+            },
+            {
+                key: 'reorder',
+                id: 'center-panel',
+                pos: 'bottom',
+                text: "GESER URUTAN — Tarik atau klik antarbaris pada naskah untuk menukar urutan blok cerita.",
+                exampleHTML: `<div class="tut-example-pill">⇅ Contoh: Baris #2 & #3 ditukar</div>`,
+                onEnter: () => {
+                    tutPlaceSampleBlocks(4, true, true);
+                    if (window.matchMedia('(orientation: portrait)').matches) {
+                        openPreviewScript();
+                    }
+                }
+            },
+            {
+                key: 'pagination',
+                id: 'pagination-controls',
+                pos: 'top',
+                text: "HALAMAN (◄ / ►) — Klik panah kiri/kanan di bawah untuk pindah halaman jika lebih dari 1 page.",
+                exampleHTML: `<div class="tut-example-pill">📖 Navigasi: ◄ [1] [2] ►</div>`,
+                onEnter: () => { tutPlaceSampleBlocks(4, false); }
+            },
+            {
+                key: 'checklist',
+                id: 'checklist-container',
+                pos: 'left',
+                text: "CHECKLIST — Pantau progres naskahmu. Syarat yang terpenuhi otomatis tercentang hijau (✔).",
+                exampleHTML: `<div class="tut-example-pill">✔ Semua syarat terpenuhi</div>`,
+                onEnter: () => {
+                    tutPlaceSampleBlocks(4, false);
+                    document.querySelectorAll('#checklist-container .checklist-item').forEach(el => el.classList.add('done'));
+                }
+            },
+            {
+                key: 'hint',
+                id: 'btn-open-hint',
+                pos: 'left',
+                text: "HINT — Jika bingung, klik HINT untuk melihat letak blok yang salah atau saran baris kosong.",
+                exampleHTML: `<div class="tut-example-pill">💡 Contoh: "Baris #2 tidak sesuai brief"</div>`,
+                onEnter: () => { tutPlaceSampleBlocks(3, false); }
+            },
+            {
+                key: 'kamus',
+                id: 'kamus-container',
+                secondaryId: 'paper-glossary-porselen',
+                pos: 'left',
+                text: "KAMUS — Klik kata berwarna biru di kertas naskah (kotak biru) untuk membaca artinya di Kamus (kotak kuning).",
+                exampleHTML: `<div class="tut-example-pill">📘 Contoh: Arti kata "porselen" tampil</div>`,
+                onEnter: () => {
+                    tutPlaceSampleBlocks(3, false);
+                    openGlossary('PORSELEN');
+                }
+            },
+            {
+                key: 'coffee',
+                id: 'ui-coffee',
+                secondaryId: 'deadline-bar-box',
+                pos: 'bottom',
+                text: "KOPI (☕) — Jika waktu hampir habis, klik kopi untuk menambah waktu +35 detik pada bar Deadline!",
+                exampleHTML: `<div class="tut-example-pill">☕ Contoh: Hijau + Biru (+35 detik)</div>`,
+                onEnter: () => {
+                    tutPlaceSampleBlocks(3, false);
+                    gameState.maxTime = BASE_TIME;
+                    gameState.timeLeft = BASE_TIME * 0.48;
+                    updateTimerUI();
+                    const progBar = document.getElementById('progress-bar');
+                    if (progBar) { progBar.style.width = '48%'; progBar.style.backgroundColor = 'var(--color-scene)'; }
+                    const boostBar = document.getElementById('coffee-boost-bar');
+                    if (boostBar) {
+                        boostBar.style.transition = 'none';
+                        boostBar.style.left = '48%';
+                        boostBar.style.width = '24%';
+                        boostBar.style.backgroundColor = 'var(--color-coffee-boost)';
+                        boostBar.style.opacity = '1';
+                    }
+                }
+            },
+            {
+                key: 'coffee_empty',
+                id: 'ui-coffee',
+                pos: 'bottom',
+                text: "KOPI HABIS — Jika 3 kopi habis (☕ redup), klik lagi ikon kopi untuk bermain Mini Game (+1 Kopi).",
+                exampleHTML: `<div class="tut-example-pill">🎮 Pop-up: Mainkan mini game?</div>`,
+                onEnter: () => {
+                    gameState.coffeesLeft = 0;
+                    renderCoffee();
+                }
+            },
+            {
+                key: 'mg_showcase',
+                id: 'center-panel',
+                pos: 'center',
+                wide: true,
+                text: "DAFTAR MINI GAME — Berikut 5 mini game acak (3 level) untuk isi ulang Kopi/Hint (hanya visual):",
+                exampleHTML: buildMiniGameShowcaseHTML(),
+                onEnter: () => {
+                    gameState.coffeesLeft = MAX_COFFEE_PER_CASE;
+                    renderCoffee();
+                }
+            },
+            {
+                key: 'hint_empty',
+                id: 'btn-open-hint',
+                pos: 'left',
+                text: "HINT HABIS — Jika jatah Hint habis, klik HINT untuk bermain Mini Game (+1 Hint, -19 poin bonus).",
+                exampleHTML: `<div class="tut-example-pill">💡 Isi ulang Hint lewat Mini Game</div>`,
+                onEnter: () => {
+                    gameState.hintsLeft = 0;
+                    updateHintButtonUI();
+                }
+            },
+            {
+                key: 'reset',
+                id: 'btn-reset',
+                secondaryId: 'left-panel',
+                pos: 'bottom',
+                text: "RESET — Jika susunan script salah, klik RESET untuk mengembalikan blok ke Script Blocks.",
+                exampleHTML: `<div class="tut-example-pill">↺ Kertas kembali bersih</div>`,
+                onEnter: () => {
+                    gameState.hintsLeft = MAX_HINTS_PER_CASE;
+                    updateHintButtonUI();
+                    tutPlaceSampleBlocks(0);
+                }
+            },
+            {
+                key: 'settings',
+                id: 'btn-settings',
+                secondaryId: 'modal-start-content',
+                pos: 'bottom',
+                text: "SETTING (⚙) — Klik tombol ⚙ (kotak kuning) untuk membuka panel Profil Editor (kotak biru), mengatur Music & Sound, serta melihat skor sementara.",
+                exampleHTML: `<div class="tut-example-pill">⚙ Audio (Music/Sound) & Skor Sementara</div>`,
+                onEnter: () => {
+                    tutPlaceSampleBlocks(3, false);
+                    applyAppSettingsUI();
+                    const igAudio = document.getElementById('ingame-audio-settings');
+                    if (igAudio) igAudio.classList.remove('hidden');
+                    const profDesc = document.getElementById('profile-desc-text');
+                    if (profDesc) profDesc.classList.add('hidden');
+                    const casesEl = document.getElementById('stat-cases');
+                    if (casesEl) casesEl.innerText = '2';
+                    const durEl = document.getElementById('stat-duration');
+                    if (durEl) durEl.innerText = '42d 01m';
+                    const mgEl = document.getElementById('stat-minigames');
+                    if (mgEl) mgEl.innerText = '1x';
+                    const scoreEl = document.getElementById('stat-score');
+                    if (scoreEl) scoreEl.innerText = '286';
+                    const statsBox = document.getElementById('profile-stats');
+                    if (statsBox) statsBox.classList.remove('hidden');
+                    const nameIn = document.getElementById('player-name');
+                    if (nameIn) nameIn.value = gameState.playerName || 'ANONIM';
+                    const startBtn = document.getElementById('btn-start-game');
+                    if (startBtn) startBtn.innerText = 'LANJUTKAN';
+                    document.getElementById('modal-start').classList.add('active');
+                }
+            },
+            {
+                key: 'submit',
+                id: 'btn-periksa',
+                pos: 'bottom',
+                text: "SUBMIT — Jika naskah sudah selesai & lengkap, klik SUBMIT! Makin cepat selesai, makin besar bonus skor!",
+                exampleHTML: `<div class="tut-example-pill">✔ Selesai & Kirim ke Klien!</div>`,
+                onEnter: () => {
+                    tutPlaceSampleBlocks(4, false);
+                    document.querySelectorAll('#checklist-container .checklist-item').forEach(el => el.classList.add('done'));
+                }
+            }
+        ];
+        function getActiveTutorialSteps() {
+            const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+            return allTutorialSteps.filter(s => !s.portraitOnly || isPortrait);
+        }
         let tutStep = 0; let resizeListenerAttached = false;
-        function startTutorial() { document.getElementById("main-menu").classList.remove("active"); document.getElementById("main-menu").style.display = "none"; document.getElementById("game-layout").style.display = "flex"; initBrandLogos(); document.getElementById("tutorial-overlay").classList.add("active"); if (gameState.currentBlocks.length === 0) { gameState.currentBible = generateStoryBible(); const casePrep = prepareCaseBlocksAndLocks(gameState.currentBible); gameState.currentBlocks = casePrep.blocks; gameState.placedBlocks = casePrep.placedBlocks; gameState.lockedSlots = casePrep.lockedSlots; updateUI(); } initW95Scrollbars(); tutStep = 0; requestAnimationFrame(() => renderTutorialStep()); if(!resizeListenerAttached) { window.addEventListener('resize', renderTutorialStep); resizeListenerAttached = true; } }
-        function endTutorial() { document.getElementById("tutorial-overlay").classList.remove("active"); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; }
-        function nextTutorialStep() { if (tutStep < tutorialSteps.length - 1) { tutStep++; renderTutorialStep(); } else { endTutorial(); } }
-        function renderTutorialStep() { if(!document.getElementById("tutorial-overlay").classList.contains("active")) return; const step = tutorialSteps[tutStep]; let targetEl = document.getElementById(step.id); if (step.id === 'btn-preview-paper' && (!targetEl || targetEl.offsetParent === null)) targetEl = document.getElementById('btn-preview-blocks'); const spotlight = document.getElementById("tutorial-spotlight"); const dialog = document.getElementById("tutorial-dialog"); const arrow = document.getElementById("tutorial-arrow"); const promptEl = document.getElementById("tut-tap-prompt"); document.getElementById("tutorial-text").innerText = step.text; promptEl.innerText = tutStep === tutorialSteps.length - 1 ? "[ KLIK UNTUK SELESAI ]" : `[ KLIK DI MANA SAJA (${tutStep + 1}/${tutorialSteps.length}) ]`; if (targetEl) { const rect = targetEl.getBoundingClientRect(); const spotPad = 4; spotlight.style.top = `${rect.top - spotPad}px`; spotlight.style.left = `${rect.left - spotPad}px`; spotlight.style.width = `${rect.width + (spotPad * 2)}px`; spotlight.style.height = `${rect.height + (spotPad * 2)}px`; const dlgW = dialog.offsetWidth || 290; const dlgH = dialog.offsetHeight || 110; const gap = 16; const spaceBottom = window.innerHeight - rect.bottom; const spaceTop = rect.top; const spaceRight = window.innerWidth - rect.right; const spaceLeft = rect.left; let chosenPos = step.pos; const fits = { bottom: spaceBottom >= dlgH + gap + 10, top: spaceTop >= dlgH + gap + 10, right: spaceRight >= dlgW + gap + 10, left: spaceLeft >= dlgW + gap + 10 }; if (!fits[chosenPos]) { const spaces = [ { dir: 'bottom', val: spaceBottom, ok: fits.bottom }, { dir: 'top', val: spaceTop, ok: fits.top }, { dir: 'right', val: spaceRight, ok: fits.right }, { dir: 'left', val: spaceLeft, ok: fits.left } ]; const validSpaces = spaces.filter(s => s.ok).sort((a, b) => b.val - a.val); if (validSpaces.length > 0) chosenPos = validSpaces[0].dir; else chosenPos = spaces.sort((a, b) => b.val - a.val)[0].dir; } let top = 0, left = 0; arrow.className = "tutorial-arrow"; arrow.style.left = ""; arrow.style.top = ""; const targetCenterX = rect.left + (rect.width / 2); const targetCenterY = rect.top + (rect.height / 2); if (chosenPos === 'bottom') { top = rect.bottom + gap; left = Math.max(10, Math.min(window.innerWidth - dlgW - 10, targetCenterX - (dlgW / 2))); arrow.classList.add('arrow-up'); const arrowX = Math.max(14, Math.min(dlgW - 22, targetCenterX - left - 8)); arrow.style.left = `${arrowX}px`; } else if (chosenPos === 'top') { top = Math.max(10, rect.top - dlgH - gap); left = Math.max(10, Math.min(window.innerWidth - dlgW - 10, targetCenterX - (dlgW / 2))); arrow.classList.add('arrow-down'); const arrowX = Math.max(14, Math.min(dlgW - 22, targetCenterX - left - 8)); arrow.style.left = `${arrowX}px`; } else if (chosenPos === 'right') { left = rect.right + gap; top = Math.max(10, Math.min(window.innerHeight - dlgH - 10, targetCenterY - (dlgH / 2))); arrow.classList.add('arrow-left'); const arrowY = Math.max(14, Math.min(dlgH - 22, targetCenterY - top - 8)); arrow.style.top = `${arrowY}px`; } else if (chosenPos === 'left') { left = Math.max(10, rect.left - dlgW - gap); top = Math.max(10, Math.min(window.innerHeight - dlgH - 10, targetCenterY - (dlgH / 2))); arrow.classList.add('arrow-right'); const arrowY = Math.max(14, Math.min(dlgH - 22, targetCenterY - top - 8)); arrow.style.top = `${arrowY}px`; } left = Math.max(10, Math.min(window.innerWidth - dlgW - 10, left)); top = Math.max(10, Math.min(window.innerHeight - dlgH - 10, top)); dialog.style.top = `${top}px`; dialog.style.left = `${left}px`; } }
-        window.onload = function() { initBrandLogos(); updateClientAvatarState(); preloadGameAssets(); syncFromFirebase(); };
+        function resetTutorialVisualState() {
+            closeModal('modal-preview-blocks');
+            closeModal('modal-preview-script');
+            closeModal('modal-hint');
+            closeModal('modal-resource-empty');
+            closeModal('modal-start');
+            const boostBar = document.getElementById('coffee-boost-bar');
+            if (boostBar) { boostBar.style.opacity = '0'; boostBar.style.width = '0%'; }
+            gameState.maxTime = BASE_TIME;
+            gameState.timeLeft = BASE_TIME;
+            updateTimerUI();
+            gameState.coffeesLeft = MAX_COFFEE_PER_CASE;
+            gameState.hintsLeft = MAX_HINTS_PER_CASE;
+            gameState.selectedBlockId = null;
+            selectedFromPreview = false;
+            renderCoffee();
+            updateHintButtonUI();
+        }
+        function tutPlaceSampleBlocks(count = 0, highlightSecond = false, swapMiddle = false) {
+            const totalSlots = gameState.placedBlocks.length || 4;
+            gameState.placedBlocks = new Array(totalSlots).fill(null);
+            gameState.lockedSlots = new Array(totalSlots).fill(false);
+            const validBlocks = gameState.currentBlocks.filter(b => b.isCorrect);
+            const heading = validBlocks.find(b => b.type === 'SCENE HEADING') || validBlocks[0];
+            const bodies = validBlocks.filter(b => b.type === 'ACTION' || b.type === 'DIALOGUE');
+            const trans = validBlocks.find(b => b.type === 'TRANSITION') || bodies[bodies.length - 1];
+            const ordered = [heading, bodies[0], bodies[1] || bodies[0], trans].filter(Boolean);
+            if (swapMiddle && ordered.length >= 3) {
+                const tmp = ordered[1];
+                ordered[1] = ordered[2];
+                ordered[2] = tmp;
+            }
+            for (let i = 0; i < Math.min(count, totalSlots, ordered.length); i++) {
+                if (ordered[i]) gameState.placedBlocks[i] = ordered[i].id;
+            }
+            gameState.selectedBlockId = (highlightSecond && ordered[1]) ? ordered[1].id : null;
+            renderBlocksAndSlots();
+            updateChecklist();
+        }
+        function startTutorial() {
+            closeMainMenuSettings();
+            document.getElementById("main-menu").classList.remove("active");
+            document.getElementById("main-menu").style.display = "none";
+            document.getElementById("game-layout").style.display = "flex";
+            document.body.classList.add("tutorial-running");
+            initBrandLogos();
+            const tutOverlay = document.getElementById("tutorial-overlay");
+            tutOverlay.style.display = "flex";
+            tutOverlay.classList.add("active");
+            gameState.day = 1;
+            gameState.currentBible = {
+                id: 'tut_short_4',
+                genre: 'HORROR',
+                theme: 'Boneka Terkutuk',
+                reqText: 'Seorang wanita curiga boneka porselen antiknya bergerak sendiri. Akhiri dengan FADE OUT.',
+                formatId: 'FADE_OUT',
+                formatText: '',
+                slotCount: 4,
+                validBlocks: [
+                    { key: 'H1', type: 'SCENE HEADING', text: 'INT. KAMAR SARI - MALAM', role: 'Latar kamar', keyPhrase: 'INT. KAMAR SARI' },
+                    { key: 'A1', type: 'ACTION', text: 'Sari menaruh boneka porselen di sudut meja.', role: 'Aksi awal', keyPhrase: 'boneka porselen' },
+                    { key: 'D1', type: 'DIALOGUE', text: 'SARI\n(bergumam)\nPosisinya berubah sendiri...', role: 'Dialog curiga', keyPhrase: 'berubah sendiri' },
+                    { key: 'T1', type: 'TRANSITION', text: 'FADE OUT.', role: 'Transisi penutup', keyPhrase: 'FADE OUT.' }
+                ],
+                validOrders: [['H1', 'A1', 'D1', 'T1']],
+                orderHint: 'Susun 4 blok secara berurutan.',
+                distractors: []
+            };
+            gameState.currentBlocks = [
+                { id: 'tut_blk_1', blockKey: 'H1', type: 'SCENE HEADING', text: 'INT. KAMAR SARI - MALAM', isCorrect: true, sequenceOrder: 1, required: true },
+                { id: 'tut_blk_2', blockKey: 'A1', type: 'ACTION', text: 'Sari menaruh boneka porselen di sudut meja.', isCorrect: true, sequenceOrder: 2, required: true },
+                { id: 'tut_blk_3', blockKey: 'D1', type: 'DIALOGUE', text: 'SARI\n(bergumam)\nPosisinya berubah sendiri...', isCorrect: true, sequenceOrder: 3, required: true },
+                { id: 'tut_blk_4', blockKey: 'T1', type: 'TRANSITION', text: 'FADE OUT.', isCorrect: true, sequenceOrder: 4, required: true }
+            ];
+            gameState.placedBlocks = [null, null, null, null];
+            gameState.lockedSlots = [false, false, false, false];
+            updateUI();
+            initW95Scrollbars();
+            tutStep = 0;
+            applyAndRenderTutorialStep();
+            if (!resizeListenerAttached) {
+                window.addEventListener('resize', () => {
+                    if (document.getElementById("tutorial-overlay").classList.contains("active")) {
+                        applyAndRenderTutorialStep();
+                    }
+                });
+                resizeListenerAttached = true;
+            }
+        }
+        function endTutorial() {
+            resetTutorialVisualState();
+            document.body.classList.remove("tutorial-running");
+            const tutOverlay = document.getElementById("tutorial-overlay");
+            tutOverlay.classList.remove("active");
+            tutOverlay.style.display = "none";
+            const spot2 = document.getElementById("tutorial-spotlight-2");
+            if (spot2) spot2.style.display = "none";
+            gameState.currentBible = null;
+            gameState.currentBlocks = [];
+            gameState.placedBlocks = [];
+            gameState.lockedSlots = [];
+            document.getElementById("game-layout").style.display = "none";
+            document.getElementById("main-menu").classList.add("active");
+            document.getElementById("main-menu").style.display = "flex";
+        }
+        function handleTutorialOverlayClick(e) {
+            if (!document.getElementById("tutorial-overlay").classList.contains("active")) return;
+            const clickX = (e && typeof e.clientX === 'number') ? e.clientX : window.innerWidth;
+            if (clickX < window.innerWidth / 2) {
+                prevTutorialStep();
+            } else {
+                nextTutorialStep();
+            }
+        }
+        function nextTutorialStep() {
+            const steps = getActiveTutorialSteps();
+            if (tutStep < steps.length - 1) {
+                tutStep++;
+                applyAndRenderTutorialStep();
+            } else {
+                endTutorial();
+            }
+        }
+        function prevTutorialStep() {
+            if (tutStep > 0) {
+                tutStep--;
+                applyAndRenderTutorialStep();
+            }
+        }
+        function resolveTutorialElement(targetId) {
+            if (!targetId) return null;
+            if (targetId === 'modal-preview-blocks-content') return document.querySelector('#modal-preview-blocks .modal-content');
+            if (targetId === 'modal-preview-script-content') return document.querySelector('#modal-preview-script .modal-content');
+            if (targetId === 'modal-start-content') return document.querySelector('#modal-start .modal-content');
+            if (targetId === 'paper-glossary-porselen') {
+                const links = Array.from(document.querySelectorAll('#slots-container .glossary-term-link'));
+                const porselenLink = links.find(el => el.textContent.trim().toUpperCase() === 'PORSELEN');
+                return porselenLink || links[0] || null;
+            }
+            if (targetId === 'deadline-bar-box') return document.querySelector('.progress-bar-container');
+            return document.getElementById(targetId);
+        }
+        function applyAndRenderTutorialStep() {
+            if (!document.getElementById("tutorial-overlay").classList.contains("active")) return;
+            const steps = getActiveTutorialSteps();
+            if (tutStep >= steps.length) tutStep = steps.length - 1;
+            resetTutorialVisualState();
+            const step = steps[tutStep];
+            if (typeof step.onEnter === 'function') {
+                step.onEnter();
+            }
+            requestAnimationFrame(() => positionTutorialSpotlightAndDialog());
+        }
+        function positionTutorialSpotlightAndDialog() {
+            if (!document.getElementById("tutorial-overlay").classList.contains("active")) return;
+            const steps = getActiveTutorialSteps();
+            const step = steps[tutStep];
+            if (!step) return;
+            let targetEl = resolveTutorialElement(step.id);
+            if (step.key === 'reorder' && window.matchMedia('(orientation: portrait)').matches) {
+                targetEl = document.querySelector('#modal-preview-script .modal-content') || targetEl;
+            }
+            const secondaryEl = resolveTutorialElement(step.secondaryId);
+
+            const spotlight = document.getElementById("tutorial-spotlight");
+            const spotlight2 = document.getElementById("tutorial-spotlight-2");
+            const dialog = document.getElementById("tutorial-dialog");
+            const arrow = document.getElementById("tutorial-arrow");
+            const badgeEl = document.getElementById("tut-step-badge");
+            const exContainer = document.getElementById("tutorial-example-container");
+            const prevBtn = document.getElementById("btn-tut-prev");
+            const nextBtn = document.getElementById("btn-tut-next");
+
+            if (step.wide) dialog.classList.add("wide-showcase");
+            else dialog.classList.remove("wide-showcase");
+
+            if (badgeEl) badgeEl.innerText = `${tutStep + 1} / ${steps.length}`;
+            document.getElementById("tutorial-text").innerText = step.text;
+            if (exContainer) {
+                if (step.exampleHTML) {
+                    exContainer.innerHTML = step.exampleHTML;
+                    exContainer.style.display = 'flex';
+                } else {
+                    exContainer.innerHTML = '';
+                    exContainer.style.display = 'none';
+                }
+            }
+            if (prevBtn) {
+                if (tutStep <= 0) prevBtn.classList.add("disabled");
+                else prevBtn.classList.remove("disabled");
+            }
+            if (nextBtn) {
+                nextBtn.innerText = tutStep === steps.length - 1 ? "✔" : "►";
+            }
+
+            const prevBlocksModalContent = document.querySelector('#modal-preview-blocks .modal-content');
+            if (prevBlocksModalContent) {
+                prevBlocksModalContent.style.marginTop = '';
+                prevBlocksModalContent.style.marginLeft = '';
+            }
+            const startModalContent = document.querySelector('#modal-start .modal-content');
+            if (startModalContent) {
+                startModalContent.style.marginTop = '';
+                startModalContent.style.marginLeft = '';
+            }
+            if (step.key === 'preview_blocks' && targetEl && secondaryEl) {
+                const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+                const r1 = targetEl.getBoundingClientRect();
+                const r2 = secondaryEl.getBoundingClientRect();
+                if (!isPortrait) {
+                    const overlapsBtn = (r1.left < r2.right + 10 && r1.right > r2.left - 10 && r1.top < r2.bottom + 10 && r1.bottom > r2.top - 10);
+                    if (overlapsBtn) {
+                        const shiftRight = Math.max(0, (r2.right + 14) - r1.left);
+                        if (r1.right + shiftRight <= window.innerWidth - 8) {
+                            targetEl.style.marginLeft = `${Math.round(shiftRight * 2)}px`;
+                        } else {
+                            const shiftDown = Math.max(0, (r2.bottom + 12) - r1.top);
+                            targetEl.style.marginTop = `${Math.round(shiftDown)}px`;
+                        }
+                    }
+                }
+            }
+            if (step.key === 'settings' && targetEl && secondaryEl) {
+                const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+                if (!isPortrait) {
+                    const estDlgW = dialog.offsetWidth || 250;
+                    const desiredLeftClearance = 8 + estDlgW + 16;
+                    const r2Init = secondaryEl.getBoundingClientRect();
+                    if (r2Init.left < desiredLeftClearance) {
+                        const shiftX = desiredLeftClearance - r2Init.left;
+                        if (r2Init.right + shiftX <= window.innerWidth - 8) {
+                            secondaryEl.style.marginLeft = `${Math.round(shiftX * 2)}px`;
+                        }
+                    }
+                }
+            }
+
+            if (secondaryEl && secondaryEl.offsetParent !== null) {
+                const r2 = secondaryEl.getBoundingClientRect();
+                const pad2 = 3;
+                spotlight2.style.display = "block";
+                spotlight2.style.top = `${r2.top - pad2}px`;
+                spotlight2.style.left = `${r2.left - pad2}px`;
+                spotlight2.style.width = `${r2.width + (pad2 * 2)}px`;
+                spotlight2.style.height = `${r2.height + (pad2 * 2)}px`;
+            } else {
+                spotlight2.style.display = "none";
+            }
+
+            if (step.pos === 'center' || !targetEl) {
+                spotlight.style.display = "none";
+                arrow.className = "tutorial-arrow";
+                arrow.style.display = "none";
+                const dlgW = dialog.offsetWidth || 260;
+                const dlgH = dialog.offsetHeight || 160;
+                dialog.style.left = `${Math.max(8, Math.round((window.innerWidth - dlgW) / 2))}px`;
+                dialog.style.top = `${Math.max(8, Math.round((window.innerHeight - dlgH) / 2))}px`;
+                return;
+            }
+
+            spotlight.style.display = "block";
+            arrow.style.display = "block";
+            const rect = targetEl.getBoundingClientRect();
+            const spotPad = 3;
+            spotlight.style.top = `${rect.top - spotPad}px`;
+            spotlight.style.left = `${rect.left - spotPad}px`;
+            spotlight.style.width = `${rect.width + (spotPad * 2)}px`;
+            spotlight.style.height = `${rect.height + (spotPad * 2)}px`;
+
+            const dlgW = dialog.offsetWidth || 220;
+            const dlgH = dialog.offsetHeight || 95;
+            if (step.key === 'preview_blocks') {
+                const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+                const r2 = (secondaryEl && secondaryEl.offsetParent !== null) ? secondaryEl.getBoundingClientRect() : null;
+                arrow.className = "tutorial-arrow arrow-up";
+                arrow.style.left = "";
+                arrow.style.top = "";
+                const targetCenterX = rect.left + (rect.width / 2);
+                let left = Math.max(8, Math.min(window.innerWidth - dlgW - 8, targetCenterX - (dlgW / 2)));
+                let top = rect.bottom + 10;
+                if (isPortrait && r2) {
+                    top = Math.max(rect.bottom + 10, r2.bottom + 12);
+                    if (top + dlgH > window.innerHeight - 8) {
+                        left = Math.max(r2.right + 10, window.innerWidth - dlgW - 8);
+                        top = Math.max(rect.bottom + 8, Math.min(window.innerHeight - dlgH - 8, r2.top));
+                    }
+                } else if (!isPortrait) {
+                    if (top + dlgH > window.innerHeight - 6) {
+                        top = window.innerHeight - dlgH - 6;
+                    }
+                    if (r2 && left < r2.right + 10 && left + dlgW > r2.left - 10 && top < r2.bottom + 10 && top + dlgH > r2.top - 10) {
+                        left = Math.max(r2.right + 12, Math.min(window.innerWidth - dlgW - 8, targetCenterX - (dlgW / 2)));
+                    }
+                }
+                const arrowX = Math.max(12, Math.min(dlgW - 20, targetCenterX - left - 7));
+                arrow.style.left = `${Math.round(arrowX)}px`;
+                dialog.style.left = `${Math.round(left)}px`;
+                dialog.style.top = `${Math.round(Math.max(8, Math.min(window.innerHeight - dlgH - 6, top)))}px`;
+                return;
+            }
+            if (step.key === 'settings') {
+                const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+                const r2 = (secondaryEl && secondaryEl.offsetParent !== null) ? secondaryEl.getBoundingClientRect() : null;
+                arrow.className = "tutorial-arrow arrow-up";
+                arrow.style.left = "";
+                arrow.style.top = "";
+                const targetCenterX = rect.left + (rect.width / 2);
+                if (isPortrait && r2) {
+                    const r2CenterX = r2.left + (r2.width / 2);
+                    const left = Math.max(8, Math.min(window.innerWidth - dlgW - 8, r2CenterX - (dlgW / 2)));
+                    const top = Math.max(8, Math.min(window.innerHeight - dlgH - 6, r2.bottom + 10));
+                    const arrowX = Math.max(12, Math.min(dlgW - 20, r2CenterX - left - 7));
+                    arrow.style.left = `${Math.round(arrowX)}px`;
+                    dialog.style.left = `${Math.round(left)}px`;
+                    dialog.style.top = `${Math.round(top)}px`;
+                } else {
+                    const left = Math.max(8, Math.min(window.innerWidth - dlgW - 8, targetCenterX - (dlgW / 2)));
+                    const top = Math.max(8, Math.min(window.innerHeight - dlgH - 6, rect.bottom + 12));
+                    const arrowX = Math.max(12, Math.min(dlgW - 20, targetCenterX - left - 7));
+                    arrow.style.left = `${Math.round(arrowX)}px`;
+                    dialog.style.left = `${Math.round(left)}px`;
+                    dialog.style.top = `${Math.round(top)}px`;
+                }
+                return;
+            }
+            if (step.forceRightPanel) {
+                const rightPanelEl = document.getElementById('right-panel');
+                const rpRect = rightPanelEl ? rightPanelEl.getBoundingClientRect() : null;
+                arrow.className = "tutorial-arrow arrow-left";
+                arrow.style.left = "";
+                const leftPos = rpRect ? Math.max(8, Math.min(window.innerWidth - dlgW - 8, rpRect.left + Math.max(4, (rpRect.width - dlgW) / 2))) : (window.innerWidth - dlgW - 10);
+                const topPos = rpRect ? Math.max(8, Math.min(window.innerHeight - dlgH - 8, rpRect.top + 16)) : Math.max(8, (window.innerHeight - dlgH) / 2);
+                arrow.style.top = `${Math.min(dlgH - 18, 24)}px`;
+                dialog.style.left = `${Math.round(leftPos)}px`;
+                dialog.style.top = `${Math.round(topPos)}px`;
+                return;
+            }
+            const gap = 12;
+            const spaceBottom = window.innerHeight - rect.bottom;
+            const spaceTop = rect.top;
+            const spaceRight = window.innerWidth - rect.right;
+            const spaceLeft = rect.left;
+            let chosenPos = step.pos;
+            const fits = {
+                bottom: spaceBottom >= dlgH + gap + 6,
+                top: spaceTop >= dlgH + gap + 6,
+                right: spaceRight >= dlgW + gap + 6,
+                left: spaceLeft >= dlgW + gap + 6
+            };
+            if (!fits[chosenPos]) {
+                const spaces = [
+                    { dir: 'bottom', val: spaceBottom, ok: fits.bottom },
+                    { dir: 'top', val: spaceTop, ok: fits.top },
+                    { dir: 'right', val: spaceRight, ok: fits.right },
+                    { dir: 'left', val: spaceLeft, ok: fits.left }
+                ];
+                const validSpaces = spaces.filter(s => s.ok).sort((a, b) => b.val - a.val);
+                if (validSpaces.length > 0) chosenPos = validSpaces[0].dir;
+                else chosenPos = spaces.sort((a, b) => b.val - a.val)[0].dir;
+            }
+            let top = 0, left = 0;
+            arrow.className = "tutorial-arrow";
+            arrow.style.left = "";
+            arrow.style.top = "";
+            const targetCenterX = rect.left + (rect.width / 2);
+            const targetCenterY = rect.top + (rect.height / 2);
+            if (chosenPos === 'bottom') {
+                top = rect.bottom + gap;
+                left = Math.max(8, Math.min(window.innerWidth - dlgW - 8, targetCenterX - (dlgW / 2)));
+                arrow.classList.add('arrow-up');
+                const arrowX = Math.max(12, Math.min(dlgW - 20, targetCenterX - left - 7));
+                arrow.style.left = `${arrowX}px`;
+            } else if (chosenPos === 'top') {
+                top = Math.max(8, rect.top - dlgH - gap);
+                left = Math.max(8, Math.min(window.innerWidth - dlgW - 8, targetCenterX - (dlgW / 2)));
+                arrow.classList.add('arrow-down');
+                const arrowX = Math.max(12, Math.min(dlgW - 20, targetCenterX - left - 7));
+                arrow.style.left = `${arrowX}px`;
+            } else if (chosenPos === 'right') {
+                left = rect.right + gap;
+                top = Math.max(8, Math.min(window.innerHeight - dlgH - 8, targetCenterY - (dlgH / 2)));
+                arrow.classList.add('arrow-left');
+                const arrowY = Math.max(12, Math.min(dlgH - 20, targetCenterY - top - 7));
+                arrow.style.top = `${arrowY}px`;
+            } else if (chosenPos === 'left') {
+                left = Math.max(8, rect.left - dlgW - gap);
+                top = Math.max(8, Math.min(window.innerHeight - dlgH - 8, targetCenterY - (dlgH / 2)));
+                arrow.classList.add('arrow-right');
+                const arrowY = Math.max(12, Math.min(dlgH - 20, targetCenterY - top - 7));
+                arrow.style.top = `${arrowY}px`;
+            }
+            if (secondaryEl && secondaryEl.offsetParent !== null) {
+                const r2 = secondaryEl.getBoundingClientRect();
+                const hitSec = (left < r2.right + 8 && left + dlgW > r2.left - 8 && top < r2.bottom + 8 && top + dlgH > r2.top - 8);
+                if (hitSec) {
+                    if (r2.bottom + 12 + dlgH <= window.innerHeight - 6) {
+                        top = r2.bottom + 12;
+                    } else if (r2.top - 12 - dlgH >= 8) {
+                        top = r2.top - 12 - dlgH;
+                    }
+                }
+            }
+            left = Math.max(8, Math.min(window.innerWidth - dlgW - 8, left));
+            top = Math.max(8, Math.min(window.innerHeight - dlgH - 8, top));
+            dialog.style.top = `${top}px`;
+            dialog.style.left = `${left}px`;
+        }
+        function renderTutorialStep() { positionTutorialSpotlightAndDialog(); }
+        window.onload = function() { loadAppSettings(); initBrandLogos(); updateClientAvatarState(); preloadGameAssets(); syncFromFirebase(); };
     </script>
 </body>
 </html>
