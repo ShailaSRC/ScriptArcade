@@ -608,7 +608,7 @@ Music: [白銀の誓] by [yuhei komatsu]
 Source: DOVA-SYNDROME (<a href="https://dova-s.jp/" target="_blank" rel="noopener noreferrer">https://dova-s.jp/</a>)
 
 Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener noreferrer">https://www.zapsplat.com</a></div></div><div class="flex justify-center"><button class="retro-btn primary" onclick="closeMainMenuSettings()">SIMPAN & TUTUP</button></div></div></div>
-    <div id="modal-start" class="modal-overlay"><div class="modal-content" style="max-width: 380px;"><img id="profile-logo-icon" class="profile-logo-icon" alt="Logo Icon"><h1>PROFIL EDITOR</h1><div id="ingame-audio-settings" class="settings-group-box hidden" style="padding: 8px 10px; margin-bottom: 10px;"><div style="font-size: var(--fs-small); color: var(--accent-yellow); letter-spacing: 1px; border-bottom: 1px dashed var(--border-light); padding-bottom: 3px; margin-bottom: 2px; font-weight: bold;">PENGATURAN AUDIO</div><div class="settings-row"><span class="settings-row-label">🎵 MUSIC</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="ig-btn-music-mute" onclick="toggleAudioMute('music')" title="Mute/Unmute Music">🔊</button><input type="range" class="retro-range" id="ig-slider-music" min="0" max="100" value="70" oninput="updateAudioVolume('music', this.value)"><span class="settings-val-badge" id="ig-val-music">70%</span></div></div><div class="settings-row"><span class="settings-row-label">🔊 SOUND</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="ig-btn-sound-mute" onclick="toggleAudioMute('sound')" title="Mute/Unmute Sound">🔊</button><input type="range" class="retro-range" id="ig-slider-sound" min="0" max="100" value="80" oninput="updateAudioVolume('sound', this.value)"><span class="settings-val-badge" id="ig-val-sound">80%</span></div></div></div><p id="profile-desc-text" class="mb-4" style="color: var(--text-muted); font-size: var(--fs-text);">Setiap cerita memiliki masalah. Tugasmu memastikan setiap bagian memiliki alasan yang logis. Waktu terus berjalan!</p><input type="text" id="player-name" class="retro-input" placeholder="MASUKKAN NAMA" maxlength="10"><div id="profile-stats" class="mb-6 hidden border p-3 text-left" style="color: var(--text-normal); border-color: var(--border-light);"><div class="grid grid-cols-2 gap-2" style="font-size: var(--fs-text);"><span id="stat-day" class="hidden">1</span><div>Total Script:</div><div id="stat-cases" class="text-right" style="color: var(--text-highlight);">0</div><div>Durasi Bermain:</div><div id="stat-duration" class="text-right" style="color: var(--text-highlight);">00m 00d</div><div>Mini Game:</div><div id="stat-minigames" class="text-right" style="color: var(--text-highlight);">0x</div><div>Skor:</div><div id="stat-score" class="text-right" style="color: var(--accent-yellow); font-weight: bold;">0</div></div></div><div class="profile-action-row mt-2" id="profile-btn-row"><button class="retro-btn danger hidden" id="btn-end-game-now" onclick="endGameFromProfile()">SUDAHI PERMAINAN</button><button class="retro-btn" id="btn-profile-menu" onclick="returnToMenuFromProfile()">MAIN MENU</button><button class="retro-btn primary" id="btn-start-game" onclick="startGame()">MULAI KERJA</button></div></div></div>
+    <div id="modal-start" class="modal-overlay"><div class="modal-content" style="max-width: 380px;"><img id="profile-logo-icon" class="profile-logo-icon" alt="Logo Icon"><h1>PROFIL EDITOR</h1><div id="ingame-audio-settings" class="settings-group-box hidden" style="padding: 8px 10px; margin-bottom: 10px;"><div style="font-size: var(--fs-small); color: var(--accent-yellow); letter-spacing: 1px; border-bottom: 1px dashed var(--border-light); padding-bottom: 3px; margin-bottom: 2px; font-weight: bold;">PENGATURAN AUDIO</div><div class="settings-row"><span class="settings-row-label">🎵 MUSIC</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="ig-btn-music-mute" onclick="toggleAudioMute('music')" title="Mute/Unmute Music">🔊</button><input type="range" class="retro-range" id="ig-slider-music" min="0" max="100" value="70" oninput="updateAudioVolume('music', this.value)"><span class="settings-val-badge" id="ig-val-music">70%</span></div></div><div class="settings-row"><span class="settings-row-label">🔊 SOUND</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="ig-btn-sound-mute" onclick="toggleAudioMute('sound')" title="Mute/Unmute Sound">🔊</button><input type="range" class="retro-range" id="ig-slider-sound" min="0" max="100" value="80" oninput="updateAudioVolume('sound', this.value)"><span class="settings-val-badge" id="ig-val-sound">80%</span></div></div></div><p id="profile-desc-text" class="mb-4" style="color: var(--text-muted); font-size: var(--fs-text);">Setiap cerita memiliki masalah. Tugasmu memastikan setiap bagian memiliki alasan yang logis. Waktu terus berjalan!</p><input type="text" id="player-name" class="retro-input" placeholder="MASUKKAN NAMA" maxlength="10"><div id="profile-stats" class="mb-6 hidden border p-3 text-left" style="color: var(--text-normal); border-color: var(--border-light);"><div class="grid grid-cols-2 gap-2" style="font-size: var(--fs-text);"><span id="stat-day" class="hidden">1</span><div>Total Script:</div><div id="stat-cases" class="text-right" style="color: var(--text-highlight);">0</div><div>Durasi Bermain:</div><div id="stat-duration" class="text-right" style="color: var(--text-highlight);">00m 00d</div><div>Mini Game:</div><div id="stat-minigames" class="text-right" style="color: var(--text-highlight);">0x</div><div>Skor:</div><div id="stat-score" class="text-right" style="color: var(--accent-yellow); font-weight: bold;">0</div></div></div><div class="profile-action-row mt-2" id="profile-btn-row"><button class="retro-btn danger hidden" id="btn-end-game-now" onclick="endGameFromProfile()">SUDAHI</button><button class="retro-btn" id="btn-profile-menu" onclick="returnToMenuFromProfile()">MAIN MENU</button><button class="retro-btn primary" id="btn-start-game" onclick="startGame()">MULAI KERJA</button></div></div></div>
     <div id="modal-gameover" class="modal-overlay"><div class="modal-content" style="max-width: 550px; padding: 18px 22px;"><h1 id="go-title" style="color: var(--color-char);">GAME OVER</h1><div class="ending-img-container"><img id="go-img" alt="Ending Illustration" style="display:none;"><div id="go-img-fallback" class="ending-fallback-text" style="display:none;">[ ILUSTRASI ENDING BELUM TERSEDIA ]</div></div><div id="go-ending-name" class="ending-badge-title">BURNOUT</div><p id="go-epilog" style="margin: 0 0 12px 0; font-size: var(--fs-text); line-height: 1.3; color: var(--text-normal); font-style: italic;"></p><div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); padding: 12px; margin-bottom: 14px; text-align: left;"><div style="color: var(--text-highlight); font-size: var(--fs-subtitle); margin-bottom: 8px; text-align: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 4px;">PLAYER: <span id="go-player" style="color: var(--accent-yellow);"></span></div><table class="hs-table" style="margin-bottom:0;"><tr><th>SKOR AKHIR</th><td id="go-score" style="text-align: right; color: var(--accent-yellow); font-weight: bold;">0</td></tr><tr><th>DURASI BERMAIN</th><td id="go-duration" style="text-align: right; color: var(--text-highlight);">00m 00d</td></tr><tr><th>MINI GAME</th><td id="go-minigames" style="text-align: right; color: var(--text-highlight);">0x</td></tr><tr class="hidden"><th>LEVEL</th><td id="go-level">0</td></tr><tr><th>TOTAL SCRIPT</th><td id="go-jobs" style="text-align: right; color: var(--text-highlight);">0</td></tr></table></div><p id="go-rank-msg" style="font-size: var(--fs-small); color: var(--color-scene); margin-top: -6px; margin-bottom: 12px; text-align: center; font-weight: bold;"></p><div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;"><button class="retro-btn" onclick="showHighscores()">HIGHSCORE</button><button class="retro-btn" onclick="returnToMenu()">MAIN MENU</button><button class="retro-btn primary" onclick="restartGame()">PLAY AGAIN</button></div></div></div>
     <div id="modal-highscore" class="modal-overlay"><div class="hs-window-frame"><div class="hs-window-bar"><span class="hs-window-title"><img id="hs-logo-icon" class="hs-logo-icon" alt=""><span id="hs-trophy-fallback">🏆 </span>LEADERBOARD — TOP 100 EDITORS</span><button class="modal-close-x" style="position: static; transform: none; width: 24px; height: 24px;" onclick="closeHighscores()">X</button></div><div class="hs-window-body"><div class="hs-content-wrapper"><div id="hs-top3-container" class="hs-top3-box"></div><div class="hs-list-container" id="hs-others-wrapper"><div class="hs-section-divider"><span>PERINGKAT #4 — #100</span></div><table class="hs-table" id="hs-table-body" style="margin-bottom: 0;"><tr><th>RANK</th><th>NAMA</th><th>TOTAL SCRIPT</th><th>DURASI</th><th>MINI GAME</th><th style="text-align:right;">SKOR</th></tr></table></div></div></div></div></div>
     <div id="tutorial-overlay" class="modal-overlay" onclick="handleTutorialOverlayClick(event)"><div class="tutorial-spotlight" id="tutorial-spotlight"></div><div class="tutorial-spotlight-secondary" id="tutorial-spotlight-2"></div><div class="tutorial-dialog" id="tutorial-dialog"><div class="tutorial-arrow" id="tutorial-arrow"></div><div class="tut-header-bar"><span class="tut-step-badge" id="tut-step-badge">1 / 17</span><div class="tut-header-controls"><button class="tut-icon-btn" id="btn-tut-prev" onclick="event.stopPropagation(); prevTutorialStep()" title="Sebelumnya">◄</button><button class="tut-icon-btn primary" id="btn-tut-next" onclick="event.stopPropagation(); nextTutorialStep()" title="Selanjutnya">►</button><button class="tut-icon-btn exit" onclick="event.stopPropagation(); endTutorial()" title="Keluar Tutorial">✕</button></div></div><div class="tutorial-dialog-text" id="tutorial-text">Teks Tutorial</div><div id="tutorial-example-container" class="tut-example-box"></div><span id="tut-tap-prompt" class="hidden"></span></div></div>
@@ -1366,18 +1366,35 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         };
         let appSettings = { musicVol: 70, soundVol: 80, musicMuted: false, soundMuted: false };
         const AudioEngine = {
+            ctx: null,
             bgm: null,
             timerLoop: null,
             sfxCache: {},
+            sfxPools: {},
+            sfxPoolIdx: {},
+            sfxBuffers: {},
             resolvedUrls: {},
             unlocked: false,
             timerDangerTriggered: false,
+            lastShortToneAt: 0,
+            getAudioContext() {
+                if (!this.ctx) {
+                    const AC = window.AudioContext || window.webkitAudioContext;
+                    if (AC) {
+                        try { this.ctx = new AC(); } catch (e) {}
+                    }
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume().catch(() => {});
+                }
+                return this.ctx;
+            },
             getCandidateUrls(rawName) {
                 const clean = String(rawName || '').replace(/\.(mp3|wav|ogg)$/i, '');
                 const hasExt = /\.(mp3|wav|ogg)$/i.test(String(rawName || ''));
                 const list = [];
                 if (hasExt) list.push(rawName);
-                const dirs = ['', 'audio/', 'sfx/', 'sounds/', 'sound/', 'assets/audio/', 'assets/sfx/', 'assets/'];
+                const dirs = ['', 'audio/', 'sfx/', 'music/', 'sounds/', 'sound/', 'assets/audio/', 'assets/sfx/', 'assets/music/', 'assets/'];
                 const exts = ['.mp3', '.wav', '.ogg'];
                 dirs.forEach(d => {
                     exts.forEach(ext => {
@@ -1387,24 +1404,74 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 });
                 return list;
             },
+            computeTrimOffset(audioBuffer) {
+                if (!audioBuffer || audioBuffer.numberOfChannels === 0) return 0;
+                const data = audioBuffer.getChannelData(0);
+                const sr = audioBuffer.sampleRate || 44100;
+                const maxScan = Math.min(data.length, Math.floor(sr * 0.45));
+                for (let i = 0; i < maxScan; i++) {
+                    if (Math.abs(data[i]) > 0.008) {
+                        return Math.max(0, (i - 32) / sr);
+                    }
+                }
+                return 0;
+            },
+            decodeSfxIntoWebAudio(key, url) {
+                if (this.sfxBuffers[key]) return;
+                const ac = this.getAudioContext();
+                if (!ac || typeof fetch !== 'function') return;
+                fetch(url)
+                    .then(r => r.ok ? r.arrayBuffer() : Promise.reject())
+                    .then(ab => ac.decodeAudioData(ab))
+                    .then(decoded => {
+                        const trimOffset = this.computeTrimOffset(decoded);
+                        this.sfxBuffers[key] = { buffer: decoded, trimOffset };
+                    })
+                    .catch(() => {});
+            },
+            buildSfxPool(key, url) {
+                if (this.sfxPools[key]) return;
+                const pool = [];
+                for (let i = 0; i < 4; i++) {
+                    const a = new Audio();
+                    a.preload = 'auto';
+                    a.src = url;
+                    try { a.load(); } catch (e) {}
+                    pool.push(a);
+                }
+                this.sfxPools[key] = pool;
+                this.sfxPoolIdx[key] = 0;
+            },
             loadSmartAudio(key, rawName, isLoop = false, onReady = null) {
                 const candidates = this.getCandidateUrls(rawName);
                 let idx = 0;
                 const audio = new Audio();
                 audio.preload = 'auto';
                 audio.loop = Boolean(isLoop);
+                let settled = false;
+                const markReady = (resolvedUrl) => {
+                    if (settled) return;
+                    settled = true;
+                    this.resolvedUrls[key] = resolvedUrl;
+                    audio.onerror = null;
+                    if (!isLoop && key !== 'music') {
+                        this.buildSfxPool(key, resolvedUrl);
+                        this.decodeSfxIntoWebAudio(key, resolvedUrl);
+                    }
+                    if (typeof onReady === 'function') onReady(audio);
+                };
                 const tryNext = () => {
                     if (idx >= candidates.length) return;
                     const testUrl = candidates[idx++];
-                    audio.onloadeddata = () => {
-                        this.resolvedUrls[key] = testUrl;
-                        audio.onerror = null;
-                        if (typeof onReady === 'function') onReady(audio);
-                    };
+                    settled = false;
+                    audio.oncanplay = () => markReady(testUrl);
+                    audio.onloadeddata = () => markReady(testUrl);
+                    audio.onloadedmetadata = () => markReady(testUrl);
                     audio.onerror = () => {
-                        tryNext();
+                        if (!settled) tryNext();
                     };
                     audio.src = testUrl;
+                    try { audio.load(); } catch (e) {}
                 };
                 tryNext();
                 return audio;
@@ -1413,7 +1480,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 if (this.bgm) return;
                 this.bgm = this.loadSmartAudio('music', AUDIO_ASSETS.music, true, (a) => {
                     this.syncVolumes();
-                    if (this.unlocked && !appSettings.musicMuted && appSettings.musicVol > 0) {
+                    if (!appSettings.musicMuted && appSettings.musicVol > 0) {
                         a.play().catch(() => {});
                     }
                 });
@@ -1426,10 +1493,22 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 });
                 const unlockHandler = () => {
                     this.unlocked = true;
+                    this.getAudioContext();
                     this.ensureBgmPlaying();
+                    Object.keys(this.resolvedUrls).forEach(k => {
+                        if (k !== 'music' && k !== 'timerLoop' && !this.sfxBuffers[k]) {
+                            this.decodeSfxIntoWebAudio(k, this.resolvedUrls[k]);
+                        }
+                    });
                 };
-                window.addEventListener('pointerdown', unlockHandler, { passive: true });
-                window.addEventListener('keydown', unlockHandler, { passive: true });
+                ['click', 'pointerdown', 'pointerup', 'touchend', 'keydown'].forEach(ev => {
+                    window.addEventListener(ev, unlockHandler, { passive: true, capture: true });
+                });
+                setTimeout(() => {
+                    if (!appSettings.musicMuted && appSettings.musicVol > 0) {
+                        this.ensureBgmPlaying();
+                    }
+                }, 150);
             },
             getMusicVolume() {
                 if (appSettings.musicMuted) return 0;
@@ -1446,7 +1525,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     this.bgm.volume = mVol;
                     if (mVol === 0 && !this.bgm.paused) {
                         this.bgm.pause();
-                    } else if (mVol > 0 && this.unlocked && this.bgm.paused && this.resolvedUrls['music']) {
+                    } else if (mVol > 0 && this.bgm.paused) {
                         this.bgm.play().catch(() => {});
                     }
                 }
@@ -1469,20 +1548,42 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 if (!this.bgm) this.init();
                 const sVol = this.getSfxVolume();
                 if (sVol <= 0) return;
-                const resolved = this.resolvedUrls[key];
-                const baseAudio = this.sfxCache[key];
-                if (resolved) {
+                const now = performance.now();
+                if (key === 'shortTone') {
+                    if (now - this.lastShortToneAt < 35) return;
+                    this.lastShortToneAt = now;
+                }
+                const webBuf = this.sfxBuffers[key];
+                const ac = this.getAudioContext();
+                if (webBuf && webBuf.buffer && ac) {
                     try {
-                        const clone = new Audio(resolved);
-                        clone.volume = sVol;
-                        clone.play().catch(() => {});
+                        const src = ac.createBufferSource();
+                        src.buffer = webBuf.buffer;
+                        const gain = ac.createGain();
+                        gain.gain.value = sVol;
+                        src.connect(gain);
+                        gain.connect(ac.destination);
+                        src.start(0, webBuf.trimOffset || 0);
                         return;
                     } catch (e) {}
                 }
+                const pool = this.sfxPools[key];
+                if (pool && pool.length > 0) {
+                    try {
+                        const idx = (this.sfxPoolIdx[key] || 0) % pool.length;
+                        this.sfxPoolIdx[key] = idx + 1;
+                        const a = pool[idx];
+                        a.volume = sVol;
+                        try { a.currentTime = 0; } catch (e) {}
+                        a.play().catch(() => {});
+                        return;
+                    } catch (e) {}
+                }
+                const baseAudio = this.sfxCache[key];
                 if (baseAudio) {
                     try {
                         baseAudio.volume = sVol;
-                        baseAudio.currentTime = 0;
+                        try { baseAudio.currentTime = 0; } catch (e) {}
                         baseAudio.play().catch(() => {});
                     } catch (e) {}
                 }
@@ -1490,7 +1591,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             setTimerLoopActive(shouldPlay) {
                 if (!this.timerLoop) return;
                 const sVol = this.getSfxVolume();
-                if (shouldPlay && sVol > 0 && this.unlocked) {
+                if (shouldPlay && sVol > 0) {
                     this.timerLoop.volume = sVol;
                     if (this.timerLoop.paused) {
                         this.timerLoop.play().catch(() => {});
@@ -2955,7 +3056,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             dialog.style.left = `${left}px`;
         }
         function renderTutorialStep() { positionTutorialSpotlightAndDialog(); }
-        document.addEventListener('click', function(e) {
+        document.addEventListener('pointerdown', function(e) {
             const btn = e.target.closest('.retro-btn, .settings-btn, .tut-icon-btn, .modal-close-x, .nav-arrow, .page-thumb, .simon-key, .cm-desk-item, .glossary-term-link');
             if (btn) {
                 playSfx('shortTone');
