@@ -19,9 +19,9 @@
         html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
         body { background-color: var(--bg-app); color: var(--text-normal); font-size: var(--fs-subtitle); position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; user-select: none; overscroll-behavior: none; }
         body::after { content: ""; display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; z-index: 100; pointer-events: none; opacity: 0.3; }
-        #game-layout { width: 100%; max-width: 1120px; margin: 0 auto; height: 100dvh; min-height: 0; display: flex; flex-direction: column; padding: 10px; gap: 10px; position: relative; z-index: 10; }
-        #game-header { flex: 0 0 auto; min-height: 90px; display: grid; grid-template-columns: 230px minmax(0, 1fr) 230px; gap: 10px; background: var(--bg-panel); border: 2px solid var(--border-dark); padding: 10px; box-shadow: 2px 2px 0 rgba(0,0,0,0.3); align-items: stretch; position: relative; z-index: 1500; }
-        #main-area { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 290px minmax(360px, 520px) 250px; justify-content: center; gap: 10px; }
+        #game-layout { width: 100%; max-width: 100%; margin: 0 auto; height: 100dvh; min-height: 0; display: flex; flex-direction: column; padding: 6px 8px; gap: 8px; position: relative; z-index: 10; }
+        #game-header { flex: 0 0 auto; min-height: 90px; display: grid; grid-template-columns: minmax(200px, 1.15fr) minmax(340px, 2fr) minmax(190px, 1fr); gap: 10px; background: var(--bg-panel); border: 2px solid var(--border-dark); padding: 8px 12px; box-shadow: 2px 2px 0 rgba(0,0,0,0.3); align-items: stretch; position: relative; z-index: 1500; }
+        #main-area { flex: 1 1 auto; min-height: 0; width: 100%; display: grid; grid-template-columns: minmax(240px, 1.15fr) minmax(360px, 2fr) minmax(210px, 1fr); justify-content: stretch; gap: 8px; }
         .panel { min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--bg-panel); border: 2px solid var(--border-dark); box-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
         .header-left { display: flex; flex-direction: row; align-items: center; gap: 16px; width: 100%; }
         .settings-btn { color: var(--text-normal); font-size: 1.5rem; cursor: pointer; transition: all 0.15s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; background: var(--bg-app); border: 2px solid var(--border-dark); box-shadow: 2px 2px 0 rgba(0,0,0,0.4); border-radius: 3px; }
@@ -41,7 +41,7 @@
         .client-avatar.angry-active { border-color: var(--color-char) !important; box-shadow: inset 0 0 12px rgba(181, 108, 108, 0.55), 0 0 6px rgba(181, 108, 108, 0.4); }
         .client-avatar svg { width: 85%; height: auto; margin-bottom: -5px; fill: #1c1c1a; }
         .client-avatar img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
-        .client-brief-wrapper { flex: 1; max-width: 500px; display: flex; flex-direction: column; gap: 6px; min-height: 0; min-width: 0; justify-content: space-between; }
+        .client-brief-wrapper { flex: 1; max-width: 780px; display: flex; flex-direction: column; gap: 6px; min-height: 0; min-width: 0; justify-content: space-between; }
         .client-brief-box { flex: 1; border: 2px solid var(--border-dark); background: var(--bg-app); display: flex; flex-direction: column; border-radius: 4px; overflow: hidden; min-height: 0; box-shadow: inset 0 1px 4px rgba(0,0,0,0.45); }
         .client-brief-box .brief-content { padding: 5px 10px; display: flex; flex-direction: column; justify-content: center; gap: 1px; font-size: var(--fs-subtitle); text-transform: uppercase; color: var(--text-normal); flex: 1; overflow-y: auto; overflow-x: hidden; }
         .brief-line { display: flex; align-items: flex-start; line-height: 1.1; }
@@ -112,7 +112,7 @@
         #center-panel { background: #1c1c1b; position: relative; padding: 0; overflow: hidden; }
         .center-scroll-area { width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; padding: 14px 12px; display: flex; flex-direction: column; align-items: center; }
         .btn-expand-paper { position: absolute; bottom: 15px; right: 15px; z-index: 50; }
-        .paper-sheet { background: var(--paper-bg); width: 100%; max-width: 480px; min-height: 100%; height: auto; border: 1px solid var(--paper-border); box-shadow: 4px 4px 0 rgba(0,0,0,0.5); display: flex; flex-direction: column; color: var(--paper-text); padding: 22px 24px 24px 30px; position: relative; flex-shrink: 0; }
+        .paper-sheet { background: var(--paper-bg); width: 100%; max-width: 680px; min-height: 100%; height: auto; border: 1px solid var(--paper-border); box-shadow: 4px 4px 0 rgba(0,0,0,0.5); display: flex; flex-direction: column; color: var(--paper-text); padding: 22px 24px 24px 30px; position: relative; flex-shrink: 0; }
         .paper-sheet, .paper-sheet * { font-family: var(--font-script); }
         .paper-header { display: flex; justify-content: flex-end; align-items: baseline; font-size: 12px; color: #3a3832; margin-bottom: 10px; padding-bottom: 4px; flex-shrink: 0; }
         .paper-header.empty-header { display: none; }
@@ -377,9 +377,9 @@
         #selected-block-popup .sp-character { margin-left: 18%; width: 78%; }
         #selected-block-popup .sp-dialogue { margin-left: 6%; margin-right: 4%; width: 90%; }
         @media (max-height: 550px) and (orientation: landscape) {
-        #game-layout { max-width: 960px; }
-        #game-header { grid-template-columns: 200px minmax(0,1fr) 200px; padding: 6px 10px; min-height: 60px; }
-        #main-area { grid-template-columns: 240px minmax(300px, 440px) 205px; }
+        #game-layout { max-width: 100%; padding: 5px 6px; gap: 6px; }
+        #game-header { grid-template-columns: minmax(180px, 1.15fr) minmax(280px, 2fr) minmax(170px, 1fr); padding: 6px 10px; min-height: 60px; }
+        #main-area { grid-template-columns: minmax(200px, 1.15fr) minmax(290px, 2fr) minmax(185px, 1fr); gap: 6px; }
         .client-avatar { width: 50px; height: 50px; } .client-brief-box .brief-content { padding: 4px; }
         .retro-btn { padding: 4px 8px; } .hide-mobile { display: none; } #right-panel { padding: 10px; }
         .right-section-title { margin-bottom: 8px; } .deadline-area { padding: 2px 6px; }
@@ -520,8 +520,12 @@
         70% { transform: scale(1.0); opacity: 1; }
         100% { transform: scale(0.92); opacity: 0.45; }
         }
-        .simon-lcd { width: 100%; background: #233022; border: 2px solid #121211; box-shadow: inset 2px 2px 0 #141c13; color: #9cd689; padding: 6px 10px; font-size: 1.25rem; font-weight: bold; display: flex; justify-content: center; align-items: center; letter-spacing: 3px; min-height: 34px; }
-        .simon-grid { display: grid; grid-template-columns: repeat(3, 58px); gap: 6px; justify-content: center; }
+        .simon-mode-badge { width: 100%; padding: 3px 8px; font-size: 0.72rem; font-weight: bold; letter-spacing: 0.8px; text-align: center; border: 1.5px solid #121211; text-transform: uppercase; transition: background 0.15s, color 0.15s; }
+        .simon-mode-badge.wait { background: #7a2e2e; color: #ffdede; border-color: #ff9e9e; box-shadow: 0 0 6px rgba(224, 90, 90, 0.45); }
+        .simon-mode-badge.go { background: #2f5c34; color: #d8ffd8; border-color: #9cd689; box-shadow: 0 0 6px rgba(104, 196, 125, 0.45); }
+        .simon-lcd { width: 100%; background: #233022; border: 2px solid #121211; box-shadow: inset 2px 2px 0 #141c13; color: #9cd689; padding: 5px 10px; font-size: 1.2rem; font-weight: bold; display: flex; justify-content: center; align-items: center; letter-spacing: 3px; min-height: 32px; }
+        .simon-grid { display: grid; grid-template-columns: repeat(3, 58px); gap: 5px; justify-content: center; position: relative; }
+        .simon-grid.locked-watch .simon-key:not(.lit) { opacity: 0.55; cursor: not-allowed; }
         .simon-key { height: 36px; background: #d9d1ba; border: 2px solid #121211; box-shadow: inset -2px -3px 0 #999075, inset 2px 2px 0 #f5efe0, 2px 2px 0 #121211; color: #1c1b18; font-size: 1.25rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.06s; }
         .simon-key.zero-key { grid-column: 2; }
         .simon-key:active { transform: translate(1px, 2px); box-shadow: inset 1px 1px 0 #999075; }
@@ -588,7 +592,7 @@
 <body>
     <div id="main-menu" class="modal-overlay active" style="display: flex;"><div class="settings-btn main-menu-settings-btn" id="btn-main-menu-settings" onclick="openMainMenuSettings()" title="Pengaturan">⚙</div><div class="main-menu-card"><div class="main-menu-title"><img id="main-menu-logo-img" class="main-menu-logo-img" alt=""><span id="main-menu-title-text">SCRIPT ARCADE</span></div><div class="main-menu-subtitle">SCRIPT EDITING ON ARCADE DESK</div><div class="main-menu-buttons"><button class="retro-btn primary main-menu-btn" onclick="openStartModal()">▶ PLAY</button><button class="retro-btn main-menu-btn" onclick="showHighscores()">★ HIGHSCORE</button><button class="retro-btn main-menu-btn" onclick="startTutorial()">? TUTORIAL</button></div></div></div>
     <div id="game-layout" style="display: none;">
-    <header id="game-header"><div class="header-left"><div class="settings-btn" id="btn-settings" onclick="showProfile()" title="Profil & Progress">⚙</div><div class="title-area"><h1><img id="header-wordmark-img" class="header-wordmark-img" alt=""><span id="header-title-text">SCRIPT ARCADE</span></h1><div class="day-text" id="level-display">SCRIPT #01</div></div></div><div class="header-center"><div class="avatar-wrapper"><div class="client-avatar" id="client-avatar-box"><img id="client-avatar-img" alt="Client Icon" style="display:none;"><svg id="client-avatar-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/><circle cx="9" cy="9" r="1.5" fill="#3b3a36"/><circle cx="15" cy="9" r="1.5" fill="#3b3a36"/><path id="svg-mouth" d="M8 8.5h2M14 8.5h2M10.5 12h3" stroke="#3b3a36" stroke-width="1.5"/></svg></div><div class="avatar-title">CLIENT BRIEF</div></div><div class="client-brief-wrapper" id="client-brief-box"><div class="client-brief-box"><div class="brief-content" id="client-brief-content"></div></div><div class="deadline-area"><div class="timer-wrapper"><span class="timer-label">DEADLINE</span><div class="progress-bar-container"><div id="progress-bar"></div><div class="coffee-boost-bar" id="coffee-boost-bar"></div></div><span class="time-text" id="ui-time">03:00</span></div><div class="coffee-area" id="ui-coffee"></div></div></div></div><div class="header-right"><button id="btn-reset" class="retro-btn" onclick="clearBoard()" title="Kembalikan semua blok ke inventory"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg><span class="hide-mobile">RESET</span></button><button id="btn-periksa" class="retro-btn primary" onclick="checkScript()">SUBMIT</button></div></header>
+    <header id="game-header"><div class="header-left"><div class="settings-btn" id="btn-settings" onclick="showProfile()" title="Profil & Progress">⚙</div><div class="title-area"><h1><img id="header-wordmark-img" class="header-wordmark-img" alt=""><span id="header-title-text">SCRIPT ARCADE</span></h1><div class="day-text" id="level-display">SCRIPT #01</div></div></div><div class="header-center"><div class="avatar-wrapper"><div class="client-avatar" id="client-avatar-box"><img id="client-avatar-img" alt="Client Icon" style="display:none;"><svg id="client-avatar-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/><circle cx="9" cy="9" r="1.5" fill="#3b3a36"/><circle cx="15" cy="9" r="1.5" fill="#3b3a36"/><path id="svg-mouth" d="M8 8.5h2M14 8.5h2M10.5 12h3" stroke="#3b3a36" stroke-width="1.5"/></svg></div><div class="avatar-title">CLIENT BRIEF</div></div><div class="client-brief-wrapper" id="client-brief-box"><div class="client-brief-box"><div class="brief-content" id="client-brief-content"></div></div><div class="deadline-area"><div class="timer-wrapper"><span class="timer-label">DEADLINE</span><div class="progress-bar-container"><div id="progress-bar"></div><div class="coffee-boost-bar" id="coffee-boost-bar"></div></div><span class="time-text" id="ui-time">02:30</span></div><div class="coffee-area" id="ui-coffee"></div></div></div></div><div class="header-right"><button id="btn-reset" class="retro-btn" onclick="clearBoard()" title="Kembalikan semua blok ke inventory"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg><span class="hide-mobile">RESET</span></button><button id="btn-periksa" class="retro-btn primary" onclick="checkScript()">SUBMIT</button></div></header>
     <div id="main-area">
     <div id="left-panel" class="panel"><div class="panel-header"><div class="panel-header-text"><h2 class="panel-title">SCRIPT BLOCKS</h2><div class="panel-subtitle" style="font-size: var(--fs-text);">(TARIK KE HALAMAN)</div></div><button class="retro-btn btn-expand" id="btn-preview-blocks" onclick="openPreviewBlocks()" title="Lihat semua blok">➚</button></div><div class="scroll-container"><div class="retro-scrollbar" id="block-container" ondragover="handleDragOverPanel(event)" ondrop="handleDropToPanel(event)"></div><div class="w95-scrollbar" id="script-scrollbar"><div class="w95-scroll-track"><div class="w95-scroll-thumb"></div></div></div></div></div>
     <div id="center-panel" class="panel"><div class="center-scroll-area" id="center-scroll-area"><div class="paper-sheet" id="script-paper"><div class="paper-header empty-header" id="paper-header-bar"><span class="page-num" id="page-number"></span></div><div id="slots-container"></div></div></div><button class="retro-btn btn-expand btn-expand-paper" id="btn-preview-paper" onclick="openPreviewScript()" title="Perbesar Halaman">➚</button></div>
@@ -654,7 +658,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         function updateClientAvatarState() { const imgEl = document.getElementById('client-avatar-img'); const svgEl = document.getElementById('client-avatar-svg'); const boxEl = document.getElementById('client-avatar-box'); const svgMouth = document.getElementById('svg-mouth'); if (!imgEl || !svgEl) return; const clientId = gameState.clientId || 'client1'; const pct = gameState.maxTime > 0 ? (gameState.timeLeft / gameState.maxTime) * 100 : 100; const isTimerRed = gameState.isGameActive && pct <= 30; const isAngry = Boolean(gameState.isSubmitAngry || isTimerRed); if (boxEl) { if (isAngry) boxEl.classList.add('angry-active'); else boxEl.classList.remove('angry-active'); } if (svgMouth) { if (isAngry) { svgMouth.setAttribute('d', 'M7.5 7.5L10.5 9M16.5 7.5L13.5 9M10 13c1-1.2 3-1.2 4 0'); } else { svgMouth.setAttribute('d', 'M8 8.5h2M14 8.5h2M10.5 12h3'); } } const clientData = (ASSET_CONFIG.clients && ASSET_CONFIG.clients[clientId]) ? ASSET_CONFIG.clients[clientId] : ASSET_CONFIG.clients.client1; const targetSrc = clientData ? (isAngry ? clientData.angry : clientData.normal) : ""; if (targetSrc && targetSrc.trim() !== "") { if (imgEl.getAttribute('data-current-key') !== targetSrc) { imgEl.setAttribute('data-current-key', targetSrc); loadSmartImage( imgEl, targetSrc, () => { imgEl.style.display = 'block'; svgEl.style.display = 'none'; }, () => { imgEl.style.display = 'none'; svgEl.style.display = 'block'; } ); } } else { imgEl.style.display = 'none'; svgEl.style.display = 'block'; } }
         function formatPlayDuration(sec) { const totalSec = Math.max(0, Math.round(Number(sec) || 0)); const mins = Math.floor(totalSec / 60); const secs = totalSec % 60; if (mins >= 60) { const hrs = Math.floor(mins / 60); const remMins = mins % 60; return `${hrs}j ${String(remMins).padStart(2, '0')}m ${String(secs).padStart(2, '0')}d`; } return `${String(mins).padStart(2, '0')}m ${String(secs).padStart(2, '0')}d`; }
         const LeaderboardManager = { async saveScore(record) { let localScores = JSON.parse(_safeLS.getItem('es_arcade_hs_top100')) || []; const existingLocalIdx = localScores.findIndex(s => s && s.sessionId === record.sessionId); if (existingLocalIdx === -1) localScores.push(record); else localScores[existingLocalIdx] = record; localScores.sort((a, b) => (b.score || 0) - (a.score || 0) || (b.jobs || 0) - (a.jobs || 0) || (a.duration || 0) - (b.duration || 0)); localScores = localScores.slice(0, 100); _safeLS.setItem('es_arcade_hs_top100', JSON.stringify(localScores)); try { if (!firebaseDB) throw new Error("Firebase belum aktif."); const dbRef = firebaseDB.ref('highscores'); const snapshot = await dbRef.once('value'); let scores = snapshot.val() || []; if (!Array.isArray(scores)) scores = Object.values(scores); const existingIdx = scores.findIndex(s => s && s.sessionId === record.sessionId); if (existingIdx === -1) scores.push(record); else scores[existingIdx] = record; scores.sort((a, b) => (b.score || 0) - (a.score || 0) || (b.jobs || 0) - (a.jobs || 0) || (a.duration || 0) - (b.duration || 0)); scores = scores.slice(0, 100); await dbRef.set(scores); const rank = scores.findIndex(s => s && s.sessionId === record.sessionId) + 1; return rank > 0 ? rank : null; } catch (err) { const rank = localScores.findIndex(s => s && s.sessionId === record.sessionId) + 1; return rank > 0 ? rank : null; } }, async getTop100() { try { if (!firebaseDB) throw new Error("Firebase belum aktif."); const snapshot = await firebaseDB.ref('highscores').once('value'); let data = snapshot.val(); if (!data) return []; let scores = Array.isArray(data) ? data : Object.values(data); scores.sort((a, b) => (b.score || 0) - (a.score || 0) || (b.jobs || 0) - (a.jobs || 0) || (a.duration || 0) - (b.duration || 0)); return scores.slice(0, 100); } catch (err) { return JSON.parse(_safeLS.getItem('es_arcade_hs_top100')) || []; } } };
-        const BASE_TIME = 180;
+        const BASE_TIME = 150;
         const COFFEE_BOOST = 35;
         const PENALTY_TIME = 20;
         const MAX_COFFEE_PER_CASE = 3;
@@ -996,7 +1000,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
         function startTimer() { if (!gameState.isGameActive) return; if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } if (timerState.isPaused && timerState.pausedTimeLeft > 0) { gameState.timeLeft = timerState.pausedTimeLeft; } timerState.isPaused = false; gameState.lastTickTime = Date.now(); timerState.endTime = Date.now() + (gameState.timeLeft * 1000); timerState.interval = setInterval(() => { const now = Date.now(); if (gameState.lastTickTime > 0) { gameState.playDuration = (gameState.playDuration || 0) + Math.max(0, (now - gameState.lastTickTime) / 1000); } gameState.lastTickTime = now; const remaining = (timerState.endTime - now) / 1000; if (remaining <= 0) { gameState.timeLeft = 0; clearInterval(timerState.interval); timerState.interval = null; gameState.lastTickTime = 0; updateTimerUI(); triggerGameOver(); } else { gameState.timeLeft = remaining; updateTimerUI(); } }, 100); }
         function pauseTimer() { if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } AudioEngine.setTimerLoopActive(false); if (gameState.isGameActive && gameState.lastTickTime > 0) { gameState.playDuration = (gameState.playDuration || 0) + Math.max(0, (Date.now() - gameState.lastTickTime) / 1000); gameState.lastTickTime = 0; } if (gameState.isGameActive && gameState.timeLeft > 0) { timerState.pausedTimeLeft = gameState.timeLeft; timerState.isPaused = true; } else { timerState.isPaused = false; } }
-        function updateTimerUI() { const m = Math.floor(Math.max(0, gameState.timeLeft) / 60).toString().padStart(2, '0'); const s = Math.floor(Math.max(0, gameState.timeLeft) % 60).toString().padStart(2, '0'); document.getElementById("ui-time").innerText = `${m}:${s}`; const pct = Math.max(0, Math.min(100, (gameState.timeLeft / gameState.maxTime) * 100)); const bar = document.getElementById("progress-bar"); bar.style.width = `${pct}%`; if (pct > 60) bar.style.backgroundColor = "var(--color-scene)"; else if (pct > 30) bar.style.backgroundColor = "var(--accent-yellow)"; else bar.style.backgroundColor = "var(--color-char)"; const inDanger = gameState.isGameActive && !timerState.isPaused && pct <= 30 && gameState.timeLeft > 0; if (inDanger && !AudioEngine.timerDangerTriggered) { AudioEngine.timerDangerTriggered = true; playSfx('alert'); } else if (!inDanger && pct > 30) { AudioEngine.timerDangerTriggered = false; } AudioEngine.setTimerLoopActive(inDanger); updateClientAvatarState(); }
+        function updateTimerUI() { const m = Math.floor(Math.max(0, gameState.timeLeft) / 60).toString().padStart(2, '0'); const s = Math.floor(Math.max(0, gameState.timeLeft) % 60).toString().padStart(2, '0'); document.getElementById("ui-time").innerText = `${m}:${s}`; const pct = Math.max(0, Math.min(100, (gameState.timeLeft / gameState.maxTime) * 100)); const bar = document.getElementById("progress-bar"); bar.style.width = `${pct}%`; if (pct > 60) bar.style.backgroundColor = "var(--color-scene)"; else if (pct > 30) bar.style.backgroundColor = "var(--accent-yellow)"; else bar.style.backgroundColor = "var(--color-char)"; const inDanger = gameState.isGameActive && !timerState.isPaused && pct <= 30 && gameState.timeLeft > 0; AudioEngine.setTimerLoopActive(inDanger); updateClientAvatarState(); }
         function useCoffee() { if (!gameState.isGameActive || mgState.isOpen) return; if (gameState.coffeesLeft <= 0) { promptResourceMiniGame('COFFEE'); return; } if (gameState.timeLeft > 0 && !timerState.isPaused) { gameState.coffeesLeft--; const boostBar = document.getElementById('coffee-boost-bar'); const currentPct = (gameState.timeLeft / gameState.maxTime) * 100; gameState.timeLeft += COFFEE_BOOST; if(gameState.timeLeft > gameState.maxTime) gameState.maxTime = gameState.timeLeft; const boostPct = (COFFEE_BOOST / gameState.maxTime) * 100; boostBar.style.transition = 'none'; boostBar.style.left = `${currentPct}%`; boostBar.style.width = `0%`; boostBar.style.backgroundColor = 'var(--color-coffee-boost)'; boostBar.style.opacity = '1'; void boostBar.offsetWidth; boostBar.style.transition = 'width 0.5s ease-out, background-color 1s ease-in-out, opacity 1s'; boostBar.style.width = `${Math.min(100 - currentPct, boostPct)}%`; timerState.endTime += (COFFEE_BOOST * 1000); playSfx("ascend"); showFloatingFeedback(`+${COFFEE_BOOST} DETIK!`, "success"); renderCoffee(); updateClientAvatarState(); saveData(); setTimeout(() => boostBar.style.backgroundColor = 'var(--color-scene)', 500); setTimeout(() => { boostBar.style.opacity = '0'; updateTimerUI(); }, 1000); } }
         function renderCoffee() { const container = document.getElementById("ui-coffee"); container.innerHTML = ""; for (let i = 0; i < MAX_COFFEE_PER_CASE; i++) { const btn = document.createElement("button"); btn.className = `coffee-btn ${i >= gameState.coffeesLeft ? 'used' : ''}`; btn.innerText = "☕"; btn.title = gameState.coffeesLeft > 0 ? "Minum Kopi (+Waktu)" : "Kopi Habis! Klik untuk isi ulang via Mini Game"; btn.onclick = useCoffee; container.appendChild(btn); } }
         function generateStoryBible() {
@@ -1341,7 +1345,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             return { isPass: isPass, msgs: msgs, score: finalScore };
         }
         function closeInGameModals() { closeModal('modal-hint'); closeModal('modal-preview-blocks'); closeModal('modal-preview-script'); closeModal('modal-resource-empty'); if (mgState && mgState.isOpen) { cleanupMiniGame(); closeModal('modal-minigame'); } }
-        function checkScript() { if (isSubmitting || !gameState.isGameActive) return; isSubmitting = true; closeInGameModals(); const pIds = gameState.placedBlocks.filter(i => i !== null); if (pIds.length === 0 || pIds.length < gameState.placedBlocks.length) { triggerClientSubmitAngry(2200); playSfx("fail"); showFloatingFeedback("SCRIPT BELUM LENGKAP!", "neutral"); const ws = document.getElementById("center-panel"); ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)"; setTimeout(() => ws.style.transform = "translateX(-5px)", 50); setTimeout(() => ws.style.transform = "translateX(5px)", 100); setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150); isSubmitting = false; return; } const evalResult = evaluateScript(pIds); updateChecklist(); if (evalResult.isPass) { gameState.isSubmitAngry = false; if (clientAngryTimeout) clearTimeout(clientAngryTimeout); updateClientAvatarState(); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } if (gameState.lastTickTime > 0) { gameState.playDuration = (gameState.playDuration || 0) + Math.max(0, (Date.now() - gameState.lastTickTime) / 1000); gameState.lastTickTime = 0; } timerState.isPaused = false; gameState.isGameActive = false; AudioEngine.setTimerLoopActive(false); playSfx("levelComplete"); showFloatingFeedback("CLIENT MENERIMA!<br>+WAKTU", "success"); gameState.casesCompleted++; gameState.totalScore += evalResult.score; gameState.history.push({ id: gameState.currentBible.id, genre: gameState.currentBible.genre }); saveData(); setTimeout(() => { isSubmitting = false; nextDay(); }, 2000); } else { triggerClientSubmitAngry(2800); gameState.mistakes++; gameState.caseRevisions++; let subtract = PENALTY_TIME; gameState.timeLeft -= subtract; if (gameState.timeLeft <= 0) gameState.timeLeft = 0; else timerState.endTime -= (subtract * 1000); let firstErr = evalResult.msgs.length > 0 ? evalResult.msgs[0] : "KONTINUITAS SALAH"; playSfx("fail"); showFloatingFeedback(`REVISI! -${subtract} DETIK<br><span style="font-size:var(--fs-text);">${firstErr}</span>`, "error"); updateUI(); const ws = document.getElementById("center-panel"); ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)"; setTimeout(() => ws.style.transform = "translateX(-5px)", 50); setTimeout(() => ws.style.transform = "translateX(5px)", 100); setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150); if (gameState.timeLeft <= 0) setTimeout(() => { isSubmitting = false; triggerGameOver(); }, 500); else isSubmitting = false; } }
+        function checkScript() { if (isSubmitting || !gameState.isGameActive) return; isSubmitting = true; closeInGameModals(); const pIds = gameState.placedBlocks.filter(i => i !== null); if (pIds.length === 0 || pIds.length < gameState.placedBlocks.length) { triggerClientSubmitAngry(2200); playSfx("fail"); showFloatingFeedback("SCRIPT BELUM LENGKAP!", "neutral"); const ws = document.getElementById("center-panel"); ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)"; setTimeout(() => ws.style.transform = "translateX(-5px)", 50); setTimeout(() => ws.style.transform = "translateX(5px)", 100); setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150); isSubmitting = false; return; } const evalResult = evaluateScript(pIds); updateChecklist(); if (evalResult.isPass) { gameState.isSubmitAngry = false; if (clientAngryTimeout) clearTimeout(clientAngryTimeout); updateClientAvatarState(); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } if (gameState.lastTickTime > 0) { gameState.playDuration = (gameState.playDuration || 0) + Math.max(0, (Date.now() - gameState.lastTickTime) / 1000); gameState.lastTickTime = 0; } timerState.isPaused = false; gameState.isGameActive = false; AudioEngine.setTimerLoopActive(false); playSfx("success"); showFloatingFeedback("CLIENT MENERIMA!<br>+WAKTU", "success"); gameState.casesCompleted++; gameState.totalScore += evalResult.score; gameState.history.push({ id: gameState.currentBible.id, genre: gameState.currentBible.genre }); saveData(); setTimeout(() => { isSubmitting = false; nextDay(); }, 2000); } else { triggerClientSubmitAngry(2800); gameState.mistakes++; gameState.caseRevisions++; let subtract = PENALTY_TIME; gameState.timeLeft -= subtract; if (gameState.timeLeft <= 0) gameState.timeLeft = 0; else timerState.endTime -= (subtract * 1000); let firstErr = evalResult.msgs.length > 0 ? evalResult.msgs[0] : "KONTINUITAS SALAH"; playSfx("fail"); showFloatingFeedback(`REVISI! -${subtract} DETIK<br><span style="font-size:var(--fs-text);">${firstErr}</span>`, "error"); updateUI(); const ws = document.getElementById("center-panel"); ws.style.transition = "transform 0.05s"; ws.style.transform = "translateX(5px)"; setTimeout(() => ws.style.transform = "translateX(-5px)", 50); setTimeout(() => ws.style.transform = "translateX(5px)", 100); setTimeout(() => { ws.style.transform = "translateX(0)"; ws.style.transition = ""; }, 150); if (gameState.timeLeft <= 0) setTimeout(() => { isSubmitting = false; triggerGameOver(); }, 500); else isSubmitting = false; } }
         function determineEnding(state) { for (let i = 0; i < endingCatalog.length; i++) { if (endingCatalog[i].check(state)) return endingCatalog[i]; } return endingCatalog[4]; }
         async function triggerGameOver() { if (!gameState.isGameActive && document.getElementById("modal-gameover").classList.contains("active")) return; closeInGameModals(); if (gameState.lastTickTime > 0) { gameState.playDuration = (gameState.playDuration || 0) + Math.max(0, (Date.now() - gameState.lastTickTime) / 1000); gameState.lastTickTime = 0; } gameState.isGameActive = false; if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = 0; gameState.timeLeft = 0; updateTimerUI(); const finalDuration = Math.max(1, Math.round(gameState.playDuration || 0)); const finalMiniGames = gameState.miniGamesCount || 0; const ending = determineEnding(gameState); AudioEngine.setTimerLoopActive(false); playSfx("fail"); document.getElementById("go-title").innerText = "GAME OVER"; document.getElementById("go-ending-name").innerText = ending.title; document.getElementById("go-epilog").innerText = ending.epilog; document.getElementById("go-player").innerText = gameState.playerName; document.getElementById("go-score").innerText = gameState.totalScore; const durEl = document.getElementById("go-duration"); if (durEl) durEl.innerText = formatPlayDuration(finalDuration); const mgEl = document.getElementById("go-minigames"); if (mgEl) mgEl.innerText = `${finalMiniGames}x`; document.getElementById("go-level").innerText = gameState.day; document.getElementById("go-jobs").innerText = gameState.casesCompleted; const imgEl = document.getElementById("go-img"); const fallbackEl = document.getElementById("go-img-fallback"); imgEl.style.display = 'none'; fallbackEl.style.display = 'none'; loadSmartImage( imgEl, ending.getImg(), () => { imgEl.style.display = 'block'; fallbackEl.style.display = 'none'; }, () => { imgEl.style.display = 'none'; fallbackEl.style.display = 'block'; } ); _safeLS.removeItem('edsave'); document.getElementById("modal-gameover").classList.add("active"); const record = { sessionId: gameState.sessionId || generateSessionId(), name: gameState.playerName, score: gameState.totalScore, duration: finalDuration, miniGames: finalMiniGames, level: gameState.day, jobs: gameState.casesCompleted, mistakes: gameState.mistakes, date: new Date().toISOString(), endingId: ending.id }; document.getElementById("go-rank-msg").innerText = "Menyimpan skor ke server Firebase..."; const rank = await LeaderboardManager.saveScore(record); const rankMsgEl = document.getElementById("go-rank-msg"); if (rank && rank <= 100) rankMsgEl.innerText = `🏆 Luar Biasa! Kamu masuk TOP 100 di Peringkat #${rank}`; else rankMsgEl.innerText = "Skor tercatat! Terus berlatih untuk menembus Top 100!"; }
         async function showHighscores() { document.getElementById("modal-highscore").classList.add("active"); const scores = await LeaderboardManager.getTop100(); const top3Container = document.getElementById("hs-top3-container"); const othersWrapper = document.getElementById("hs-others-wrapper"); const tbody = document.getElementById("hs-table-body"); top3Container.innerHTML = ""; tbody.innerHTML = "<tr><th>RANK</th><th>NAMA</th><th>TOTAL SCRIPT</th><th>DURASI</th><th>MINI GAME</th><th style='text-align:right;'>SKOR</th></tr>"; if (scores.length === 0) { top3Container.style.display = "none"; othersWrapper.style.display = "block"; tbody.innerHTML += "<tr><td colspan='6' style='text-align:center; padding: 30px; color: var(--text-muted);'>Belum ada catatan rekor. Jadilah yang pertama!</td></tr>"; } else { top3Container.style.display = "flex"; const top3 = scores.slice(0, 3); const medals = ["👑 TOP #1", "🥈 TOP #2", "🥉 TOP #3"]; let top3HTML = `<div class="hs-top3-header"><span>★ HALL OF FAME — TOP 3 EDITORS</span><span style="font-size: var(--fs-small); color: var(--text-muted); font-weight: normal;">PODIUM UTAMA</span></div>`; for (let i = 0; i < 3; i++) { const s = top3[i]; if (s) { let nameSafe = (s.name || "ANONIM").replace(/</g, "&lt;").replace(/>/g, "&gt;"); const durText = formatPlayDuration(s.duration); const mgCount = s.miniGames || 0; const jobsCount = s.jobs || 0; top3HTML += `<div class="hs-top3-row rank-${i + 1}"><div class="hs-top3-left"><span class="hs-podium-badge">${medals[i]}</span><span class="hs-podium-name">${nameSafe}</span></div><div class="hs-top3-right"><div class="hs-podium-meta"><span class="hs-meta-item">⏱ ${durText}</span><span>•</span><span class="hs-meta-mg"><span>🎮 ${mgCount}x</span><span>MINI GAME</span></span><span>•</span><span class="hs-meta-item">📁 ${jobsCount} SCRIPT</span></div><div class="hs-podium-score">${s.score || 0} PTS</div></div></div>`; } else { top3HTML += `<div class="hs-top3-row rank-${i + 1}" style="opacity: 0.45;"><div class="hs-top3-left"><span class="hs-podium-badge">${medals[i]}</span><span class="hs-podium-name">---</span></div><div class="hs-top3-right"><div class="hs-podium-meta"><span>BELUM ADA REKOR</span></div><div class="hs-podium-score">0 PTS</div></div></div>`; } } top3Container.innerHTML = top3HTML; const restScores = scores.slice(3, 100); if (restScores.length === 0) { tbody.innerHTML += "<tr><td colspan='6' style='text-align:center; padding: 20px; color: var(--text-muted);'>Belum ada peringkat #4 dan seterusnya.</td></tr>"; } else { restScores.forEach((s, idx) => { let nameSafe = (s.name || "ANONIM").replace(/</g, "&lt;").replace(/>/g, "&gt;"); const durText = formatPlayDuration(s.duration); const mgCount = s.miniGames || 0; const jobsCount = s.jobs || 0; tbody.innerHTML += `<tr><td>#${idx + 4}</td><td style="color:var(--text-highlight); font-weight:bold;">${nameSafe}</td><td>${jobsCount} Script</td><td>${durText}</td><td>${mgCount}x</td><td style="text-align:right; color:var(--accent-yellow); font-weight:bold;">${s.score || 0}</td></tr>`; }); } } }
@@ -1352,13 +1356,18 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             music: "music.mp3",
             sfx: {
                 alert: "zapsplat_multimedia_game_retro_musical_alert_001",
+                alert2: "zapsplat_multimedia_game_retro_musical_alert_002",
                 ascend: "zapsplat_multimedia_game_retro_musical_ascend_advance_002",
                 fail: "zapsplat_multimedia_game_retro_musical_descend_fail_negative",
                 mgComplete: "zapsplat_multimedia_game_retro_musical_level_complete_002",
                 levelComplete: "zapsplat_multimedia_game_retro_musical_level_complete_009",
                 shortTone: "zapsplat_multimedia_game_retro_musical_short_tone_001",
                 success: "zapsplat_multimedia_game_retro_musical_success_005",
-                timerLoop: "zapsplat_multimedia_game_retro_musical_timer_loop_003"
+                timerLoop: "zapsplat_multimedia_game_retro_musical_timer_loop_003",
+                roachSplat: "zapsplat_animals_insects_worm_drop_002_18114.mp3",
+                coffeePour: "zapsplat_food_drink_water_pour_from_one_plastic_disposable_cup_in_another_fast_003_84124",
+                weld1: "welding 1.mp3",
+                weld2: "welding 2.mp3"
             }
         };
         let appSettings = { musicVol: 70, soundVol: 80, musicMuted: false, soundMuted: false };
@@ -1366,14 +1375,18 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             ctx: null,
             bgm: null,
             timerLoop: null,
+            timerLoopWebSource: null,
+            timerLoopWebGain: null,
+            dangerLoopRequested: false,
+            simonCountdownLoopRequested: false,
             sfxCache: {},
             sfxPools: {},
             sfxPoolIdx: {},
             sfxBuffers: {},
             resolvedUrls: {},
             unlocked: false,
-            timerDangerTriggered: false,
             lastShortToneAt: 0,
+            lastWeldIdx: 0,
             getAudioContext() {
                 if (!this.ctx) {
                     const AC = window.AudioContext || window.webkitAudioContext;
@@ -1397,21 +1410,38 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     exts.forEach(ext => {
                         const u = `${d}${clean}${ext}`;
                         if (!list.includes(u)) list.push(u);
+                        if (clean.includes(' ')) {
+                            const uEnc = `${d}${clean.replace(/ /g, '%20')}${ext}`;
+                            if (!list.includes(uEnc)) list.push(uEnc);
+                        }
                     });
                 });
                 return list;
             },
-            computeTrimOffset(audioBuffer) {
-                if (!audioBuffer || audioBuffer.numberOfChannels === 0) return 0;
+            computeTrimBounds(audioBuffer) {
+                if (!audioBuffer || audioBuffer.numberOfChannels === 0) return { start: 0, end: audioBuffer ? audioBuffer.duration : 0 };
                 const data = audioBuffer.getChannelData(0);
                 const sr = audioBuffer.sampleRate || 44100;
-                const maxScan = Math.min(data.length, Math.floor(sr * 0.45));
+                const maxScan = Math.min(data.length, Math.floor(sr * 0.5));
+                let startSample = 0;
                 for (let i = 0; i < maxScan; i++) {
                     if (Math.abs(data[i]) > 0.008) {
-                        return Math.max(0, (i - 32) / sr);
+                        startSample = Math.max(0, i - 24);
+                        break;
                     }
                 }
-                return 0;
+                let endSample = data.length - 1;
+                const minEndSample = Math.max(startSample + Math.floor(sr * 0.08), data.length - Math.floor(sr * 0.6));
+                for (let i = data.length - 1; i >= minEndSample; i--) {
+                    if (Math.abs(data[i]) > 0.008) {
+                        endSample = Math.min(data.length - 1, i + 24);
+                        break;
+                    }
+                }
+                return {
+                    start: startSample / sr,
+                    end: Math.max((startSample / sr) + 0.05, endSample / sr)
+                };
             },
             decodeSfxIntoWebAudio(key, url) {
                 if (this.sfxBuffers[key]) return;
@@ -1421,8 +1451,11 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     .then(r => r.ok ? r.arrayBuffer() : Promise.reject())
                     .then(ab => ac.decodeAudioData(ab))
                     .then(decoded => {
-                        const trimOffset = this.computeTrimOffset(decoded);
-                        this.sfxBuffers[key] = { buffer: decoded, trimOffset };
+                        const bounds = this.computeTrimBounds(decoded);
+                        this.sfxBuffers[key] = { buffer: decoded, trimOffset: bounds.start, trimEnd: bounds.end };
+                        if (key === 'timerLoop' && (this.dangerLoopRequested || this.simonCountdownLoopRequested)) {
+                            this.refreshTimerLoopPlayback();
+                        }
                     })
                     .catch(() => {});
             },
@@ -1451,8 +1484,8 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     settled = true;
                     this.resolvedUrls[key] = resolvedUrl;
                     audio.onerror = null;
-                    if (!isLoop && key !== 'music') {
-                        this.buildSfxPool(key, resolvedUrl);
+                    if (key !== 'music') {
+                        if (!isLoop) this.buildSfxPool(key, resolvedUrl);
                         this.decodeSfxIntoWebAudio(key, resolvedUrl);
                     }
                     if (typeof onReady === 'function') onReady(audio);
@@ -1481,7 +1514,12 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         a.play().catch(() => {});
                     }
                 });
-                this.timerLoop = this.loadSmartAudio('timerLoop', AUDIO_ASSETS.sfx.timerLoop, true, () => {
+                this.timerLoop = this.loadSmartAudio('timerLoop', AUDIO_ASSETS.sfx.timerLoop, true, (a) => {
+                    a.addEventListener('timeupdate', () => {
+                        if (a.duration && a.currentTime >= a.duration - 0.11) {
+                            try { a.currentTime = 0.02; } catch (e) {}
+                        }
+                    });
                     this.syncVolumes();
                 });
                 Object.keys(AUDIO_ASSETS.sfx).forEach(k => {
@@ -1493,7 +1531,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     this.getAudioContext();
                     this.ensureBgmPlaying();
                     Object.keys(this.resolvedUrls).forEach(k => {
-                        if (k !== 'music' && k !== 'timerLoop' && !this.sfxBuffers[k]) {
+                        if (k !== 'music' && !this.sfxBuffers[k]) {
                             this.decodeSfxIntoWebAudio(k, this.resolvedUrls[k]);
                         }
                     });
@@ -1509,11 +1547,11 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             },
             getMusicVolume() {
                 if (appSettings.musicMuted) return 0;
-                return Math.max(0, Math.min(1, (Number(appSettings.musicVol) || 0) / 100));
+                return Math.max(0, Math.min(1, ((Number(appSettings.musicVol) || 0) / 100) * 0.5));
             },
             getSfxVolume() {
                 if (appSettings.soundMuted) return 0;
-                return Math.max(0, Math.min(1, (Number(appSettings.soundVol) || 0) / 100));
+                return Math.max(0, Math.min(1, ((Number(appSettings.soundVol) || 0) / 100) * 0.5));
             },
             syncVolumes() {
                 const mVol = this.getMusicVolume();
@@ -1526,11 +1564,19 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         this.bgm.play().catch(() => {});
                     }
                 }
+                if (this.timerLoopWebGain) {
+                    this.timerLoopWebGain.gain.value = sVol;
+                }
                 if (this.timerLoop) {
                     this.timerLoop.volume = sVol;
                     if (sVol === 0 && !this.timerLoop.paused) {
                         this.timerLoop.pause();
                     }
+                }
+                if (sVol === 0) {
+                    this.stopWebTimerLoop();
+                } else if (this.dangerLoopRequested || this.simonCountdownLoopRequested) {
+                    this.refreshTimerLoopPlayback();
                 }
             },
             ensureBgmPlaying() {
@@ -1541,9 +1587,14 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     this.bgm.play().catch(() => {});
                 }
             },
-            playSfx(key) {
+            playSfx(key, volScale = 1) {
                 if (!this.bgm) this.init();
-                const sVol = this.getSfxVolume();
+                const baseVol = this.getSfxVolume();
+                let scale = (typeof volScale === 'number' && !isNaN(volScale)) ? volScale : 1;
+                if (key === 'shortTone') {
+                    scale *= 0.32;
+                }
+                const sVol = Math.max(0, Math.min(1, baseVol * scale));
                 if (sVol <= 0) return;
                 const now = performance.now();
                 if (key === 'shortTone') {
@@ -1585,24 +1636,81 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     } catch (e) {}
                 }
             },
-            setTimerLoopActive(shouldPlay) {
-                if (!this.timerLoop) return;
+            playWeldSfx() {
+                const pick = Math.random() < 0.35 ? (this.lastWeldIdx === 1 ? 2 : 1) : (this.lastWeldIdx === 1 ? 2 : 1);
+                this.lastWeldIdx = (Math.random() < 0.25) ? (Math.random() < 0.5 ? 1 : 2) : pick;
+                const key = this.lastWeldIdx === 1 ? 'weld1' : 'weld2';
+                this.playSfx(key, 0.28);
+            },
+            stopWebTimerLoop() {
+                if (this.timerLoopWebSource) {
+                    try { this.timerLoopWebSource.stop(); } catch (e) {}
+                    try { this.timerLoopWebSource.disconnect(); } catch (e) {}
+                    this.timerLoopWebSource = null;
+                }
+                if (this.timerLoopWebGain) {
+                    try { this.timerLoopWebGain.disconnect(); } catch (e) {}
+                    this.timerLoopWebGain = null;
+                }
+            },
+            refreshTimerLoopPlayback() {
+                const shouldPlay = Boolean(this.dangerLoopRequested || this.simonCountdownLoopRequested);
                 const sVol = this.getSfxVolume();
-                if (shouldPlay && sVol > 0) {
+                if (!shouldPlay || sVol <= 0) {
+                    this.stopWebTimerLoop();
+                    if (this.timerLoop && !this.timerLoop.paused) {
+                        this.timerLoop.pause();
+                    }
+                    if (this.timerLoop) {
+                        try { this.timerLoop.currentTime = 0; } catch (e) {}
+                    }
+                    return;
+                }
+                const webBuf = this.sfxBuffers['timerLoop'];
+                const ac = this.getAudioContext();
+                if (webBuf && webBuf.buffer && ac) {
+                    if (this.timerLoop && !this.timerLoop.paused) {
+                        this.timerLoop.pause();
+                    }
+                    if (!this.timerLoopWebSource) {
+                        try {
+                            const src = ac.createBufferSource();
+                            src.buffer = webBuf.buffer;
+                            src.loop = true;
+                            src.loopStart = webBuf.trimOffset || 0;
+                            src.loopEnd = webBuf.trimEnd || webBuf.buffer.duration;
+                            const gain = ac.createGain();
+                            gain.gain.value = sVol;
+                            src.connect(gain);
+                            gain.connect(ac.destination);
+                            src.start(0, webBuf.trimOffset || 0);
+                            this.timerLoopWebSource = src;
+                            this.timerLoopWebGain = gain;
+                            return;
+                        } catch (e) {}
+                    } else {
+                        if (this.timerLoopWebGain) this.timerLoopWebGain.gain.value = sVol;
+                        return;
+                    }
+                }
+                if (this.timerLoop) {
                     this.timerLoop.volume = sVol;
                     if (this.timerLoop.paused) {
                         this.timerLoop.play().catch(() => {});
                     }
-                } else {
-                    if (!this.timerLoop.paused) {
-                        this.timerLoop.pause();
-                    }
-                    try { this.timerLoop.currentTime = 0; } catch (e) {}
                 }
+            },
+            setTimerLoopActive(shouldPlay) {
+                this.dangerLoopRequested = Boolean(shouldPlay);
+                this.refreshTimerLoopPlayback();
+            },
+            setSimonCountdownLoop(shouldPlay) {
+                this.simonCountdownLoopRequested = Boolean(shouldPlay);
+                this.refreshTimerLoopPlayback();
             }
         };
-        function playSfx(key) {
-            AudioEngine.playSfx(key);
+        function playSfx(key, volScale = 1) {
+            AudioEngine.playSfx(key, volScale);
         }
         function loadAppSettings() {
             try {
@@ -1813,31 +1921,333 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         const MG_MAX_LEVEL = 3; let mgState = { isOpen: false, isPromptOpen: false, pendingResource: null, currentGameId: null, currentLevel: 1, lastPlayedId: null, recentHistory: [], timers: [], intervals: [], rafId: null, cleanupFn: null, finished: false };
         function registerMgTimeout(fn, delay) { const id = setTimeout(fn, delay); mgState.timers.push(id); return id; }
         function registerMgInterval(fn, delay) { const id = setInterval(fn, delay); mgState.intervals.push(id); return id; }
-        function clearMiniGameTimersOnly() { mgState.timers.forEach(id => clearTimeout(id)); mgState.intervals.forEach(id => clearInterval(id)); mgState.timers = []; mgState.intervals = []; if (mgState.rafId) { cancelAnimationFrame(mgState.rafId); mgState.rafId = null; } if (typeof mgState.cleanupFn === 'function') { try { mgState.cleanupFn(); } catch (e) {} mgState.cleanupFn = null; } }
+        function clearMiniGameTimersOnly() { AudioEngine.setSimonCountdownLoop(false); mgState.timers.forEach(id => clearTimeout(id)); mgState.intervals.forEach(id => clearInterval(id)); mgState.timers = []; mgState.intervals = []; if (mgState.rafId) { cancelAnimationFrame(mgState.rafId); mgState.rafId = null; } if (typeof mgState.cleanupFn === 'function') { try { mgState.cleanupFn(); } catch (e) {} mgState.cleanupFn = null; } }
         function cleanupMiniGame() { clearMiniGameTimersOnly(); if (mgState.isOpen && mgState.startedAt > 0) { gameState.playDuration = (gameState.playDuration || 0) + Math.max(0, (Date.now() - mgState.startedAt) / 1000); mgState.startedAt = 0; } mgState.isOpen = false; mgState.isPromptOpen = false; }
         function updateMiniGameLevelHeader() { const pipsContainer = document.getElementById('mg-level-pips'); if (!pipsContainer) return; const diffLabels = ['EASY', 'NORMAL', 'HARD']; let html = ''; for (let lv = 1; lv <= MG_MAX_LEVEL; lv++) { let cls = 'mg-pip'; if (lv < mgState.currentLevel) cls += ' done'; else if (lv === mgState.currentLevel) cls += ' active'; const label = lv < mgState.currentLevel ? `LV.${lv} ✔` : `LV.${lv} ${diffLabels[lv - 1]}`; html += `<span class="${cls}">${label}</span>`; } pipsContainer.innerHTML = html; }
         function pickRandomMiniGame() { let pool = [...MINIGAME_POOL]; if (mgState.lastPlayedId && pool.length > 1) { pool = pool.filter(id => id !== mgState.lastPlayedId); } const chosen = pool[Math.floor(Math.random() * pool.length)]; mgState.lastPlayedId = chosen; mgState.recentHistory.push(chosen); if (mgState.recentHistory.length > 5) mgState.recentHistory.shift(); return chosen; }
-        function promptResourceMiniGame(resourceType) { if (!gameState.isGameActive || mgState.isOpen || mgState.isPromptOpen) return; syncHeaderOverlayOffset(); closeModal('modal-hint'); closeModal('modal-preview-blocks'); closeModal('modal-preview-script'); mgState.pendingResource = resourceType; mgState.isPromptOpen = true; const titleEl = document.getElementById('res-empty-title'); const descEl = document.getElementById('res-empty-desc'); if (resourceType === 'COFFEE') { titleEl.innerText = 'KOPI HABIS!'; descEl.innerText = 'Persediaan kopimu sudah habis. Selesaikan mini game untuk mendapatkan secangkir kopi tambahan agar tetap terjaga!'; } else { titleEl.innerText = 'HINT HABIS!'; descEl.innerText = 'Butuh sedikit bantuan? Selesaikan mini game untuk mendapatkan tambahan Hint.'; } playSfx('alert'); document.getElementById('modal-resource-empty').classList.add('active'); }
+        function promptResourceMiniGame(resourceType) { if (!gameState.isGameActive || mgState.isOpen || mgState.isPromptOpen) return; syncHeaderOverlayOffset(); closeModal('modal-hint'); closeModal('modal-preview-blocks'); closeModal('modal-preview-script'); mgState.pendingResource = resourceType; mgState.isPromptOpen = true; const titleEl = document.getElementById('res-empty-title'); const descEl = document.getElementById('res-empty-desc'); if (resourceType === 'COFFEE') { titleEl.innerText = 'KOPI HABIS!'; descEl.innerText = 'Persediaan kopimu sudah habis. Selesaikan mini game untuk mendapatkan secangkir kopi tambahan agar tetap terjaga!'; } else { titleEl.innerText = 'HINT HABIS!'; descEl.innerText = 'Butuh sedikit bantuan? Selesaikan mini game untuk mendapatkan tambahan Hint.'; } document.getElementById('modal-resource-empty').classList.add('active'); }
         function cancelPlayMiniGame() { mgState.isPromptOpen = false; mgState.pendingResource = null; closeModal('modal-resource-empty'); }
         function confirmPlayMiniGame() { if (!mgState.pendingResource || mgState.isOpen) return; const targetRes = mgState.pendingResource; closeModal('modal-resource-empty'); mgState.isPromptOpen = false; pauseTimer(); saveData(); launchRandomMiniGame(targetRes); }
         function launchRandomMiniGame(resourceType) { cleanupMiniGame(); gameState.miniGamesCount = (gameState.miniGamesCount || 0) + 1; gameState.caseMiniGamesUsed = (gameState.caseMiniGamesUsed || 0) + 1; mgState.startedAt = Date.now(); mgState.isOpen = true; mgState.finished = false; mgState.pendingResource = resourceType; mgState.currentLevel = 1; simonMasterSequence = []; const gameId = pickRandomMiniGame(); mgState.currentGameId = gameId; const rewardLabel = resourceType === 'COFFEE' ? 'HADIAH: +1 KOPI ☕' : 'HADIAH: +1 HINT 💡'; document.getElementById('mg-reward-badge').innerText = rewardLabel; syncHeaderOverlayOffset(); document.getElementById('modal-minigame').classList.add('active'); startCurrentMiniGameStage(); }
         function startCurrentMiniGameStage() { clearMiniGameTimersOnly(); mgState.finished = false; updateMiniGameLevelHeader(); const lv = mgState.currentLevel; const gameId = mgState.currentGameId; if (gameId === 'SIMON_KEYPAD') initSimonKeypadGame(lv); else if (gameId === 'COFFEE_MACHINE') initCoffeeMachineGame(lv); else if (gameId === 'COCKROACH_SMASHER') initCockroachSmasherGame(lv); else if (gameId === 'WIRE_MATCHING') initWireMatchingGame(lv); else if (gameId === 'PAPER_TOSS') initPaperTossGame(lv); }
-        function advanceMiniGameLevelOrWin() { if (mgState.finished) return; clearMiniGameTimersOnly(); if (mgState.currentLevel < MG_MAX_LEVEL) { mgState.currentLevel++; updateMiniGameLevelHeader(); const statusEl = document.getElementById('mg-status'); if (statusEl) { statusEl.style.color = 'var(--color-scene)'; playSfx('ascend'); statusEl.innerText = 'Berhasil! Bersiap ke tahap berikutnya...'; } registerMgTimeout(() => { startCurrentMiniGameStage(); }, 750); } else { completeMiniGameSuccess(); } }
+        function advanceMiniGameLevelOrWin() { if (mgState.finished) return; clearMiniGameTimersOnly(); if (mgState.currentLevel < MG_MAX_LEVEL) { mgState.currentLevel++; updateMiniGameLevelHeader(); const statusEl = document.getElementById('mg-status'); if (statusEl) { statusEl.style.color = 'var(--color-scene)'; playSfx('mgComplete'); statusEl.innerText = 'Berhasil! Bersiap ke tahap berikutnya...'; } registerMgTimeout(() => { startCurrentMiniGameStage(); }, 750); } else { completeMiniGameSuccess(); } }
         function completeMiniGameSuccess() { if (mgState.finished) return; mgState.finished = true; playSfx('mgComplete'); const rewardType = mgState.pendingResource; cleanupMiniGame(); closeModal('modal-minigame'); if (rewardType === 'COFFEE') { gameState.coffeesLeft = Math.min(MAX_COFFEE_PER_CASE, gameState.coffeesLeft + 1); renderCoffee(); showFloatingFeedback('MINI GAME SELESAI!<br>+1 KOPI ☕', 'success'); } else if (rewardType === 'HINT') { gameState.hintsLeft = Math.min(MAX_HINTS_PER_CASE, gameState.hintsLeft + 1); gameState.hintUsed = false; updateHintButtonUI(); showFloatingFeedback('MINI GAME SELESAI!<br>+1 HINT 💡', 'success'); } mgState.pendingResource = null; saveData(); if (gameState.isGameActive) startTimer(); }
         function failMiniGame(reasonText) { if (mgState.finished) return; mgState.finished = true; clearMiniGameTimersOnly(); const statusEl = document.getElementById('mg-status'); if (statusEl) { statusEl.style.color = 'var(--color-char)'; playSfx('fail'); statusEl.innerText = reasonText || 'Gagal! Kembali ke meja kerja...'; } registerMgTimeout(() => { abortMiniGame(); }, 1300); }
         function abortMiniGame() { cleanupMiniGame(); mgState.pendingResource = null; closeModal('modal-minigame'); saveData(); if (gameState.isGameActive) startTimer(); }
         let simonMasterSequence = [];
-        function initSimonKeypadGame(level) { document.getElementById('mg-title').innerText = 'KODE NUMPAD'; const seqLength = level === 1 ? 3 : (level === 2 ? 5 : 7); const flashSpeed = 680; if (level === 1 || simonMasterSequence.length === 0) { simonMasterSequence = []; for (let i = 0; i < 7; i++) { simonMasterSequence.push(Math.floor(Math.random() * 10)); } } const sequence = simonMasterSequence.slice(0, seqLength); const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = 'Bersiap mengamati urutan angka pada numpad...'; const initialSlots = Array(seqLength).fill('_').join(' '); stage.innerHTML = `<div class="simon-casing"><div class="simon-countdown-overlay" id="simon-cd-overlay"><span class="simon-countdown-num" id="simon-cd-num">3</span></div><div class="simon-lcd"><span id="simon-prog">${initialSlots}</span></div><div class="simon-grid" id="simon-grid"></div></div>`; const grid = document.getElementById('simon-grid'); const keysLayout = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]; const keyEls = {}; keysLayout.forEach(num => { const btn = document.createElement('button'); btn.className = `simon-key ${num === 0 ? 'zero-key' : ''}`; btn.innerText = num; btn.onclick = () => handleSimonPress(num); grid.appendChild(btn); keyEls[num] = btn; }); let playerIndex = 0; let acceptingInput = false; function updateSlotsDisplay() { const progEl = document.getElementById('simon-prog'); if (!progEl) return; const arr = []; for (let i = 0; i < seqLength; i++) { arr.push(i < playerIndex ? sequence[i] : '_'); } progEl.innerText = arr.join(' '); } function startCountdownAndPlay(isReplay = false) { acceptingInput = false; playerIndex = 0; updateSlotsDisplay(); const cdOverlay = document.getElementById('simon-cd-overlay'); const cdNum = document.getElementById('simon-cd-num'); let count = 3; statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = isReplay ? 'Perhatikan kembali urutan angkanya...' : (level > 1 ? 'Hafalkan tambahan angka berikutnya...' : 'Bersiap menghafal urutan angka...'); function triggerCountdownTick(val) { if (!cdNum) return; cdNum.innerText = val; cdNum.classList.remove('pop-tick'); void cdNum.offsetWidth; cdNum.classList.add('pop-tick'); } if (cdOverlay && cdNum) { cdOverlay.classList.add('active'); triggerCountdownTick(count); } const cdId = registerMgInterval(() => { count--; if (count > 0) { triggerCountdownTick(count); } else { clearInterval(cdId); if (cdOverlay) cdOverlay.classList.remove('active'); if (cdNum) cdNum.classList.remove('pop-tick'); playSequence(); } }, 650); } function playSequence() { acceptingInput = false; playerIndex = 0; updateSlotsDisplay(); statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = 'Perhatikan tombol yang menyala...'; sequence.forEach((digit, idx) => { registerMgTimeout(() => { const el = keyEls[digit]; if (el) { el.classList.add('lit'); registerMgTimeout(() => el.classList.remove('lit'), Math.floor(flashSpeed * 0.65)); } }, 300 + idx * flashSpeed); }); registerMgTimeout(() => { acceptingInput = true; statusEl.style.color = 'var(--color-scene)'; statusEl.innerText = 'Tekan angka sesuai urutan yang ditampilkan!'; }, 350 + sequence.length * flashSpeed); } function handleSimonPress(num) { if (!acceptingInput || mgState.finished) return; const btn = keyEls[num]; if (num === sequence[playerIndex]) { btn.classList.add('lit'); registerMgTimeout(() => btn.classList.remove('lit'), 180); playerIndex++; updateSlotsDisplay(); if (playerIndex >= sequence.length) { acceptingInput = false; advanceMiniGameLevelOrWin(); } } else { acceptingInput = false; playSfx('fail'); btn.classList.add('err-lit'); statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Urutan salah! Mengulang kembali urutan kode...'; registerMgTimeout(() => { btn.classList.remove('err-lit'); startCountdownAndPlay(true); }, 900); } } startCountdownAndPlay(false); }
-        function initCoffeeMachineGame(level) { document.getElementById('mg-title').innerText = 'RACIK KOPI'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; const baseIngredients = [{ id: 'BEANS', name: 'Kopi' }, { id: 'WATER', name: 'Air' }, { id: 'MILK', name: 'Susu' }, { id: 'SUGAR', name: 'Gula' }, { id: 'ICE', name: 'Es' }, { id: 'CARAMEL', name: 'Karamel' }]; const isPortraitMode = window.matchMedia('(orientation: portrait)').matches; const safeDeskPositions = (isPortraitMode ? ['right: 8px; top: 4px;', 'right: 58px; top: 4px;', 'left: 8px; top: 60px;', 'right: 8px; top: 60px;', 'left: 8px; top: 120px;', 'right: 8px; top: 120px;', 'left: 8px; bottom: 8px;', 'right: 8px; bottom: 8px;'] : ['right: 12px; top: 4px;', 'right: 68px; top: 4px;', 'left: 12px; top: 58px;', 'right: 12px; top: 58px;', 'left: 12px; top: 114px;', 'right: 12px; top: 114px;', 'left: 12px; bottom: 8px;', 'right: 12px; bottom: 8px;']).sort(() => Math.random() - 0.5); const recipesByLevel = { 1: [ { title: 'ESPRESSO PANAS', req: ['BEANS', 'WATER'] }, { title: 'KOPI MANIS', req: ['BEANS', 'SUGAR'] } ], 2: [ { title: 'KOPI SUSU', req: ['BEANS', 'WATER', 'MILK'] }, { title: 'ES AMERICANO', req: ['BEANS', 'WATER', 'ICE'] }, { title: 'KOPI GULA HANGAT', req: ['BEANS', 'WATER', 'SUGAR'] } ], 3: [ { title: 'ES LATTE KARAMEL', req: ['BEANS', 'WATER', 'MILK', 'ICE', 'CARAMEL'] }, { title: 'MACCHIATO SPESIAL', req: ['BEANS', 'WATER', 'MILK', 'SUGAR', 'CARAMEL'] } ] }; const targetRecipe = pickRandom(recipesByLevel[level] || recipesByLevel[1]); const selectedSet = new Set(); let brewing = false; const reqListHTML = targetRecipe.req.map(rId => { const item = baseIngredients.find(x => x.id === rId); return `<div>• ${item.name}</div>`; }).join(''); stage.innerHTML = `<div class="coffee-desk-scene" id="coffee-desk-scene"><div class="cm-wall-shelf shelf-top"></div><div class="cm-wall-shelf shelf-mid"></div><div class="cm-wall-shelf shelf-low"></div><div class="cm-sticky-note"><div class="cm-sticky-title">${targetRecipe.title}</div><div class="cm-sticky-grid">${reqListHTML}</div></div><div class="cm-center-machine"><div class="cm-hopper"></div><div class="cm-body-top"><div class="cm-gauge"></div><span class="cm-led-screen" id="cm-count-led">0/${targetRecipe.req.length}</span></div><div class="cm-brew-chamber"><div class="cm-steam-wand"></div><div class="cm-portafilter"></div><div class="cm-stream" id="cm-stream"></div><div class="cm-cup"><div class="cm-cup-fill" id="cm-cup-fill"></div></div></div><div class="cm-base-tray"><button class="cm-brew-trigger" id="btn-brew-now">▶ SEDUH</button></div></div></div>`; statusEl.innerText = 'Cari dan klik bahan di atas meja sesuai resep, lalu tekan SEDUH!'; const deskScene = document.getElementById('coffee-desk-scene'); baseIngredients.forEach((ing, idx) => { const itemEl = document.createElement('div'); itemEl.className = 'cm-desk-item'; itemEl.style.cssText = safeDeskPositions[idx]; itemEl.innerHTML = `${PIXEL_ART.ingIcon(ing.id, 28)}<span class="cm-desk-item-label">${ing.name}</span>`; itemEl.onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.has(ing.id)) { selectedSet.delete(ing.id); itemEl.classList.remove('selected'); } else { selectedSet.add(ing.id); itemEl.classList.add('selected'); } const ledEl = document.getElementById('cm-count-led'); if (ledEl) ledEl.innerText = `${selectedSet.size}/${targetRecipe.req.length}`; statusEl.style.color = 'var(--text-highlight)'; statusEl.innerText = `Bahan dipilih: ${selectedSet.size} dari ${targetRecipe.req.length} bahan resep.`; }; deskScene.appendChild(itemEl); }); document.getElementById('btn-brew-now').onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.size === 0) { statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Pilih bahan di atas meja terlebih dahulu!'; return; } brewing = true; statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = 'Menyeduh kopi di mesin...'; const streamEl = document.getElementById('cm-stream'); const fillEl = document.getElementById('cm-cup-fill'); if (streamEl) streamEl.classList.add('pouring'); if (fillEl) fillEl.style.height = '85%'; registerMgTimeout(() => { if (streamEl) streamEl.classList.remove('pouring'); const isExactMatch = selectedSet.size === targetRecipe.req.length && targetRecipe.req.every(reqId => selectedSet.has(reqId)); if (isExactMatch) { advanceMiniGameLevelOrWin(); } else { brewing = false; if (fillEl) fillEl.style.height = '0%'; statusEl.style.color = 'var(--color-char)'; playSfx('fail'); statusEl.innerText = 'Campuran bahan belum tepat! Cek lagi catatan resep.'; } }, 800); }; }
-        function initCockroachSmasherGame(level) { document.getElementById('mg-title').innerText = 'BASMI KECOAK'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; let stageTimeLeft = 30; const stageQuota = level === 1 ? 5 : (level === 2 ? 7 : 9); const simultaneousCount = level === 1 ? 2 : (level === 2 ? 3 : 4); let stageKills = 0; stage.innerHTML = `<div style="display:flex; justify-content:space-between; width:100%; margin-bottom:6px; font-size:var(--fs-subtitle);"><span>TERBASMI: <strong id="roach-wave-score" style="color:var(--color-scene);">0 / ${stageQuota}</strong></span><span>WAKTU: <strong id="roach-timer" style="color:var(--accent-yellow);">${stageTimeLeft}d</strong></span></div><div class="roach-arena" id="roach-arena"></div>`; statusEl.innerText = 'Ketuk kecoak-kecoak yang berkeliaran sebelum waktu habis!'; const arena = document.getElementById('roach-arena'); const speedProfiles = [ { moveMs: level === 1 ? 1200 : (level === 2 ? 950 : 720), stepTransition: '0.45s' }, { moveMs: level === 1 ? 900 : (level === 2 ? 720 : 550), stepTransition: '0.35s' }, { moveMs: level === 1 ? 700 : (level === 2 ? 550 : 420), stepTransition: '0.25s' }, { moveMs: level === 1 ? 550 : (level === 2 ? 420 : 320), stepTransition: '0.20s' } ]; function moveSingleRoach(roach) { if (mgState.finished || !arena || !roach || roach.dataset.smashed === '1') return; const maxW = Math.max(40, arena.clientWidth - 48); const maxH = Math.max(40, arena.clientHeight - 48); const rot = Math.floor(Math.random() * 8) * 45; roach.style.left = `${Math.floor(Math.random() * maxW)}px`; roach.style.top = `${Math.floor(Math.random() * maxH)}px`; roach.style.transform = `rotate(${rot}deg)`; } function spawnSingleRoach(profileIdx) { if (mgState.finished || !arena) return; const activeOnBoard = arena.querySelectorAll('.roach-target[data-smashed="0"]').length; if (stageKills + activeOnBoard >= stageQuota) return; const profile = speedProfiles[profileIdx % speedProfiles.length]; const roach = document.createElement('div'); roach.className = 'roach-target'; roach.innerHTML = PIXEL_ART.roach; roach.dataset.smashed = '0'; roach.style.transition = `top ${profile.stepTransition} steps(5), left ${profile.stepTransition} steps(5), transform 0.12s steps(2)`; const maxW = Math.max(40, arena.clientWidth - 48); const maxH = Math.max(40, arena.clientHeight - 48); roach.style.left = `${Math.floor(Math.random() * maxW)}px`; roach.style.top = `${Math.floor(Math.random() * maxH)}px`; roach.style.transform = `rotate(${Math.floor(Math.random() * 8) * 45}deg)`; const moveId = registerMgInterval(() => { moveSingleRoach(roach); }, profile.moveMs); roach.onpointerdown = (e) => { e.stopPropagation(); if (mgState.finished || roach.dataset.smashed === '1') return; playSfx('success'); roach.dataset.smashed = '1'; clearInterval(moveId); stageKills++; const splat = document.createElement('div'); splat.className = 'roach-splat'; splat.style.left = roach.style.left; splat.style.top = roach.style.top; splat.innerHTML = PIXEL_ART.splat; arena.appendChild(splat); registerMgTimeout(() => splat.remove(), 400); roach.remove(); const wEl = document.getElementById('roach-wave-score'); if (wEl) wEl.innerText = `${stageKills} / ${stageQuota}`; if (stageKills >= stageQuota) { advanceMiniGameLevelOrWin(); } else { registerMgTimeout(() => { spawnSingleRoach(Math.floor(Math.random() * speedProfiles.length)); }, 180); } }; arena.appendChild(roach); } for (let i = 0; i < simultaneousCount; i++) { spawnSingleRoach(i); } registerMgInterval(() => { if (mgState.finished) return; stageTimeLeft--; const tEl = document.getElementById('roach-timer'); if (tEl) tEl.innerText = `${Math.max(0, stageTimeLeft)}d`; if (stageTimeLeft <= 0) { if (arena) arena.innerHTML = ''; failMiniGame('Waktu habis! Kecoak berhasil kabur.'); } }, 1000); }
-        function initWireMatchingGame(level) { document.getElementById('mg-title').innerText = 'SAMBUNG KABEL'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; const wirePalette = [{ id: 'RED', color: '#e05a5a' }, { id: 'BLUE', color: '#5a9ce0' }, { id: 'YELLOW', color: '#e0c35a' }, { id: 'GREEN', color: '#68c47d' }, { id: 'PURPLE', color: '#b57ae0' }]; const wireCount = level === 1 ? 3 : (level === 2 ? 4 : 5); const activeWires = wirePalette.slice(0, wireCount); const leftOrder = [...activeWires].sort(() => Math.random() - 0.5); let rightOrder = [...activeWires].sort(() => Math.random() - 0.5); if (rightOrder.every((w, i) => w.id === leftOrder[i].id)) { rightOrder.reverse(); } stage.innerHTML = `<div class="wire-board" id="wire-board"><svg class="wire-svg-layer" id="wire-svg"></svg><div class="wire-col" id="wire-left-col"></div><div class="wire-col" id="wire-right-col"></div></div>`; statusEl.innerText = 'Hubungkan kotak warna yang sama dari kiri ke kanan!'; const board = document.getElementById('wire-board'); const svg = document.getElementById('wire-svg'); const leftCol = document.getElementById('wire-left-col'); const rightCol = document.getElementById('wire-right-col'); const connections = {}; let selectedLeftId = null; let isDraggingWire = false; const leftEls = {}; const rightEls = {}; function getPinCenter(el) { const bRect = board.getBoundingClientRect(); const r = el.getBoundingClientRect(); return { x: (r.left - bRect.left) + (r.width / 2), y: (r.top - bRect.top) + (r.height / 2) }; } function renderLines(dragPos = null) { svg.innerHTML = ''; Object.keys(connections).forEach(cid => { const c = connections[cid]; const p1 = getPinCenter(c.leftEl); const p2 = getPinCenter(c.rightEl); const line = document.createElementNS('http://www.w3.org/2000/svg', 'line'); line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y); line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y); line.setAttribute('stroke', c.color); line.setAttribute('stroke-width', '6'); line.setAttribute('stroke-linecap', 'round'); svg.appendChild(line); }); if (selectedLeftId && dragPos && leftEls[selectedLeftId]) { const wObj = activeWires.find(w => w.id === selectedLeftId); const p1 = getPinCenter(leftEls[selectedLeftId]); const line = document.createElementNS('http://www.w3.org/2000/svg', 'line'); line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y); line.setAttribute('x2', dragPos.x); line.setAttribute('y2', dragPos.y); line.setAttribute('stroke', wObj ? wObj.color : '#fff'); line.setAttribute('stroke-width', '5'); line.setAttribute('stroke-dasharray', '6,4'); svg.appendChild(line); } } function selectLeftPin(cid) { if (mgState.finished || connections[cid]) return; Object.values(leftEls).forEach(el => el.classList.remove('active-pin')); selectedLeftId = cid; leftEls[cid].classList.add('active-pin'); renderLines(); } function tryConnectRightPin(rightCid) { if (mgState.finished || !selectedLeftId) return; const leftCid = selectedLeftId; Object.values(leftEls).forEach(el => el.classList.remove('active-pin')); selectedLeftId = null; if (leftCid === rightCid) { const wObj = activeWires.find(w => w.id === leftCid); connections[leftCid] = { leftEl: leftEls[leftCid], rightEl: rightEls[rightCid], color: wObj.color }; leftEls[leftCid].classList.add('matched'); rightEls[rightCid].classList.add('matched'); renderLines(); const doneCount = Object.keys(connections).length; statusEl.style.color = 'var(--color-scene)'; playSfx('success'); statusEl.innerText = `Kabel terhubung (${doneCount}/${wireCount}).`; if (doneCount >= wireCount) { advanceMiniGameLevelOrWin(); } } else { renderLines(); statusEl.style.color = 'var(--color-char)'; playSfx('fail'); statusEl.innerText = 'Warna tidak cocok! Sambungkan ke warna yang sama.'; } } leftOrder.forEach((w) => { const pin = document.createElement('div'); pin.className = 'wire-node'; pin.style.backgroundColor = w.color; pin.onpointerdown = (e) => { e.preventDefault(); selectLeftPin(w.id); isDraggingWire = true; }; leftCol.appendChild(pin); leftEls[w.id] = pin; }); rightOrder.forEach((w) => { const pin = document.createElement('div'); pin.className = 'wire-node'; pin.style.backgroundColor = w.color; pin.dataset.rightId = w.id; pin.onpointerup = (e) => { e.preventDefault(); isDraggingWire = false; tryConnectRightPin(w.id); }; pin.onclick = () => tryConnectRightPin(w.id); rightCol.appendChild(pin); rightEls[w.id] = pin; }); board.onpointermove = (e) => { if (!isDraggingWire || !selectedLeftId || mgState.finished) return; const bRect = board.getBoundingClientRect(); renderLines({ x: e.clientX - bRect.left, y: e.clientY - bRect.top }); }; board.onpointerup = (e) => { if (!isDraggingWire) return; isDraggingWire = false; const hitEl = document.elementFromPoint(e.clientX, e.clientY); if (hitEl && hitEl.dataset && hitEl.dataset.rightId) { tryConnectRightPin(hitEl.dataset.rightId); } else { renderLines(); } }; }
-        let tossSharedAttempts = 5;
+        function initSimonKeypadGame(level) {
+            document.getElementById('mg-title').innerText = 'KODE NUMPAD';
+            const seqLength = level === 1 ? 3 : (level === 2 ? 5 : 7);
+            const flashSpeed = 680;
+            if (level === 1 || simonMasterSequence.length === 0) {
+                simonMasterSequence = [];
+                for (let i = 0; i < 7; i++) {
+                    simonMasterSequence.push(Math.floor(Math.random() * 10));
+                }
+            }
+            const sequence = simonMasterSequence.slice(0, seqLength);
+            const stage = document.getElementById('mg-stage');
+            const statusEl = document.getElementById('mg-status');
+            statusEl.style.color = 'var(--accent-yellow)';
+            statusEl.innerText = 'Bersiap mengamati urutan angka pada numpad...';
+            const initialSlots = Array(seqLength).fill('_').join(' ');
+            stage.innerHTML = `<div class="simon-casing"><div class="simon-countdown-overlay" id="simon-cd-overlay"><span class="simon-countdown-num" id="simon-cd-num">3</span></div><div class="simon-mode-badge wait" id="simon-mode-badge">✋ TUNGGU — AMATI URUTAN</div><div class="simon-lcd"><span id="simon-prog">${initialSlots}</span></div><div class="simon-grid locked-watch" id="simon-grid"></div></div>`;
+            const grid = document.getElementById('simon-grid');
+            const modeBadge = document.getElementById('simon-mode-badge');
+            const keysLayout = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+            const keyEls = {};
+            let playerIndex = 0;
+            let acceptingInput = false;
+            function setInputModeUI(canInput) {
+                acceptingInput = Boolean(canInput);
+                if (grid) {
+                    grid.classList.toggle('locked-watch', !acceptingInput);
+                }
+                if (modeBadge) {
+                    if (acceptingInput) {
+                        modeBadge.className = 'simon-mode-badge go';
+                        modeBadge.innerText = '👉 GILIRANMU — TEKAN ANGKA!';
+                    } else {
+                        modeBadge.className = 'simon-mode-badge wait';
+                        modeBadge.innerText = '✋ JANGAN TEKAN — AMATI URUTAN';
+                    }
+                }
+            }
+            keysLayout.forEach(num => {
+                const btn = document.createElement('button');
+                btn.className = `simon-key ${num === 0 ? 'zero-key' : ''}`;
+                btn.innerText = num;
+                btn.onclick = () => handleSimonPress(num);
+                grid.appendChild(btn);
+                keyEls[num] = btn;
+            });
+            function updateSlotsDisplay() {
+                const progEl = document.getElementById('simon-prog');
+                if (!progEl) return;
+                const arr = [];
+                for (let i = 0; i < seqLength; i++) {
+                    arr.push(i < playerIndex ? sequence[i] : '_');
+                }
+                progEl.innerText = arr.join(' ');
+            }
+            function startCountdownAndPlay(isReplay = false) {
+                setInputModeUI(false);
+                playerIndex = 0;
+                updateSlotsDisplay();
+                const cdOverlay = document.getElementById('simon-cd-overlay');
+                const cdNum = document.getElementById('simon-cd-num');
+                let count = 3;
+                statusEl.style.color = 'var(--accent-yellow)';
+                statusEl.innerText = isReplay ? 'Perhatikan kembali urutan angkanya...' : (level > 1 ? 'Hafalkan tambahan angka berikutnya...' : 'Bersiap menghafal urutan angka...');
+                function triggerCountdownTick(val) {
+                    if (!cdNum) return;
+                    cdNum.innerText = val;
+                    cdNum.classList.remove('pop-tick');
+                    void cdNum.offsetWidth;
+                    cdNum.classList.add('pop-tick');
+                }
+                if (cdOverlay && cdNum) {
+                    cdOverlay.classList.add('active');
+                    triggerCountdownTick(count);
+                }
+                AudioEngine.setSimonCountdownLoop(true);
+                const cdId = registerMgInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        triggerCountdownTick(count);
+                    } else {
+                        clearInterval(cdId);
+                        AudioEngine.setSimonCountdownLoop(false);
+                        if (cdOverlay) cdOverlay.classList.remove('active');
+                        if (cdNum) cdNum.classList.remove('pop-tick');
+                        playSequence();
+                    }
+                }, 650);
+            }
+            function playSequence() {
+                setInputModeUI(false);
+                playerIndex = 0;
+                updateSlotsDisplay();
+                statusEl.style.color = 'var(--accent-yellow)';
+                statusEl.innerText = 'Perhatikan tombol yang menyala (jangan tekan dulu)...';
+                sequence.forEach((digit, idx) => {
+                    registerMgTimeout(() => {
+                        const el = keyEls[digit];
+                        if (el) {
+                            playSfx('shortTone');
+                            el.classList.add('lit');
+                            registerMgTimeout(() => el.classList.remove('lit'), Math.floor(flashSpeed * 0.65));
+                        }
+                    }, 300 + idx * flashSpeed);
+                });
+                registerMgTimeout(() => {
+                    setInputModeUI(true);
+                    statusEl.style.color = 'var(--color-scene)';
+                    statusEl.innerText = 'Giliranmu! Tekan angka sesuai urutan yang ditampilkan!';
+                }, 350 + sequence.length * flashSpeed);
+            }
+            function handleSimonPress(num) {
+                if (!acceptingInput || mgState.finished) return;
+                const btn = keyEls[num];
+                if (num === sequence[playerIndex]) {
+                    playSfx('shortTone');
+                    btn.classList.add('lit');
+                    registerMgTimeout(() => btn.classList.remove('lit'), 180);
+                    playerIndex++;
+                    updateSlotsDisplay();
+                    if (playerIndex >= sequence.length) {
+                        setInputModeUI(false);
+                        advanceMiniGameLevelOrWin();
+                    }
+                } else {
+                    setInputModeUI(false);
+                    playSfx('alert2');
+                    btn.classList.add('err-lit');
+                    statusEl.style.color = 'var(--color-char)';
+                    statusEl.innerText = 'Urutan salah! Mengulang kembali urutan kode...';
+                    registerMgTimeout(() => {
+                        btn.classList.remove('err-lit');
+                        startCountdownAndPlay(true);
+                    }, 900);
+                }
+            }
+            startCountdownAndPlay(false);
+        }
+        function initCoffeeMachineGame(level) { document.getElementById('mg-title').innerText = 'RACIK KOPI'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; const baseIngredients = [{ id: 'BEANS', name: 'Kopi' }, { id: 'WATER', name: 'Air' }, { id: 'MILK', name: 'Susu' }, { id: 'SUGAR', name: 'Gula' }, { id: 'ICE', name: 'Es' }, { id: 'CARAMEL', name: 'Karamel' }]; const isPortraitMode = window.matchMedia('(orientation: portrait)').matches; const safeDeskPositions = (isPortraitMode ? ['right: 8px; top: 4px;', 'right: 58px; top: 4px;', 'right: 8px; top: 60px;', 'left: 8px; top: 120px;', 'right: 8px; top: 120px;', 'left: 8px; bottom: 8px;', 'right: 8px; bottom: 8px;'] : ['right: 12px; top: 4px;', 'right: 68px; top: 4px;', 'right: 124px; top: 4px;', 'right: 12px; top: 58px;', 'left: 12px; top: 114px;', 'right: 12px; top: 114px;', 'left: 12px; bottom: 8px;', 'right: 12px; bottom: 8px;']).sort(() => Math.random() - 0.5); const recipesByLevel = { 1: [ { title: 'ESPRESSO PANAS', req: ['BEANS', 'WATER'] }, { title: 'KOPI MANIS', req: ['BEANS', 'SUGAR'] } ], 2: [ { title: 'KOPI SUSU', req: ['BEANS', 'WATER', 'MILK'] }, { title: 'ES AMERICANO', req: ['BEANS', 'WATER', 'ICE'] }, { title: 'KOPI GULA HANGAT', req: ['BEANS', 'WATER', 'SUGAR'] } ], 3: [ { title: 'ES LATTE KARAMEL', req: ['BEANS', 'WATER', 'MILK', 'ICE', 'CARAMEL'] }, { title: 'MACCHIATO SPESIAL', req: ['BEANS', 'WATER', 'MILK', 'SUGAR', 'CARAMEL'] } ] }; const targetRecipe = pickRandom(recipesByLevel[level] || recipesByLevel[1]); const selectedSet = new Set(); let brewing = false; const reqListHTML = targetRecipe.req.map(rId => { const item = baseIngredients.find(x => x.id === rId); return `<div>• ${item.name}</div>`; }).join(''); stage.innerHTML = `<div class="coffee-desk-scene" id="coffee-desk-scene"><div class="cm-wall-shelf shelf-top"></div><div class="cm-wall-shelf shelf-mid"></div><div class="cm-wall-shelf shelf-low"></div><div class="cm-sticky-note"><div class="cm-sticky-title">${targetRecipe.title}</div><div class="cm-sticky-grid">${reqListHTML}</div></div><div class="cm-center-machine"><div class="cm-hopper"></div><div class="cm-body-top"><div class="cm-gauge"></div><span class="cm-led-screen" id="cm-count-led">0/${targetRecipe.req.length}</span></div><div class="cm-brew-chamber"><div class="cm-steam-wand"></div><div class="cm-portafilter"></div><div class="cm-stream" id="cm-stream"></div><div class="cm-cup"><div class="cm-cup-fill" id="cm-cup-fill"></div></div></div><div class="cm-base-tray"><button class="cm-brew-trigger" id="btn-brew-now">▶ SEDUH</button></div></div></div>`; statusEl.innerText = 'Cari dan klik bahan di atas meja sesuai resep, lalu tekan SEDUH!'; const deskScene = document.getElementById('coffee-desk-scene'); baseIngredients.forEach((ing, idx) => { const itemEl = document.createElement('div'); itemEl.className = 'cm-desk-item'; itemEl.style.cssText = safeDeskPositions[idx]; itemEl.innerHTML = `${PIXEL_ART.ingIcon(ing.id, 28)}<span class="cm-desk-item-label">${ing.name}</span>`; itemEl.onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.has(ing.id)) { selectedSet.delete(ing.id); itemEl.classList.remove('selected'); } else { selectedSet.add(ing.id); itemEl.classList.add('selected'); } const ledEl = document.getElementById('cm-count-led'); if (ledEl) ledEl.innerText = `${selectedSet.size}/${targetRecipe.req.length}`; statusEl.style.color = 'var(--text-highlight)'; statusEl.innerText = `Bahan dipilih: ${selectedSet.size} dari ${targetRecipe.req.length} bahan resep.`; }; deskScene.appendChild(itemEl); }); document.getElementById('btn-brew-now').onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.size === 0) { statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Pilih bahan di atas meja terlebih dahulu!'; return; } brewing = true; playSfx('coffeePour'); statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = 'Menyeduh kopi di mesin...'; const streamEl = document.getElementById('cm-stream'); const fillEl = document.getElementById('cm-cup-fill'); if (streamEl) streamEl.classList.add('pouring'); if (fillEl) fillEl.style.height = '85%'; registerMgTimeout(() => { if (streamEl) streamEl.classList.remove('pouring'); const isExactMatch = selectedSet.size === targetRecipe.req.length && targetRecipe.req.every(reqId => selectedSet.has(reqId)); if (isExactMatch) { advanceMiniGameLevelOrWin(); } else { brewing = false; if (fillEl) fillEl.style.height = '0%'; statusEl.style.color = 'var(--color-char)'; playSfx('fail'); statusEl.innerText = 'Campuran bahan belum tepat! Cek lagi catatan resep.'; } }, 800); }; }
+        function initCockroachSmasherGame(level) { document.getElementById('mg-title').innerText = 'BASMI KECOAK'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; let stageTimeLeft = 30; const stageQuota = level === 1 ? 5 : (level === 2 ? 7 : 9); const simultaneousCount = level === 1 ? 2 : (level === 2 ? 3 : 4); let stageKills = 0; stage.innerHTML = `<div style="display:flex; justify-content:space-between; width:100%; margin-bottom:6px; font-size:var(--fs-subtitle);"><span>TERBASMI: <strong id="roach-wave-score" style="color:var(--color-scene);">0 / ${stageQuota}</strong></span><span>WAKTU: <strong id="roach-timer" style="color:var(--accent-yellow);">${stageTimeLeft}d</strong></span></div><div class="roach-arena" id="roach-arena"></div>`; statusEl.innerText = 'Ketuk kecoak-kecoak yang berkeliaran sebelum waktu habis!'; const arena = document.getElementById('roach-arena'); const speedProfiles = [ { moveMs: level === 1 ? 1200 : (level === 2 ? 950 : 720), stepTransition: '0.45s' }, { moveMs: level === 1 ? 900 : (level === 2 ? 720 : 550), stepTransition: '0.35s' }, { moveMs: level === 1 ? 700 : (level === 2 ? 550 : 420), stepTransition: '0.25s' }, { moveMs: level === 1 ? 550 : (level === 2 ? 420 : 320), stepTransition: '0.20s' } ]; function moveSingleRoach(roach) { if (mgState.finished || !arena || !roach || roach.dataset.smashed === '1') return; const maxW = Math.max(40, arena.clientWidth - 48); const maxH = Math.max(40, arena.clientHeight - 48); const rot = Math.floor(Math.random() * 8) * 45; roach.style.left = `${Math.floor(Math.random() * maxW)}px`; roach.style.top = `${Math.floor(Math.random() * maxH)}px`; roach.style.transform = `rotate(${rot}deg)`; } function spawnSingleRoach(profileIdx) { if (mgState.finished || !arena) return; const activeOnBoard = arena.querySelectorAll('.roach-target[data-smashed="0"]').length; if (stageKills + activeOnBoard >= stageQuota) return; const profile = speedProfiles[profileIdx % speedProfiles.length]; const roach = document.createElement('div'); roach.className = 'roach-target'; roach.innerHTML = PIXEL_ART.roach; roach.dataset.smashed = '0'; roach.style.transition = `top ${profile.stepTransition} steps(5), left ${profile.stepTransition} steps(5), transform 0.12s steps(2)`; const maxW = Math.max(40, arena.clientWidth - 48); const maxH = Math.max(40, arena.clientHeight - 48); roach.style.left = `${Math.floor(Math.random() * maxW)}px`; roach.style.top = `${Math.floor(Math.random() * maxH)}px`; roach.style.transform = `rotate(${Math.floor(Math.random() * 8) * 45}deg)`; const moveId = registerMgInterval(() => { moveSingleRoach(roach); }, profile.moveMs); roach.onpointerdown = (e) => { e.stopPropagation(); if (mgState.finished || roach.dataset.smashed === '1') return; playSfx('roachSplat', 0.22); roach.dataset.smashed = '1'; clearInterval(moveId); stageKills++; const splat = document.createElement('div'); splat.className = 'roach-splat'; splat.style.left = roach.style.left; splat.style.top = roach.style.top; splat.innerHTML = PIXEL_ART.splat; arena.appendChild(splat); registerMgTimeout(() => splat.remove(), 400); roach.remove(); const wEl = document.getElementById('roach-wave-score'); if (wEl) wEl.innerText = `${stageKills} / ${stageQuota}`; if (stageKills >= stageQuota) { advanceMiniGameLevelOrWin(); } else { registerMgTimeout(() => { spawnSingleRoach(Math.floor(Math.random() * speedProfiles.length)); }, 180); } }; arena.appendChild(roach); } for (let i = 0; i < simultaneousCount; i++) { spawnSingleRoach(i); } registerMgInterval(() => { if (mgState.finished) return; stageTimeLeft--; const tEl = document.getElementById('roach-timer'); if (tEl) tEl.innerText = `${Math.max(0, stageTimeLeft)}d`; if (stageTimeLeft <= 0) { if (arena) arena.innerHTML = ''; failMiniGame('Waktu habis! Kecoak berhasil kabur.'); } }, 1000); }
+        function initWireMatchingGame(level) {
+            document.getElementById('mg-title').innerText = 'SAMBUNG KABEL';
+            const stage = document.getElementById('mg-stage');
+            const statusEl = document.getElementById('mg-status');
+            statusEl.style.color = 'var(--accent-yellow)';
+            const wirePalette = [{ id: 'RED', color: '#e05a5a' }, { id: 'BLUE', color: '#5a9ce0' }, { id: 'YELLOW', color: '#e0c35a' }, { id: 'GREEN', color: '#68c47d' }, { id: 'PURPLE', color: '#b57ae0' }];
+            const wireCount = level === 1 ? 3 : (level === 2 ? 4 : 5);
+            const activeWires = wirePalette.slice(0, wireCount);
+            const leftOrder = [...activeWires].sort(() => Math.random() - 0.5);
+            let rightOrder = [...activeWires].sort(() => Math.random() - 0.5);
+            if (rightOrder.every((w, i) => w.id === leftOrder[i].id)) { rightOrder.reverse(); }
+            stage.innerHTML = `<div class="wire-board" id="wire-board"><svg class="wire-svg-layer" id="wire-svg"></svg><div class="wire-col" id="wire-left-col"></div><div class="wire-col" id="wire-right-col"></div></div>`;
+            statusEl.innerText = 'Hubungkan kotak warna yang sama antara sisi kiri dan kanan!';
+            const board = document.getElementById('wire-board');
+            const svg = document.getElementById('wire-svg');
+            const leftCol = document.getElementById('wire-left-col');
+            const rightCol = document.getElementById('wire-right-col');
+            const connections = {};
+            let selectedPin = null;
+            let isDraggingWire = false;
+            const leftEls = {};
+            const rightEls = {};
+            function getPinCenter(el) {
+                const bRect = board.getBoundingClientRect();
+                const r = el.getBoundingClientRect();
+                return { x: (r.left - bRect.left) + (r.width / 2), y: (r.top - bRect.top) + (r.height / 2) };
+            }
+            function clearActiveHighlights() {
+                Object.values(leftEls).forEach(el => el.classList.remove('active-pin'));
+                Object.values(rightEls).forEach(el => el.classList.remove('active-pin'));
+            }
+            function renderLines(dragPos = null) {
+                svg.innerHTML = '';
+                Object.keys(connections).forEach(cid => {
+                    const c = connections[cid];
+                    const p1 = getPinCenter(c.leftEl);
+                    const p2 = getPinCenter(c.rightEl);
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', p1.x);
+                    line.setAttribute('y1', p1.y);
+                    line.setAttribute('x2', p2.x);
+                    line.setAttribute('y2', p2.y);
+                    line.setAttribute('stroke', c.color);
+                    line.setAttribute('stroke-width', '6');
+                    line.setAttribute('stroke-linecap', 'round');
+                    svg.appendChild(line);
+                });
+                if (selectedPin && dragPos) {
+                    const startEl = selectedPin.side === 'left' ? leftEls[selectedPin.id] : rightEls[selectedPin.id];
+                    if (startEl) {
+                        const wObj = activeWires.find(w => w.id === selectedPin.id);
+                        const p1 = getPinCenter(startEl);
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', p1.x);
+                        line.setAttribute('y1', p1.y);
+                        line.setAttribute('x2', dragPos.x);
+                        line.setAttribute('y2', dragPos.y);
+                        line.setAttribute('stroke', wObj ? wObj.color : '#fff');
+                        line.setAttribute('stroke-width', '5');
+                        line.setAttribute('stroke-dasharray', '6,4');
+                        svg.appendChild(line);
+                    }
+                }
+            }
+            function selectPin(side, cid) {
+                if (mgState.finished || connections[cid]) return;
+                clearActiveHighlights();
+                selectedPin = { side, id: cid };
+                const targetMap = side === 'left' ? leftEls : rightEls;
+                if (targetMap[cid]) targetMap[cid].classList.add('active-pin');
+                renderLines();
+            }
+            function tryConnectPins(leftCid, rightCid) {
+                if (mgState.finished || !leftCid || !rightCid) return;
+                if (connections[leftCid] || connections[rightCid]) {
+                    clearActiveHighlights();
+                    selectedPin = null;
+                    renderLines();
+                    return;
+                }
+                clearActiveHighlights();
+                selectedPin = null;
+                if (leftCid === rightCid) {
+                    const wObj = activeWires.find(w => w.id === leftCid);
+                    connections[leftCid] = { leftEl: leftEls[leftCid], rightEl: rightEls[rightCid], color: wObj.color };
+                    leftEls[leftCid].classList.add('matched');
+                    rightEls[rightCid].classList.add('matched');
+                    renderLines();
+                    const doneCount = Object.keys(connections).length;
+                    statusEl.style.color = 'var(--color-scene)';
+                    AudioEngine.playWeldSfx();
+                    statusEl.innerText = `Kabel terhubung (${doneCount}/${wireCount}).`;
+                    if (doneCount >= wireCount) {
+                        advanceMiniGameLevelOrWin();
+                    }
+                } else {
+                    renderLines();
+                    statusEl.style.color = 'var(--color-char)';
+                    playSfx('fail');
+                    statusEl.innerText = 'Warna tidak cocok! Sambungkan ke warna yang sama.';
+                }
+            }
+            function handlePinDown(side, cid, e) {
+                e.preventDefault();
+                if (mgState.finished || connections[cid]) return;
+                if (selectedPin && selectedPin.side !== side && !isDraggingWire) {
+                    const lId = side === 'left' ? cid : selectedPin.id;
+                    const rId = side === 'right' ? cid : selectedPin.id;
+                    tryConnectPins(lId, rId);
+                    return;
+                }
+                selectPin(side, cid);
+                isDraggingWire = true;
+            }
+            function handlePinUp(side, cid, e) {
+                e.preventDefault();
+                if (mgState.finished) return;
+                if (selectedPin && selectedPin.side !== side) {
+                    isDraggingWire = false;
+                    const lId = side === 'left' ? cid : selectedPin.id;
+                    const rId = side === 'right' ? cid : selectedPin.id;
+                    tryConnectPins(lId, rId);
+                }
+            }
+            leftOrder.forEach((w) => {
+                const pin = document.createElement('div');
+                pin.className = 'wire-node';
+                pin.style.backgroundColor = w.color;
+                pin.dataset.side = 'left';
+                pin.dataset.wireId = w.id;
+                pin.onpointerdown = (e) => handlePinDown('left', w.id, e);
+                pin.onpointerup = (e) => handlePinUp('left', w.id, e);
+                leftCol.appendChild(pin);
+                leftEls[w.id] = pin;
+            });
+            rightOrder.forEach((w) => {
+                const pin = document.createElement('div');
+                pin.className = 'wire-node';
+                pin.style.backgroundColor = w.color;
+                pin.dataset.side = 'right';
+                pin.dataset.wireId = w.id;
+                pin.onpointerdown = (e) => handlePinDown('right', w.id, e);
+                pin.onpointerup = (e) => handlePinUp('right', w.id, e);
+                rightCol.appendChild(pin);
+                rightEls[w.id] = pin;
+            });
+            board.onpointermove = (e) => {
+                if (!isDraggingWire || !selectedPin || mgState.finished) return;
+                const bRect = board.getBoundingClientRect();
+                renderLines({ x: e.clientX - bRect.left, y: e.clientY - bRect.top });
+            };
+            board.onpointerup = (e) => {
+                if (!isDraggingWire) return;
+                isDraggingWire = false;
+                const hitEl = document.elementFromPoint(e.clientX, e.clientY);
+                const pinNode = hitEl ? hitEl.closest('.wire-node') : null;
+                if (pinNode && selectedPin && pinNode.dataset.side && pinNode.dataset.side !== selectedPin.side) {
+                    const targetCid = pinNode.dataset.wireId;
+                    const lId = pinNode.dataset.side === 'left' ? targetCid : selectedPin.id;
+                    const rId = pinNode.dataset.side === 'right' ? targetCid : selectedPin.id;
+                    tryConnectPins(lId, rId);
+                } else {
+                    renderLines();
+                }
+            };
+        }
+        let tossSharedAttempts = 7;
         function initPaperTossGame(level) {
             document.getElementById('mg-title').innerText = 'LEMPAR KERTAS';
             const stage = document.getElementById('mg-stage');
             const statusEl = document.getElementById('mg-status');
             statusEl.style.color = 'var(--accent-yellow)';
-            if (level === 1) { tossSharedAttempts = 5; }
+            if (level === 1) { tossSharedAttempts = 7; }
             const madeCount = level - 1;
             stage.innerHTML = `<div style="display:flex; justify-content:space-between; width:100%; margin-bottom:4px; font-size:var(--fs-subtitle);"><span>MASUK: <strong id="toss-score" style="color:var(--color-scene);">${madeCount} / 3</strong></span><span>SISA BOLA: <strong id="toss-tries" style="color:var(--accent-yellow);">${tossSharedAttempts}</strong></span></div><div class="toss-arena" id="toss-arena"><div class="toss-bin-back" id="toss-bin-back">${PIXEL_ART.trashBinBack}</div><div class="toss-ball" id="toss-ball">${PIXEL_ART.paperBall}</div><div class="toss-bin" id="toss-bin">${PIXEL_ART.trashBin}</div></div><div class="toss-controls"><div class="power-bar-wrap"><div class="power-bar-fill" id="toss-power-fill"></div><div class="power-sweetspot" id="toss-sweetspot"></div></div><button class="toss-arcade-btn" id="btn-hold-toss" title="Tahan & Lepas"><svg class="pixel-svg" width="24" height="24" viewBox="0 0 12 12"><rect x="5" y="1" width="2" height="2" fill="#fff"/><rect x="4" y="3" width="4" height="2" fill="#fff"/><rect x="3" y="5" width="6" height="2" fill="#fff"/><rect x="5" y="7" width="2" height="4" fill="#fff"/></svg></button></div>`;
             statusEl.innerText = 'Tahan tombol pelontar dan lepaskan tepat di zona hijau!';
@@ -2190,12 +2600,8 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             const hasValidBody = bodyEntries.length >= 2 ? bodyEntries.every(e => e.block.isCorrect) : (isAllSlotsFilled && bodyEntries.some(e => e.block.isCorrect));
             if (hasValidBody && !hasAnyWrongBlock && orderAnalysis.isOrderLogical) cProf.classList.add('done');
             else cProf.classList.remove('done');
-            const wasLogicDone = cLogic.classList.contains('done');
             if (isAllSlotsFilled && !hasAnyWrongBlock && orderAnalysis.isOrderLogical) {
                 cLogic.classList.add('done');
-                if (!wasLogicDone && gameState.isGameActive && !document.body.classList.contains('tutorial-running')) {
-                    playSfx('success');
-                }
             } else {
                 cLogic.classList.remove('done');
             }
@@ -3054,7 +3460,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         }
         function renderTutorialStep() { positionTutorialSpotlightAndDialog(); }
         document.addEventListener('pointerdown', function(e) {
-            const btn = e.target.closest('.retro-btn, .settings-btn, .tut-icon-btn, .modal-close-x, .nav-arrow, .page-thumb, .simon-key, .cm-desk-item, .glossary-term-link');
+            const btn = e.target.closest('.retro-btn, .settings-btn, .tut-icon-btn, .modal-close-x, .nav-arrow, .page-thumb, .cm-desk-item, .glossary-term-link');
             if (btn) {
                 playSfx('shortTone');
             }
