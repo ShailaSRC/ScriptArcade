@@ -19,9 +19,9 @@
         html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; }
         body { background-color: var(--bg-app); color: var(--text-normal); font-size: var(--fs-subtitle); position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; user-select: none; overscroll-behavior: none; }
         body::after { content: ""; display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%); background-size: 100% 4px; z-index: 100; pointer-events: none; opacity: 0.3; }
-        #game-layout { width: 100%; max-width: 100%; margin: 0 auto; height: 100dvh; min-height: 0; display: flex; flex-direction: column; padding: 6px 8px; gap: 8px; position: relative; z-index: 10; }
-        #game-header { flex: 0 0 auto; min-height: 90px; display: grid; grid-template-columns: minmax(200px, 1.15fr) minmax(340px, 2fr) minmax(190px, 1fr); gap: 10px; background: var(--bg-panel); border: 2px solid var(--border-dark); padding: 8px 12px; box-shadow: 2px 2px 0 rgba(0,0,0,0.3); align-items: stretch; position: relative; z-index: 1500; }
-        #main-area { flex: 1 1 auto; min-height: 0; width: 100%; display: grid; grid-template-columns: minmax(240px, 1.15fr) minmax(360px, 2fr) minmax(210px, 1fr); justify-content: stretch; gap: 8px; }
+        #game-layout { width: 100%; max-width: 100%; margin: 0 auto; height: 100dvh; min-height: 0; display: flex; flex-direction: column; align-items: stretch; padding: 6px var(--game-side-margin, 8px); gap: 8px; position: relative; z-index: 10; box-sizing: border-box; }
+        #game-header { flex: 0 0 auto; width: 100%; max-width: 100%; min-height: 90px; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 2fr) minmax(0, 1fr); gap: 8px; background: var(--bg-panel); border: 2px solid var(--border-dark); padding: 8px 12px; box-shadow: 2px 2px 0 rgba(0,0,0,0.3); align-items: stretch; position: relative; z-index: 1500; box-sizing: border-box; }
+        #main-area { flex: 1 1 auto; min-height: 0; width: 100%; max-width: 100%; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 2fr) minmax(0, 1fr); justify-content: stretch; gap: 8px; box-sizing: border-box; }
         .panel { min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--bg-panel); border: 2px solid var(--border-dark); box-shadow: 2px 2px 0 rgba(0,0,0,0.3); }
         .header-left { display: flex; flex-direction: row; align-items: center; gap: 16px; width: 100%; }
         .settings-btn { color: var(--text-normal); font-size: 1.5rem; cursor: pointer; transition: all 0.15s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; background: var(--bg-app); border: 2px solid var(--border-dark); box-shadow: 2px 2px 0 rgba(0,0,0,0.4); border-radius: 3px; }
@@ -209,7 +209,9 @@
         .modal-close-x:active { transform: translateY(-50%) translate(1px, 1px); box-shadow: none; }
         #main-menu { z-index: 2000; flex-direction: column; background: radial-gradient(circle at center, #2e2d2a 0%, var(--bg-app) 80%); position: fixed; inset: 0; }
         #main-menu::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 32px 32px; pointer-events: none; }
-        .main-menu-settings-btn { position: absolute; top: 18px; left: 24px; z-index: 5; }
+        .main-menu-settings-btn { position: absolute; top: 18px; left: 24px; z-index: 5; width: auto !important; height: 36px !important; padding: 0 12px !important; gap: 6px; font-size: var(--fs-title) !important; letter-spacing: 1px; }
+        .main-menu-settings-btn .mm-settings-icon { font-size: 1.25rem; line-height: 1; }
+        .main-menu-settings-btn .mm-settings-label { font-size: var(--fs-subtitle); line-height: 1; color: var(--text-highlight); }
         .main-menu-credit { position: absolute; top: 18px; right: 24px; font-size: var(--fs-subtitle); color: var(--text-muted); letter-spacing: 1.5px; z-index: 5; background: rgba(0,0,0,0.35); padding: 4px 10px; border: 1px solid var(--border-light); }
         .settings-group-box { background: rgba(0,0,0,0.25); border: 1.5px solid var(--border-light); padding: 10px 12px; margin-bottom: 12px; text-align: left; display: flex; flex-direction: column; gap: 8px; }
         .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: var(--fs-subtitle); color: var(--text-highlight); }
@@ -221,6 +223,17 @@
         .settings-val-badge { font-size: var(--fs-small); color: var(--accent-yellow); min-width: 36px; text-align: right; font-weight: bold; }
         .settings-mute-btn { background: var(--bg-app); border: 1px solid var(--border-light); color: var(--text-highlight); width: 26px; height: 24px; padding: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; }
         .settings-mute-btn.muted { color: var(--color-char); border-color: var(--color-char); opacity: 0.75; }
+        .margin-preview-box { width: 100%; height: 54px; background: #141413; border: 1.5px solid var(--border-dark); outline: 1px solid var(--border-light); display: flex; align-items: stretch; justify-content: space-between; padding: 4px 0; position: relative; overflow: hidden; margin-top: 2px; }
+        .margin-side-zone { background: repeating-linear-gradient(45deg, rgba(214, 176, 84, 0.14) 0px, rgba(214, 176, 84, 0.14) 3px, transparent 3px, transparent 6px); border-right: 1.5px dashed var(--accent-yellow); display: flex; align-items: center; justify-content: center; color: var(--accent-yellow); font-size: 0.65rem; transition: none !important; will-change: width; flex-shrink: 0; overflow: hidden; }
+        .margin-note-text { font-size: 0.62rem !important; color: var(--text-muted); text-align: center; line-height: 1.15; margin-top: 2px; font-style: italic; letter-spacing: 0.3px; }
+        .margin-side-zone.right { border-right: none; border-left: 1.5px dashed var(--accent-yellow); }
+        .margin-mini-game { flex: 1; margin: 0 3px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+        .margin-mini-header { height: 11px; background: var(--bg-panel); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; padding: 0 4px; }
+        .margin-mini-header::before { content: ""; width: 14px; height: 4px; background: var(--accent-yellow); display: block; }
+        .margin-mini-header::after { content: ""; width: 26px; height: 4px; background: var(--color-scene); display: block; }
+        .margin-mini-cols { flex: 1; display: grid; grid-template-columns: 1fr 1.6fr 0.9fr; gap: 3px; min-height: 0; }
+        .margin-mini-col { background: var(--bg-panel); border: 1px solid var(--border-light); }
+        .margin-mini-col.paper { background: var(--paper-bg); border-color: var(--paper-border); }
         .credit-box-area { background: #161615; border: 1px dashed var(--border-light); padding: 10px 12px; font-size: var(--fs-small); color: var(--text-normal); line-height: 1.45; text-align: left; max-height: 160px; overflow-y: auto; white-space: pre-line; }
         .credit-box-area a { color: var(--color-coffee-boost); text-decoration: underline; word-break: break-all; }
         .main-menu-card { background: var(--bg-panel); border: 2px solid var(--border-dark); box-shadow: 8px 8px 0 rgba(0,0,0,0.6), inset 0 0 0 2px var(--border-light); padding: 35px 40px; display: flex; flex-direction: column; align-items: center; max-width: 90%; width: 420px; position: relative; z-index: 2; }
@@ -320,7 +333,7 @@
         .hs-window-bar { padding: 10px 14px; }
         .hs-window-body { padding: 12px; }
         .main-menu-card { padding: 25px 20px; }
-        .main-menu-settings-btn { top: 12px; left: 12px; width: 34px !important; height: 32px !important; font-size: 1.3rem !important; }
+        .main-menu-settings-btn { top: 12px; left: 12px; width: auto !important; height: 30px !important; padding: 0 9px !important; gap: 5px; font-size: var(--fs-subtitle) !important; }
         .main-menu-credit { top: 12px; right: 12px; }
         }
         .ending-img-container { width: 100%; max-width: 440px; aspect-ratio: 16 / 9; height: auto; margin: 0 auto 8px auto; background: #111; border: 2px solid var(--border-light); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
@@ -377,9 +390,9 @@
         #selected-block-popup .sp-character { margin-left: 18%; width: 78%; }
         #selected-block-popup .sp-dialogue { margin-left: 6%; margin-right: 4%; width: 90%; }
         @media (max-height: 550px) and (orientation: landscape) {
-        #game-layout { max-width: 100%; padding: 5px 6px; gap: 6px; }
-        #game-header { grid-template-columns: minmax(180px, 1.15fr) minmax(280px, 2fr) minmax(170px, 1fr); padding: 6px 10px; min-height: 60px; }
-        #main-area { grid-template-columns: minmax(200px, 1.15fr) minmax(290px, 2fr) minmax(185px, 1fr); gap: 6px; }
+        #game-layout { max-width: 100%; padding: 5px 6px !important; gap: 6px; }
+        #game-header { grid-template-columns: minmax(0, 1.15fr) minmax(0, 2fr) minmax(0, 1fr); padding: 6px 10px; min-height: 60px; gap: 6px; }
+        #main-area { grid-template-columns: minmax(0, 1.15fr) minmax(0, 2fr) minmax(0, 1fr); gap: 6px; }
         .client-avatar { width: 50px; height: 50px; } .client-brief-box .brief-content { padding: 4px; }
         .retro-btn { padding: 4px 8px; } .hide-mobile { display: none; } #right-panel { padding: 10px; }
         .right-section-title { margin-bottom: 8px; } .deadline-area { padding: 2px 6px; }
@@ -478,9 +491,9 @@
         #modal-minigame .cm-wall-shelf.shelf-top { top: 52px !important; left: 132px !important; right: 6px !important; }
         #modal-minigame .cm-wall-shelf.shelf-mid { top: 108px !important; left: 6px !important; right: 6px !important; }
         #modal-minigame .cm-wall-shelf.shelf-low { top: 168px !important; left: 6px !important; right: 6px !important; }
-        #modal-minigame .cm-center-machine { width: 112px !important; height: 152px !important; bottom: 6px !important; }
+        #modal-minigame .cm-center-machine { width: 112px !important; height: 198px !important; bottom: 6px !important; }
         #modal-minigame .cm-body-top, #modal-minigame .cm-base-tray { width: 108px !important; }
-        #modal-minigame .cm-brew-chamber { width: 96px !important; height: 70px !important; }
+        #modal-minigame .cm-brew-chamber { width: 96px !important; height: 104px !important; }
         .main-menu-title { font-size: 2.2rem; }
         .main-menu-logo-img { max-height: 82px; }
         .header-wordmark-img { height: 20px; max-height: 20px; width: auto; max-width: 120px; object-position: center center; }
@@ -510,7 +523,9 @@
         .mg-stage { background: #181715; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 8px 8px; border: 3px solid var(--border-dark); outline: 1px solid var(--border-light); box-shadow: inset 0 0 18px rgba(0,0,0,0.85); padding: 10px; height: 268px; min-height: 268px; max-height: 268px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .mg-status-bar { margin-top: 10px; height: 44px; min-height: 44px; max-height: 44px; font-size: var(--fs-subtitle); color: var(--accent-yellow); text-align: center; letter-spacing: 0.5px; background: #141413; border: 1px dashed var(--border-light); padding: 4px 8px; display: flex; align-items: center; justify-content: center; line-height: 1.15; overflow: hidden; }
         .pixel-svg { shape-rendering: crispEdges; image-rendering: pixelated; display: block; }
-        .simon-casing { background: #363532; border: 3px solid #121211; box-shadow: inset -3px -3px 0 #22211f, inset 3px 3px 0 #52504b, 4px 4px 0 rgba(0,0,0,0.6); padding: 10px 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; }
+        .mg-stage.simon-watch-bg { background-color: #2c1616 !important; transition: background-color 0.2s ease; }
+        .simon-casing { background: #363532; border: 3px solid #121211; box-shadow: inset -3px -3px 0 #22211f, inset 3px 3px 0 #52504b, 4px 4px 0 rgba(0,0,0,0.6); padding: 10px 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; transition: background-color 0.2s ease; }
+        .simon-casing.watch-phase { background: #542727 !important; box-shadow: inset -3px -3px 0 #331515, inset 3px 3px 0 #6e3535, 4px 4px 0 rgba(0,0,0,0.6) !important; }
         .simon-countdown-overlay { position: absolute; inset: 0; background: rgba(18, 18, 17, 0.78); display: none; align-items: center; justify-content: center; z-index: 20; pointer-events: none; }
         .simon-countdown-overlay.active { display: flex; }
         .simon-countdown-num { font-size: 5rem; color: var(--accent-yellow); font-weight: bold; text-shadow: 4px 4px 0 #121211, 0 0 18px rgba(214, 176, 84, 0.8); line-height: 1; }
@@ -520,12 +535,9 @@
         70% { transform: scale(1.0); opacity: 1; }
         100% { transform: scale(0.92); opacity: 0.45; }
         }
-        .simon-mode-badge { width: 100%; padding: 3px 8px; font-size: 0.72rem; font-weight: bold; letter-spacing: 0.8px; text-align: center; border: 1.5px solid #121211; text-transform: uppercase; transition: background 0.15s, color 0.15s; }
-        .simon-mode-badge.wait { background: #7a2e2e; color: #ffdede; border-color: #ff9e9e; box-shadow: 0 0 6px rgba(224, 90, 90, 0.45); }
-        .simon-mode-badge.go { background: #2f5c34; color: #d8ffd8; border-color: #9cd689; box-shadow: 0 0 6px rgba(104, 196, 125, 0.45); }
-        .simon-lcd { width: 100%; background: #233022; border: 2px solid #121211; box-shadow: inset 2px 2px 0 #141c13; color: #9cd689; padding: 5px 10px; font-size: 1.2rem; font-weight: bold; display: flex; justify-content: center; align-items: center; letter-spacing: 3px; min-height: 32px; }
-        .simon-grid { display: grid; grid-template-columns: repeat(3, 58px); gap: 5px; justify-content: center; position: relative; }
-        .simon-grid.locked-watch .simon-key:not(.lit) { opacity: 0.55; cursor: not-allowed; }
+        .simon-lcd { width: 100%; background: #233022; border: 2px solid #121211; box-shadow: inset 2px 2px 0 #141c13; color: #9cd689; padding: 6px 10px; font-size: 1.25rem; font-weight: bold; display: flex; justify-content: center; align-items: center; letter-spacing: 3px; min-height: 34px; }
+        .simon-grid { display: grid; grid-template-columns: repeat(3, 58px); gap: 6px; justify-content: center; position: relative; }
+        .simon-grid.locked-watch .simon-key:not(.lit) { cursor: not-allowed; }
         .simon-key { height: 36px; background: #d9d1ba; border: 2px solid #121211; box-shadow: inset -2px -3px 0 #999075, inset 2px 2px 0 #f5efe0, 2px 2px 0 #121211; color: #1c1b18; font-size: 1.25rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.06s; }
         .simon-key.zero-key { grid-column: 2; }
         .simon-key:active { transform: translate(1px, 2px); box-shadow: inset 1px 1px 0 #999075; }
@@ -540,23 +552,25 @@
         .cm-wall-shelf.shelf-top { top: 52px; left: 136px; right: 8px; }
         .cm-wall-shelf.shelf-mid { top: 106px; left: 8px; right: 8px; }
         .cm-wall-shelf.shelf-low { top: 162px; left: 8px; right: 8px; }
-        .cm-sticky-note { position: absolute; top: 6px; left: 6px; background: #e8d882; color: #1c1b18; border: 2px solid #121211; box-shadow: 2px 2px 0 rgba(0,0,0,0.55); padding: 4px 6px; z-index: 6; width: 128px; font-size: 0.65rem; line-height: 1.1; transform: rotate(-1.5deg); pointer-events: none; }
-        .cm-sticky-title { font-weight: bold; border-bottom: 1px dashed #5c5328; padding-bottom: 2px; margin-bottom: 3px; color: #121211; font-size: 0.68rem; text-align: center; }
+        .cm-sticky-note { position: absolute; top: 6px; left: 6px; background: #e8d882; color: #1c1b18; border: 2px solid #121211; box-shadow: 2px 2px 0 rgba(0,0,0,0.55); padding: 4px 6px; z-index: 6; width: 122px; font-size: 0.64rem; line-height: 1.08; transform: rotate(-1.5deg); pointer-events: none; }
+        .cm-sticky-title { font-weight: bold; border-bottom: 1px dashed #5c5328; padding-bottom: 2px; margin-bottom: 3px; color: #121211; font-size: 0.67rem; text-align: center; }
         .cm-sticky-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 4px; }
-        .cm-center-machine { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); width: 122px; height: 162px; display: flex; flex-direction: column; align-items: center; z-index: 3; }
-        .cm-hopper { width: 58px; height: 18px; background: linear-gradient(90deg, rgba(111,78,55,0.85), rgba(160,120,90,0.65), rgba(111,78,55,0.85)); border: 2px solid #121211; border-bottom: none; position: relative; }
+        .cm-center-machine { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); width: 122px; height: 184px; display: flex; flex-direction: column; align-items: center; z-index: 3; }
+        .cm-hopper { width: 58px; height: 22px; background: linear-gradient(90deg, rgba(111,78,55,0.85), rgba(160,120,90,0.65), rgba(111,78,55,0.85)); border: 2px solid #121211; border-bottom: none; position: relative; }
         .cm-hopper::before { content: ""; position: absolute; top: -4px; left: -3px; right: -3px; height: 4px; background: #1c1b19; border: 1px solid #121211; }
-        .cm-body-top { width: 118px; height: 34px; background: #8c2d2d; border: 3px solid #121211; box-shadow: inset -2px -2px 0 #591a1a, inset 2px 2px 0 #b84848; padding: 3px 6px; display: flex; justify-content: space-between; align-items: center; }
+        .cm-body-top { width: 118px; height: 38px; background: #8c2d2d; border: 3px solid #121211; box-shadow: inset -2px -2px 0 #591a1a, inset 2px 2px 0 #b84848; padding: 3px 6px; display: flex; justify-content: space-between; align-items: center; }
         .cm-gauge { width: 18px; height: 18px; border-radius: 50%; background: #e6dfc8; border: 2px solid #121211; position: relative; }
         .cm-gauge::after { content: ""; position: absolute; width: 6px; height: 2px; background: #b56c6c; top: 7px; left: 6px; transform: rotate(-35deg); }
         .cm-led-screen { background: #141c13; border: 1.5px solid #121211; color: #9cd689; padding: 1px 5px; font-size: 0.7rem; font-weight: bold; }
-        .cm-brew-chamber { width: 104px; height: 78px; background: #181716; border-left: 3px solid #121211; border-right: 3px solid #121211; box-shadow: inset 0 4px 8px rgba(0,0,0,0.9), inset 6px 0 0 #2d2c29, inset -6px 0 0 #2d2c29; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; position: relative; padding-bottom: 4px; }
+        .cm-brew-chamber { width: 104px; height: 94px; background: #181716; border-left: 3px solid #121211; border-right: 3px solid #121211; box-shadow: inset 0 4px 8px rgba(0,0,0,0.9), inset 6px 0 0 #2d2c29, inset -6px 0 0 #2d2c29; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; position: relative; padding-bottom: 4px; }
         .cm-portafilter { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 34px; height: 12px; background: #77756e; border: 2px solid #121211; border-top: none; z-index: 3; }
         .cm-portafilter::after { content: ""; position: absolute; right: -22px; top: 2px; width: 22px; height: 5px; background: #1c1b18; border: 1px solid #000; }
-        .cm-steam-wand { position: absolute; left: 16px; top: 0; width: 4px; height: 36px; background: #9e9b93; border: 1px solid #121211; transform: rotate(10deg); }
+        .cm-steam-wand { position: absolute; left: 16px; top: 0; width: 4px; height: 42px; background: #9e9b93; border: 1px solid #121211; transform: rotate(10deg); }
         .cm-stream { width: 5px; height: 0; background: repeating-linear-gradient(0deg, #6f4e37 0px, #6f4e37 4px, #8b6347 4px, #8b6347 8px); position: absolute; top: 12px; left: 50%; transform: translateX(-50%); transition: height 0.2s; z-index: 1; }
-        .cm-stream.pouring { height: 42px; }
-        .cm-cup { width: 34px; height: 26px; border: 3px solid #e6dfc8; background: #262421; position: relative; overflow: hidden; z-index: 2; box-shadow: 2px 2px 0 #000; }
+        .cm-stream.pouring { height: 54px; }
+        .cm-cup-wrap { position: relative; display: flex; align-items: center; justify-content: center; z-index: 2; margin-right: 4px; }
+        .cm-cup { width: 32px; height: 29px; border: 3px solid #e6dfc8; border-top-width: 2px; border-radius: 2px 2px 9px 9px; background: #262421; position: relative; overflow: hidden; box-shadow: inset -3px 0 0 rgba(0,0,0,0.35), 2px 2px 0 #000; }
+        .cm-cup-handle { position: absolute; right: -9px; top: 5px; width: 9px; height: 15px; border: 3px solid #e6dfc8; border-left: none; border-radius: 0 7px 7px 0; box-shadow: 2px 2px 0 #000; pointer-events: none; }
         .cm-cup-fill { position: absolute; bottom: 0; left: 0; right: 0; height: 0%; background: linear-gradient(180deg, #d6b054 0%, #6f4e37 30%, #4a3222 100%); transition: height 0.7s steps(6); }
         .cm-base-tray { width: 118px; height: 30px; background: #3a3935; border: 3px solid #121211; box-shadow: inset 0 3px 0 #66645e, 3px 3px 0 rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; padding: 2px 6px; }
         .cm-brew-trigger { width: 100%; background: #689c68; color: #fff; border: 2px solid #121211; box-shadow: inset 1px 1px 0 #9cd689, 1px 1px 0 #000; font-size: 0.72rem; font-weight: bold; padding: 2px 0; cursor: pointer; text-align: center; letter-spacing: 1px; }
@@ -590,7 +604,7 @@
     </style>
 </head>
 <body>
-    <div id="main-menu" class="modal-overlay active" style="display: flex;"><div class="settings-btn main-menu-settings-btn" id="btn-main-menu-settings" onclick="openMainMenuSettings()" title="Pengaturan">⚙</div><div class="main-menu-card"><div class="main-menu-title"><img id="main-menu-logo-img" class="main-menu-logo-img" alt=""><span id="main-menu-title-text">SCRIPT ARCADE</span></div><div class="main-menu-subtitle">SCRIPT EDITING ON ARCADE DESK</div><div class="main-menu-buttons"><button class="retro-btn primary main-menu-btn" onclick="openStartModal()">▶ PLAY</button><button class="retro-btn main-menu-btn" onclick="showHighscores()">★ HIGHSCORE</button><button class="retro-btn main-menu-btn" onclick="startTutorial()">? TUTORIAL</button></div></div></div>
+    <div id="main-menu" class="modal-overlay active" style="display: flex;"><div class="settings-btn main-menu-settings-btn" id="btn-main-menu-settings" onclick="openMainMenuSettings()" title="Pengaturan"><span class="mm-settings-icon">⚙</span><span class="mm-settings-label">SETTING</span></div><div class="main-menu-card"><div class="main-menu-title"><img id="main-menu-logo-img" class="main-menu-logo-img" alt=""><span id="main-menu-title-text">SCRIPT ARCADE</span></div><div class="main-menu-subtitle">SCRIPT EDITING ON ARCADE DESK</div><div class="main-menu-buttons"><button class="retro-btn primary main-menu-btn" onclick="openStartModal()">▶ PLAY</button><button class="retro-btn main-menu-btn" onclick="showHighscores()">★ HIGHSCORE</button><button class="retro-btn main-menu-btn" onclick="startTutorial()">? TUTORIAL</button></div></div></div>
     <div id="game-layout" style="display: none;">
     <header id="game-header"><div class="header-left"><div class="settings-btn" id="btn-settings" onclick="showProfile()" title="Profil & Progress">⚙</div><div class="title-area"><h1><img id="header-wordmark-img" class="header-wordmark-img" alt=""><span id="header-title-text">SCRIPT ARCADE</span></h1><div class="day-text" id="level-display">SCRIPT #01</div></div></div><div class="header-center"><div class="avatar-wrapper"><div class="client-avatar" id="client-avatar-box"><img id="client-avatar-img" alt="Client Icon" style="display:none;"><svg id="client-avatar-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/><circle cx="9" cy="9" r="1.5" fill="#3b3a36"/><circle cx="15" cy="9" r="1.5" fill="#3b3a36"/><path id="svg-mouth" d="M8 8.5h2M14 8.5h2M10.5 12h3" stroke="#3b3a36" stroke-width="1.5"/></svg></div><div class="avatar-title">CLIENT BRIEF</div></div><div class="client-brief-wrapper" id="client-brief-box"><div class="client-brief-box"><div class="brief-content" id="client-brief-content"></div></div><div class="deadline-area"><div class="timer-wrapper"><span class="timer-label">DEADLINE</span><div class="progress-bar-container"><div id="progress-bar"></div><div class="coffee-boost-bar" id="coffee-boost-bar"></div></div><span class="time-text" id="ui-time">02:30</span></div><div class="coffee-area" id="ui-coffee"></div></div></div></div><div class="header-right"><button id="btn-reset" class="retro-btn" onclick="clearBoard()" title="Kembalikan semua blok ke inventory"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg><span class="hide-mobile">RESET</span></button><button id="btn-periksa" class="retro-btn primary" onclick="checkScript()">SUBMIT</button></div></header>
     <div id="main-area">
@@ -604,8 +618,7 @@
     <div id="modal-hint" class="modal-overlay in-game-modal"><div class="modal-content" style="max-width: 500px; text-align: left;"><div class="modal-header-row"><h2>HINT</h2><button class="modal-close-x" onclick="closeHint()">X</button></div><div id="hint-diagnostic-body" style="color: var(--text-normal); line-height: 1.6; max-height: 50vh; padding-right: 10px; overflow-y: auto; font-size: var(--fs-subtitle);"></div><div class="flex justify-center mt-6"><button class="retro-btn primary" onclick="closeHint()">SAYA MENGERTI (TUTUP)</button></div></div></div>
     <div id="modal-resource-empty" class="modal-overlay in-game-modal"><div class="modal-content" style="max-width: 420px;"><div class="modal-header-row"><h2 id="res-empty-title">KOPI HABIS!</h2></div><p id="res-empty-desc" class="mb-4" style="line-height: 1.45; color: var(--text-normal); font-size: var(--fs-subtitle);"></p><p class="mb-6" style="color: var(--accent-yellow); font-size: var(--fs-title); letter-spacing: 1px;">Mainkan mini game?</p><div class="flex justify-between items-center mt-2"><button class="retro-btn" id="btn-res-no" onclick="cancelPlayMiniGame()">TIDAK</button><button class="retro-btn primary" id="btn-res-yes" onclick="confirmPlayMiniGame()">YA</button></div></div></div>
     <div id="modal-minigame" class="modal-overlay in-game-modal"><div class="modal-content"><div class="modal-header-row"><h2 id="mg-title">MINI GAME</h2><button class="modal-close-x" onclick="abortMiniGame()" title="Tutup">X</button></div><div class="mg-HeaderMeta"><div class="mg-level-pips" id="mg-level-pips"><span class="mg-pip active">LV.1</span><span class="mg-pip">LV.2</span><span class="mg-pip">LV.3</span></div><span class="mg-badge" id="mg-reward-badge">HADIAH: +1 KOPI</span></div><div class="mg-stage" id="mg-stage"></div><div class="mg-status-bar" id="mg-status">Siapkan dirimu...</div></div></div>
-    <div id="modal-main-settings" class="modal-overlay" style="z-index: 2600;"><div class="modal-content" style="max-width: 400px;"><div class="modal-header-row"><h2>SETTINGS</h2><button class="modal-close-x" onclick="closeMainMenuSettings()">X</button></div><div class="settings-group-box"><div class="settings-row"><span class="settings-row-label">🎵 MUSIC</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="mm-btn-music-mute" onclick="toggleAudioMute('music')" title="Mute/Unmute Music">🔊</button><input type="range" class="retro-range" id="mm-slider-music" min="0" max="100" value="70" oninput="updateAudioVolume('music', this.value)"><span class="settings-val-badge" id="mm-val-music">70%</span></div></div><div class="settings-row"><span class="settings-row-label">🔊 SOUND</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="mm-btn-sound-mute" onclick="toggleAudioMute('sound')" title="Mute/Unmute Sound">🔊</button><input type="range" class="retro-range" id="mm-slider-sound" min="0" max="100" value="80" oninput="updateAudioVolume('sound', this.value)"><span class="settings-val-badge" id="mm-val-sound">80%</span></div></div></div><div class="settings-group-box" style="margin-bottom: 14px;"><div class="settings-row" style="margin-bottom: 4px;"><span class="settings-row-label" style="color: var(--accent-yellow);">★ CREDIT</span></div><div class="credit-box-area" id="main-settings-credit-text">Game Design: ShailaSRC 
-Music: [白銀の誓] by [yuhei komatsu]
+    <div id="modal-main-settings" class="modal-overlay" style="z-index: 2600;"><div class="modal-content" style="max-width: 400px;"><div class="modal-header-row"><h2>SETTINGS</h2><button class="modal-close-x" onclick="closeMainMenuSettings()">X</button></div><div class="settings-group-box"><div class="settings-row"><span class="settings-row-label">🎵 MUSIC</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="mm-btn-music-mute" onclick="toggleAudioMute('music')" title="Mute/Unmute Music">🔊</button><input type="range" class="retro-range" id="mm-slider-music" min="0" max="100" value="70" oninput="updateAudioVolume('music', this.value)"><span class="settings-val-badge" id="mm-val-music">70%</span></div></div><div class="settings-row"><span class="settings-row-label">🔊 SOUND</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="mm-btn-sound-mute" onclick="toggleAudioMute('sound')" title="Mute/Unmute Sound">🔊</button><input type="range" class="retro-range" id="mm-slider-sound" min="0" max="100" value="80" oninput="updateAudioVolume('sound', this.value)"><span class="settings-val-badge" id="mm-val-sound">80%</span></div></div><div style="border-top: 1px dashed var(--border-light); margin-top: 2px; padding-top: 6px; display: flex; flex-direction: column; gap: 5px;"><div class="settings-row"><span class="settings-row-label">↔ MARGIN</span><div class="settings-ctrl-wrap"><input type="range" class="retro-range" id="mm-slider-margin" min="0" max="100" value="0" oninput="updateSideMargin(this.value)"><span class="settings-val-badge" id="mm-val-margin">0%</span></div></div><div class="margin-preview-box" title="Ilustrasi Margin Kiri & Kanan Layout Game"><div class="margin-side-zone left" id="margin-viz-left" style="width: 4%;"><span>◄►</span></div><div class="margin-mini-game"><div class="margin-mini-header"></div><div class="margin-mini-cols"><div class="margin-mini-col"></div><div class="margin-mini-col paper"></div><div class="margin-mini-col"></div></div></div><div class="margin-side-zone right" id="margin-viz-right" style="width: 4%;"><span>◄►</span></div></div><div class="margin-note-text">* Hanya berlaku untuk mode landscape (tidak untuk handphone)</div></div></div><div class="settings-group-box" style="margin-bottom: 14px;"><div class="settings-row" style="margin-bottom: 4px;"><span class="settings-row-label" style="color: var(--accent-yellow);">★ CREDIT</span></div><div class="credit-box-area" id="main-settings-credit-text">Game Design: ShailaSRC 
 Music: [ゲームのじかん] by [Make a field Music]
 Source: DOVA-SYNDROME (<a href="https://dova-s.jp/" target="_blank" rel="noopener noreferrer">https://dova-s.jp/</a>)
 Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener noreferrer">https://www.zapsplat.com</a></div></div><div class="flex justify-center"><button class="retro-btn primary" onclick="closeMainMenuSettings()">SIMPAN & TUTUP</button></div></div></div>
@@ -1190,7 +1203,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         function getSceneHeadingNumber(slotIdx) { const currentId = gameState.placedBlocks[slotIdx]; if (!currentId) return ""; const currentBlock = gameState.currentBlocks.find(x => x.id === currentId); if (!currentBlock || currentBlock.type !== 'SCENE HEADING') return ""; let sceneCount = 0; for (let i = 0; i <= slotIdx; i++) { const bId = gameState.placedBlocks[i]; if (bId) { const b = gameState.currentBlocks.find(x => x.id === bId); if (b && b.type === 'SCENE HEADING') sceneCount++; } } return sceneCount > 0 ? sceneCount : ""; }
         function formatScreenplayContent(block, isPlaced = false, slotIdx = null) { if (!block) return ''; const type = block.type; if (type === 'SCENE HEADING') { const slugText = processTextForGlossary(block.text.toUpperCase(), true); return `<div class="sp-slugline-row"><span class="sp-slugline-text">${slugText}</span></div>`; } if (type === 'DIALOGUE' || type === 'CHARACTER') { const lines = block.text.split('\n').map(l => l.trim()).filter(Boolean); const charCue = lines[0] ? processTextForGlossary(lines[0].toUpperCase(), true) : 'CHARACTER'; let parentheticalHTML = ''; let dialogueLines = []; for (let i = 1; i < lines.length; i++) { if (lines[i].startsWith('(') && lines[i].endsWith(')')) { const inner = lines[i].slice(1, -1).trim(); if (inner.length > 0) { parentheticalHTML += `<div class="sp-parenthetical">(${processTextForGlossary(inner)})</div>`; } } else { dialogueLines.push(processTextForGlossary(lines[i])); } } const dialHTML = dialogueLines.join('<br>'); return `<div class="sp-dialogue-group"><div class="sp-character">${charCue}</div>${parentheticalHTML}<div class="sp-dialogue">${dialHTML}</div></div>`; } if (type === 'TRANSITION') { return `<div class="sp-transition">${processTextForGlossary(block.text.toUpperCase(), true)}</div>`; } const paragraphs = block.text.split('\n').map(p => processTextForGlossary(p.trim())).filter(Boolean); return paragraphs.map(p => `<div class="sp-action">${p}</div>`).join(''); }
         function goToScriptPage(pageNum) { if (pageNum < 1 || pageNum > gameState.totalPages) return; gameState.currentPage = pageNum; renderBlocksAndSlots(); }
-        function setupNewCase(isNewGame = false) { closeInGameModals(); gameState.currentBible = generateStoryBible(); const casePrep = prepareCaseBlocksAndLocks(gameState.currentBible); gameState.currentBlocks = casePrep.blocks; gameState.placedBlocks = casePrep.placedBlocks; gameState.lockedSlots = casePrep.lockedSlots; gameState.caseRevisions = 0; gameState.caseMiniGamesUsed = 0; gameState.caseStartTime = Date.now(); gameState.revisedSlots = []; gameState.currentPage = 1; gameState.clientId = pickRandom(['client1', 'client2', 'client3', 'client4']); gameState.isSubmitAngry = false; if (clientAngryTimeout) clearTimeout(clientAngryTimeout); deselectBlock(); gameState.hintsLeft = MAX_HINTS_PER_CASE; gameState.hintUsed = false; updateHintButtonUI(); document.getElementById('glossary-empty').classList.remove('hidden'); document.getElementById('glossary-content').classList.add('hidden'); if (isNewGame) { closeModal('modal-gameover'); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = BASE_TIME; gameState.sessionId = generateSessionId(); gameState.maxTime = BASE_TIME; gameState.timeLeft = BASE_TIME; gameState.coffeesLeft = MAX_COFFEE_PER_CASE; gameState.mistakes = 0; gameState.playDuration = 0; gameState.miniGamesCount = 0; gameState.lastTickTime = Date.now(); } else { let timeBonus = Math.max(30, 60 - (gameState.day * 2)); gameState.timeLeft = Math.min(BASE_TIME, gameState.timeLeft + timeBonus); gameState.maxTime = Math.max(gameState.timeLeft, BASE_TIME); gameState.coffeesLeft = MAX_COFFEE_PER_CASE; } gameState.isGameActive = true; isSubmitting = false; updateUI(); startTimer(); }
+        function setupNewCase(isNewGame = false) { closeInGameModals(); gameState.currentBible = generateStoryBible(); const casePrep = prepareCaseBlocksAndLocks(gameState.currentBible); gameState.currentBlocks = casePrep.blocks; gameState.placedBlocks = casePrep.placedBlocks; gameState.lockedSlots = casePrep.lockedSlots; gameState.caseRevisions = 0; gameState.caseMiniGamesUsed = 0; gameState.caseStartTime = Date.now(); gameState.revisedSlots = []; gameState.currentPage = 1; gameState.clientId = pickRandom(['client1', 'client2', 'client3', 'client4']); gameState.isSubmitAngry = false; if (clientAngryTimeout) clearTimeout(clientAngryTimeout); deselectBlock(); gameState.hintsLeft = MAX_HINTS_PER_CASE; gameState.hintUsed = false; updateHintButtonUI(); document.getElementById('glossary-empty').classList.remove('hidden'); document.getElementById('glossary-content').classList.add('hidden'); if (isNewGame) { closeModal('modal-gameover'); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = BASE_TIME; gameState.sessionId = generateSessionId(); gameState.maxTime = BASE_TIME; gameState.timeLeft = BASE_TIME; gameState.coffeesLeft = MAX_COFFEE_PER_CASE; gameState.mistakes = 0; gameState.playDuration = 0; gameState.miniGamesCount = 0; gameState.lastTickTime = Date.now(); } else { let timeBonus = Math.max(30, 60 - (gameState.day * 2)); gameState.timeLeft = Math.min(BASE_TIME, gameState.timeLeft + timeBonus); gameState.maxTime = BASE_TIME; gameState.coffeesLeft = MAX_COFFEE_PER_CASE; } gameState.isGameActive = true; isSubmitting = false; updateUI(); startTimer(); }
         function updateHintButtonUI() { const badge = document.getElementById('hint-badge'); const btn = document.getElementById('btn-open-hint'); if (!badge || !btn) return; if (gameState.hintsLeft > 0) { badge.style.display = 'flex'; badge.innerText = gameState.hintsLeft; btn.classList.remove('hint-disabled'); } else { badge.style.display = 'none'; btn.classList.add('hint-disabled'); } }
         function updateUI() { document.getElementById('level-display').innerText = `SCRIPT #${String(gameState.day).padStart(2, '0')}`; let notes = gameState.currentBible.reqText; if (gameState.currentBible.formatText !== '') notes += ' ' + gameState.currentBible.formatText; const processedNotes = processTextForGlossary(notes); document.getElementById('client-brief-content').innerHTML = `<div class="brief-line"><span class="label">GENRE</span><span class="colon">:</span><span class="value">${gameState.currentBible.genre}</span></div><div class="brief-line"><span class="label">TEMA</span><span class="colon">:</span><span class="value">${gameState.currentBible.theme}</span></div><div class="brief-line quote-line"><span class="value">"${processedNotes}"</span></div>`; let checklistHTML = ''; if (gameState.currentBible.reqText !== "") checklistHTML += `<div class="checklist-item" id="chk-blocks"><span class="checklist-box"></span>Sesuai plot klien</div>`; if (gameState.currentBible.formatId === 'CUT_TO' || gameState.currentBible.formatId === 'FADE_OUT') checklistHTML += `<div class="checklist-item" id="chk-trans"><span class="checklist-box"></span>Transisi penutup adegan</div>`; checklistHTML += `<div class="checklist-item" id="chk-logic"><span class="checklist-box"></span>Urutan sebab-akibat logis</div><div class="checklist-item" id="chk-prof"><span class="checklist-box"></span>Konsistensi karakter & aksi</div>`; document.getElementById('checklist-container').innerHTML = checklistHTML; initBrandLogos(); updateHintButtonUI(); updateClientAvatarState(); renderCoffee(); updateTimerUI(); renderBlocksAndSlots(); updateChecklist(); requestAnimationFrame(syncHeaderOverlayOffset); }
         function requiresClosingTransition(bible) {
@@ -1366,11 +1379,13 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 timerLoop: "zapsplat_multimedia_game_retro_musical_timer_loop_003",
                 roachSplat: "zapsplat_animals_insects_worm_drop_002_18114.mp3",
                 coffeePour: "zapsplat_food_drink_water_pour_from_one_plastic_disposable_cup_in_another_fast_003_84124",
+                paperDrop: "zapsplat_foley_paper_sheets_a4_several_drop_001_82996",
+                countdown: "countdown.mp3",
                 weld1: "welding 1.mp3",
                 weld2: "welding 2.mp3"
             }
         };
-        let appSettings = { musicVol: 70, soundVol: 80, musicMuted: false, soundMuted: false };
+        let appSettings = { musicVol: 70, soundVol: 80, musicMuted: false, soundMuted: false, sideMarginPct: 0 };
         const AudioEngine = {
             ctx: null,
             bgm: null,
@@ -1404,16 +1419,27 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 const hasExt = /\.(mp3|wav|ogg)$/i.test(String(rawName || ''));
                 const list = [];
                 if (hasExt) list.push(rawName);
+                const nameVariants = [clean];
+                if (clean.includes(' ')) {
+                    nameVariants.push(clean.replace(/ /g, '%20'));
+                    nameVariants.push(clean.replace(/ /g, '_'));
+                    nameVariants.push(clean.replace(/ /g, '-'));
+                    nameVariants.push(clean.replace(/ /g, ''));
+                }
+                if (clean.startsWith('welding')) {
+                    const num = clean.replace(/[^0-9]/g, '');
+                    if (num) {
+                        nameVariants.push(`welder ${num}`, `welder%20${num}`, `welder_${num}`, `welder${num}`);
+                    }
+                }
                 const dirs = ['', 'audio/', 'sfx/', 'music/', 'sounds/', 'sound/', 'assets/audio/', 'assets/sfx/', 'assets/music/', 'assets/'];
                 const exts = ['.mp3', '.wav', '.ogg'];
                 dirs.forEach(d => {
-                    exts.forEach(ext => {
-                        const u = `${d}${clean}${ext}`;
-                        if (!list.includes(u)) list.push(u);
-                        if (clean.includes(' ')) {
-                            const uEnc = `${d}${clean.replace(/ /g, '%20')}${ext}`;
-                            if (!list.includes(uEnc)) list.push(uEnc);
-                        }
+                    nameVariants.forEach(nv => {
+                        exts.forEach(ext => {
+                            const u = `${d}${nv}${ext}`;
+                            if (!list.includes(u)) list.push(u);
+                        });
                     });
                 });
                 return list;
@@ -1506,12 +1532,18 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 tryNext();
                 return audio;
             },
+            bgmPlayPending: false,
+            countdownAudio: null,
             init() {
                 if (this.bgm) return;
-                this.bgm = this.loadSmartAudio('music', AUDIO_ASSETS.music, true, (a) => {
+                this.bgm = this.loadSmartAudio('music', AUDIO_ASSETS.music, true, () => {
                     this.syncVolumes();
-                    if (!appSettings.musicMuted && appSettings.musicVol > 0) {
-                        a.play().catch(() => {});
+                    if (this.unlocked) this.ensureBgmPlaying();
+                });
+                this.bgm.addEventListener('ended', () => {
+                    if (this.getMusicVolume() > 0) {
+                        try { this.bgm.currentTime = 0; } catch (e) {}
+                        this.ensureBgmPlaying();
                     }
                 });
                 this.timerLoop = this.loadSmartAudio('timerLoop', AUDIO_ASSETS.sfx.timerLoop, true, (a) => {
@@ -1522,13 +1554,19 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     });
                     this.syncVolumes();
                 });
+                this.countdownAudio = this.loadSmartAudio('countdown', AUDIO_ASSETS.sfx.countdown, true, () => {
+                    this.syncVolumes();
+                });
                 Object.keys(AUDIO_ASSETS.sfx).forEach(k => {
                     if (k === 'timerLoop') return;
                     this.sfxCache[k] = this.loadSmartAudio(k, AUDIO_ASSETS.sfx[k], false);
                 });
                 const unlockHandler = () => {
                     this.unlocked = true;
-                    this.getAudioContext();
+                    const ac = this.getAudioContext();
+                    if (ac && ac.state !== 'running') {
+                        ac.resume().catch(() => {});
+                    }
                     this.ensureBgmPlaying();
                     Object.keys(this.resolvedUrls).forEach(k => {
                         if (k !== 'music' && !this.sfxBuffers[k]) {
@@ -1536,14 +1574,19 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         }
                     });
                 };
-                ['click', 'pointerdown', 'pointerup', 'touchend', 'keydown'].forEach(ev => {
+                ['click', 'pointerdown', 'touchend', 'keydown'].forEach(ev => {
                     window.addEventListener(ev, unlockHandler, { passive: true, capture: true });
                 });
-                setTimeout(() => {
-                    if (!appSettings.musicMuted && appSettings.musicVol > 0) {
+                document.addEventListener('visibilitychange', () => {
+                    if (!document.hidden && this.unlocked) {
                         this.ensureBgmPlaying();
                     }
-                }, 150);
+                });
+                setInterval(() => {
+                    if (this.unlocked && !document.hidden && this.getMusicVolume() > 0 && this.bgm && this.bgm.paused) {
+                        this.ensureBgmPlaying();
+                    }
+                }, 1200);
             },
             getMusicVolume() {
                 if (appSettings.musicMuted) return 0;
@@ -1560,8 +1603,8 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     this.bgm.volume = mVol;
                     if (mVol === 0 && !this.bgm.paused) {
                         this.bgm.pause();
-                    } else if (mVol > 0 && this.bgm.paused) {
-                        this.bgm.play().catch(() => {});
+                    } else if (mVol > 0 && this.unlocked && this.bgm.paused) {
+                        this.ensureBgmPlaying();
                     }
                 }
                 if (this.timerLoopWebGain) {
@@ -1573,22 +1616,36 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         this.timerLoop.pause();
                     }
                 }
+                if (this.countdownAudio) {
+                    this.countdownAudio.volume = sVol;
+                    if (sVol === 0 && !this.countdownAudio.paused) {
+                        this.countdownAudio.pause();
+                    }
+                }
                 if (sVol === 0) {
                     this.stopWebTimerLoop();
-                } else if (this.dangerLoopRequested || this.simonCountdownLoopRequested) {
+                } else if (this.dangerLoopRequested) {
                     this.refreshTimerLoopPlayback();
                 }
             },
             ensureBgmPlaying() {
                 if (!this.bgm) this.init();
                 const mVol = this.getMusicVolume();
-                if (this.bgm && mVol > 0 && this.bgm.paused) {
-                    this.bgm.volume = mVol;
-                    this.bgm.play().catch(() => {});
+                if (!this.bgm || mVol <= 0) return;
+                this.bgm.volume = mVol;
+                if (this.bgm.paused && !this.bgmPlayPending) {
+                    this.bgmPlayPending = true;
+                    const p = this.bgm.play();
+                    if (p && typeof p.then === 'function') {
+                        p.then(() => { this.bgmPlayPending = false; }).catch(() => { this.bgmPlayPending = false; });
+                    } else {
+                        this.bgmPlayPending = false;
+                    }
                 }
             },
             playSfx(key, volScale = 1) {
                 if (!this.bgm) this.init();
+                this.ensureBgmPlaying();
                 const baseVol = this.getSfxVolume();
                 let scale = (typeof volScale === 'number' && !isNaN(volScale)) ? volScale : 1;
                 if (key === 'shortTone') {
@@ -1603,7 +1660,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 }
                 const webBuf = this.sfxBuffers[key];
                 const ac = this.getAudioContext();
-                if (webBuf && webBuf.buffer && ac) {
+                if (webBuf && webBuf.buffer && ac && ac.state === 'running') {
                     try {
                         const src = ac.createBufferSource();
                         src.buffer = webBuf.buffer;
@@ -1637,10 +1694,10 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 }
             },
             playWeldSfx() {
-                const pick = Math.random() < 0.35 ? (this.lastWeldIdx === 1 ? 2 : 1) : (this.lastWeldIdx === 1 ? 2 : 1);
-                this.lastWeldIdx = (Math.random() < 0.25) ? (Math.random() < 0.5 ? 1 : 2) : pick;
+                const nextIdx = (Math.random() < 0.3) ? (Math.random() < 0.5 ? 1 : 2) : (this.lastWeldIdx === 1 ? 2 : 1);
+                this.lastWeldIdx = nextIdx;
                 const key = this.lastWeldIdx === 1 ? 'weld1' : 'weld2';
-                this.playSfx(key, 0.28);
+                this.playSfx(key, 1.6);
             },
             stopWebTimerLoop() {
                 if (this.timerLoopWebSource) {
@@ -1654,7 +1711,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 }
             },
             refreshTimerLoopPlayback() {
-                const shouldPlay = Boolean(this.dangerLoopRequested || this.simonCountdownLoopRequested);
+                const shouldPlay = Boolean(this.dangerLoopRequested);
                 const sVol = this.getSfxVolume();
                 if (!shouldPlay || sVol <= 0) {
                     this.stopWebTimerLoop();
@@ -1668,7 +1725,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 }
                 const webBuf = this.sfxBuffers['timerLoop'];
                 const ac = this.getAudioContext();
-                if (webBuf && webBuf.buffer && ac) {
+                if (webBuf && webBuf.buffer && ac && ac.state === 'running') {
                     if (this.timerLoop && !this.timerLoop.paused) {
                         this.timerLoop.pause();
                     }
@@ -1706,7 +1763,23 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             },
             setSimonCountdownLoop(shouldPlay) {
                 this.simonCountdownLoopRequested = Boolean(shouldPlay);
-                this.refreshTimerLoopPlayback();
+                const sVol = this.getSfxVolume();
+                if (shouldPlay && sVol > 0) {
+                    if (this.countdownAudio) {
+                        this.countdownAudio.volume = sVol;
+                        try { this.countdownAudio.currentTime = 0; } catch (e) {}
+                        this.countdownAudio.play().catch(() => {
+                            this.playSfx('countdown');
+                        });
+                    } else {
+                        this.playSfx('countdown');
+                    }
+                } else {
+                    if (this.countdownAudio && !this.countdownAudio.paused) {
+                        this.countdownAudio.pause();
+                        try { this.countdownAudio.currentTime = 0; } catch (e) {}
+                    }
+                }
             }
         };
         function playSfx(key, volScale = 1) {
@@ -1720,6 +1793,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     if (typeof saved.soundVol === 'number') appSettings.soundVol = saved.soundVol;
                     if (typeof saved.musicMuted === 'boolean') appSettings.musicMuted = saved.musicMuted;
                     if (typeof saved.soundMuted === 'boolean') appSettings.soundMuted = saved.soundMuted;
+                    if (typeof saved.sideMarginPct === 'number') appSettings.sideMarginPct = saved.sideMarginPct;
                 }
             } catch (e) {}
             AudioEngine.init();
@@ -1731,6 +1805,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         function applyAppSettingsUI() {
             const effMusic = appSettings.musicMuted ? 0 : appSettings.musicVol;
             const effSound = appSettings.soundMuted ? 0 : appSettings.soundVol;
+            const marginPct = Math.max(0, Math.min(100, Number(appSettings.sideMarginPct) || 0));
             ['mm', 'ig'].forEach(prefix => {
                 const mSlider = document.getElementById(`${prefix}-slider-music`);
                 const sSlider = document.getElementById(`${prefix}-slider-sound`);
@@ -1751,8 +1826,28 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     sBtn.classList.toggle('muted', Boolean(appSettings.soundMuted || effSound === 0));
                 }
             });
+            syncSideMarginDOM(marginPct, true);
             document.documentElement.style.fontSize = '';
             AudioEngine.syncVolumes();
+        }
+        function syncSideMarginDOM(marginPct, updateSliderVal = false) {
+            const marginSlider = document.getElementById('mm-slider-margin');
+            const marginValEl = document.getElementById('mm-val-margin');
+            const vizLeft = document.getElementById('margin-viz-left');
+            const vizRight = document.getElementById('margin-viz-right');
+            if (updateSliderVal && marginSlider) marginSlider.value = marginPct;
+            if (marginValEl) marginValEl.textContent = `${marginPct}%`;
+            const vizWidthPct = 4 + (marginPct * 0.22);
+            if (vizLeft) vizLeft.style.width = `${vizWidthPct}%`;
+            if (vizRight) vizRight.style.width = `${vizWidthPct}%`;
+            document.documentElement.style.setProperty('--game-side-margin', `calc(8px + ${(marginPct * 0.12).toFixed(2)}vw)`);
+        }
+        function updateSideMargin(val) {
+            const marginPct = Math.max(0, Math.min(100, parseInt(val, 10) || 0));
+            appSettings.sideMarginPct = marginPct;
+            syncSideMarginDOM(marginPct, false);
+            saveAppSettings();
+            syncHeaderOverlayOffset();
         }
         function updateAudioVolume(type, val) {
             const num = Math.max(0, Math.min(100, parseInt(val, 10) || 0));
@@ -1921,14 +2016,48 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         const MG_MAX_LEVEL = 3; let mgState = { isOpen: false, isPromptOpen: false, pendingResource: null, currentGameId: null, currentLevel: 1, lastPlayedId: null, recentHistory: [], timers: [], intervals: [], rafId: null, cleanupFn: null, finished: false };
         function registerMgTimeout(fn, delay) { const id = setTimeout(fn, delay); mgState.timers.push(id); return id; }
         function registerMgInterval(fn, delay) { const id = setInterval(fn, delay); mgState.intervals.push(id); return id; }
-        function clearMiniGameTimersOnly() { AudioEngine.setSimonCountdownLoop(false); mgState.timers.forEach(id => clearTimeout(id)); mgState.intervals.forEach(id => clearInterval(id)); mgState.timers = []; mgState.intervals = []; if (mgState.rafId) { cancelAnimationFrame(mgState.rafId); mgState.rafId = null; } if (typeof mgState.cleanupFn === 'function') { try { mgState.cleanupFn(); } catch (e) {} mgState.cleanupFn = null; } }
+        function clearMiniGameTimersOnly() { AudioEngine.setSimonCountdownLoop(false); const stg = document.getElementById('mg-stage'); if (stg) stg.classList.remove('simon-watch-bg'); mgState.timers.forEach(id => clearTimeout(id)); mgState.intervals.forEach(id => clearInterval(id)); mgState.timers = []; mgState.intervals = []; if (mgState.rafId) { cancelAnimationFrame(mgState.rafId); mgState.rafId = null; } if (typeof mgState.cleanupFn === 'function') { try { mgState.cleanupFn(); } catch (e) {} mgState.cleanupFn = null; } }
         function cleanupMiniGame() { clearMiniGameTimersOnly(); if (mgState.isOpen && mgState.startedAt > 0) { gameState.playDuration = (gameState.playDuration || 0) + Math.max(0, (Date.now() - mgState.startedAt) / 1000); mgState.startedAt = 0; } mgState.isOpen = false; mgState.isPromptOpen = false; }
         function updateMiniGameLevelHeader() { const pipsContainer = document.getElementById('mg-level-pips'); if (!pipsContainer) return; const diffLabels = ['EASY', 'NORMAL', 'HARD']; let html = ''; for (let lv = 1; lv <= MG_MAX_LEVEL; lv++) { let cls = 'mg-pip'; if (lv < mgState.currentLevel) cls += ' done'; else if (lv === mgState.currentLevel) cls += ' active'; const label = lv < mgState.currentLevel ? `LV.${lv} ✔` : `LV.${lv} ${diffLabels[lv - 1]}`; html += `<span class="${cls}">${label}</span>`; } pipsContainer.innerHTML = html; }
-        function pickRandomMiniGame() { let pool = [...MINIGAME_POOL]; if (mgState.lastPlayedId && pool.length > 1) { pool = pool.filter(id => id !== mgState.lastPlayedId); } const chosen = pool[Math.floor(Math.random() * pool.length)]; mgState.lastPlayedId = chosen; mgState.recentHistory.push(chosen); if (mgState.recentHistory.length > 5) mgState.recentHistory.shift(); return chosen; }
+        function pickRandomMiniGame(resourceType) {
+            const resKey = (resourceType === 'HINT') ? 'HINT' : 'COFFEE';
+            let stats = { total: {}, COFFEE: {}, HINT: {}, lastId: mgState.lastPlayedId || null };
+            try {
+                const saved = JSON.parse(_safeLS.getItem('sa_mg_fair_bag'));
+                if (saved && typeof saved === 'object') {
+                    stats = {
+                        total: saved.total || {},
+                        COFFEE: saved.COFFEE || {},
+                        HINT: saved.HINT || {},
+                        lastId: saved.lastId || mgState.lastPlayedId || null
+                    };
+                }
+            } catch (e) {}
+            MINIGAME_POOL.forEach(id => {
+                if (typeof stats.total[id] !== 'number') stats.total[id] = 0;
+                if (typeof stats.COFFEE[id] !== 'number') stats.COFFEE[id] = 0;
+                if (typeof stats.HINT[id] !== 'number') stats.HINT[id] = 0;
+            });
+            let candidates = MINIGAME_POOL.filter(id => id !== stats.lastId);
+            if (candidates.length === 0) candidates = [...MINIGAME_POOL];
+            const minResCount = Math.min(...candidates.map(id => stats[resKey][id]));
+            let resFiltered = candidates.filter(id => stats[resKey][id] === minResCount);
+            const minTotalCount = Math.min(...resFiltered.map(id => stats.total[id]));
+            let finalCandidates = resFiltered.filter(id => stats.total[id] === minTotalCount);
+            const chosen = finalCandidates[Math.floor(Math.random() * finalCandidates.length)];
+            stats.total[chosen]++;
+            stats[resKey][chosen]++;
+            stats.lastId = chosen;
+            mgState.lastPlayedId = chosen;
+            mgState.recentHistory.push(chosen);
+            if (mgState.recentHistory.length > 5) mgState.recentHistory.shift();
+            _safeLS.setItem('sa_mg_fair_bag', JSON.stringify(stats));
+            return chosen;
+        }
         function promptResourceMiniGame(resourceType) { if (!gameState.isGameActive || mgState.isOpen || mgState.isPromptOpen) return; syncHeaderOverlayOffset(); closeModal('modal-hint'); closeModal('modal-preview-blocks'); closeModal('modal-preview-script'); mgState.pendingResource = resourceType; mgState.isPromptOpen = true; const titleEl = document.getElementById('res-empty-title'); const descEl = document.getElementById('res-empty-desc'); if (resourceType === 'COFFEE') { titleEl.innerText = 'KOPI HABIS!'; descEl.innerText = 'Persediaan kopimu sudah habis. Selesaikan mini game untuk mendapatkan secangkir kopi tambahan agar tetap terjaga!'; } else { titleEl.innerText = 'HINT HABIS!'; descEl.innerText = 'Butuh sedikit bantuan? Selesaikan mini game untuk mendapatkan tambahan Hint.'; } document.getElementById('modal-resource-empty').classList.add('active'); }
         function cancelPlayMiniGame() { mgState.isPromptOpen = false; mgState.pendingResource = null; closeModal('modal-resource-empty'); }
         function confirmPlayMiniGame() { if (!mgState.pendingResource || mgState.isOpen) return; const targetRes = mgState.pendingResource; closeModal('modal-resource-empty'); mgState.isPromptOpen = false; pauseTimer(); saveData(); launchRandomMiniGame(targetRes); }
-        function launchRandomMiniGame(resourceType) { cleanupMiniGame(); gameState.miniGamesCount = (gameState.miniGamesCount || 0) + 1; gameState.caseMiniGamesUsed = (gameState.caseMiniGamesUsed || 0) + 1; mgState.startedAt = Date.now(); mgState.isOpen = true; mgState.finished = false; mgState.pendingResource = resourceType; mgState.currentLevel = 1; simonMasterSequence = []; const gameId = pickRandomMiniGame(); mgState.currentGameId = gameId; const rewardLabel = resourceType === 'COFFEE' ? 'HADIAH: +1 KOPI ☕' : 'HADIAH: +1 HINT 💡'; document.getElementById('mg-reward-badge').innerText = rewardLabel; syncHeaderOverlayOffset(); document.getElementById('modal-minigame').classList.add('active'); startCurrentMiniGameStage(); }
+        function launchRandomMiniGame(resourceType) { cleanupMiniGame(); gameState.miniGamesCount = (gameState.miniGamesCount || 0) + 1; gameState.caseMiniGamesUsed = (gameState.caseMiniGamesUsed || 0) + 1; mgState.startedAt = Date.now(); mgState.isOpen = true; mgState.finished = false; mgState.pendingResource = resourceType; mgState.currentLevel = 1; simonMasterSequence = []; const gameId = pickRandomMiniGame(resourceType); mgState.currentGameId = gameId; const rewardLabel = resourceType === 'COFFEE' ? 'HADIAH: +1 KOPI ☕' : 'HADIAH: +1 HINT 💡'; document.getElementById('mg-reward-badge').innerText = rewardLabel; syncHeaderOverlayOffset(); document.getElementById('modal-minigame').classList.add('active'); startCurrentMiniGameStage(); }
         function startCurrentMiniGameStage() { clearMiniGameTimersOnly(); mgState.finished = false; updateMiniGameLevelHeader(); const lv = mgState.currentLevel; const gameId = mgState.currentGameId; if (gameId === 'SIMON_KEYPAD') initSimonKeypadGame(lv); else if (gameId === 'COFFEE_MACHINE') initCoffeeMachineGame(lv); else if (gameId === 'COCKROACH_SMASHER') initCockroachSmasherGame(lv); else if (gameId === 'WIRE_MATCHING') initWireMatchingGame(lv); else if (gameId === 'PAPER_TOSS') initPaperTossGame(lv); }
         function advanceMiniGameLevelOrWin() { if (mgState.finished) return; clearMiniGameTimersOnly(); if (mgState.currentLevel < MG_MAX_LEVEL) { mgState.currentLevel++; updateMiniGameLevelHeader(); const statusEl = document.getElementById('mg-status'); if (statusEl) { statusEl.style.color = 'var(--color-scene)'; playSfx('mgComplete'); statusEl.innerText = 'Berhasil! Bersiap ke tahap berikutnya...'; } registerMgTimeout(() => { startCurrentMiniGameStage(); }, 750); } else { completeMiniGameSuccess(); } }
         function completeMiniGameSuccess() { if (mgState.finished) return; mgState.finished = true; playSfx('mgComplete'); const rewardType = mgState.pendingResource; cleanupMiniGame(); closeModal('modal-minigame'); if (rewardType === 'COFFEE') { gameState.coffeesLeft = Math.min(MAX_COFFEE_PER_CASE, gameState.coffeesLeft + 1); renderCoffee(); showFloatingFeedback('MINI GAME SELESAI!<br>+1 KOPI ☕', 'success'); } else if (rewardType === 'HINT') { gameState.hintsLeft = Math.min(MAX_HINTS_PER_CASE, gameState.hintsLeft + 1); gameState.hintUsed = false; updateHintButtonUI(); showFloatingFeedback('MINI GAME SELESAI!<br>+1 HINT 💡', 'success'); } mgState.pendingResource = null; saveData(); if (gameState.isGameActive) startTimer(); }
@@ -1937,11 +2066,11 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         let simonMasterSequence = [];
         function initSimonKeypadGame(level) {
             document.getElementById('mg-title').innerText = 'KODE NUMPAD';
-            const seqLength = level === 1 ? 3 : (level === 2 ? 5 : 7);
+            const seqLength = level === 1 ? 3 : (level === 2 ? 4 : 5);
             const flashSpeed = 680;
             if (level === 1 || simonMasterSequence.length === 0) {
                 simonMasterSequence = [];
-                for (let i = 0; i < 7; i++) {
+                for (let i = 0; i < 5; i++) {
                     simonMasterSequence.push(Math.floor(Math.random() * 10));
                 }
             }
@@ -1949,11 +2078,11 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             const stage = document.getElementById('mg-stage');
             const statusEl = document.getElementById('mg-status');
             statusEl.style.color = 'var(--accent-yellow)';
-            statusEl.innerText = 'Bersiap mengamati urutan angka pada numpad...';
+            statusEl.innerText = 'Jangan tekan dulu! Bersiap mengamati urutan angka...';
             const initialSlots = Array(seqLength).fill('_').join(' ');
-            stage.innerHTML = `<div class="simon-casing"><div class="simon-countdown-overlay" id="simon-cd-overlay"><span class="simon-countdown-num" id="simon-cd-num">3</span></div><div class="simon-mode-badge wait" id="simon-mode-badge">✋ TUNGGU — AMATI URUTAN</div><div class="simon-lcd"><span id="simon-prog">${initialSlots}</span></div><div class="simon-grid locked-watch" id="simon-grid"></div></div>`;
+            stage.innerHTML = `<div class="simon-casing watch-phase" id="simon-casing"><div class="simon-countdown-overlay" id="simon-cd-overlay"><span class="simon-countdown-num" id="simon-cd-num">3</span></div><div class="simon-lcd"><span id="simon-prog">${initialSlots}</span></div><div class="simon-grid locked-watch" id="simon-grid"></div></div>`;
+            const casing = document.getElementById('simon-casing');
             const grid = document.getElementById('simon-grid');
-            const modeBadge = document.getElementById('simon-mode-badge');
             const keysLayout = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
             const keyEls = {};
             let playerIndex = 0;
@@ -1963,14 +2092,11 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 if (grid) {
                     grid.classList.toggle('locked-watch', !acceptingInput);
                 }
-                if (modeBadge) {
-                    if (acceptingInput) {
-                        modeBadge.className = 'simon-mode-badge go';
-                        modeBadge.innerText = '👉 GILIRANMU — TEKAN ANGKA!';
-                    } else {
-                        modeBadge.className = 'simon-mode-badge wait';
-                        modeBadge.innerText = '✋ JANGAN TEKAN — AMATI URUTAN';
-                    }
+                if (casing) {
+                    casing.classList.toggle('watch-phase', !acceptingInput);
+                }
+                if (stage) {
+                    stage.classList.toggle('simon-watch-bg', !acceptingInput);
                 }
             }
             keysLayout.forEach(num => {
@@ -2073,8 +2199,25 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             }
             startCountdownAndPlay(false);
         }
-        function initCoffeeMachineGame(level) { document.getElementById('mg-title').innerText = 'RACIK KOPI'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; const baseIngredients = [{ id: 'BEANS', name: 'Kopi' }, { id: 'WATER', name: 'Air' }, { id: 'MILK', name: 'Susu' }, { id: 'SUGAR', name: 'Gula' }, { id: 'ICE', name: 'Es' }, { id: 'CARAMEL', name: 'Karamel' }]; const isPortraitMode = window.matchMedia('(orientation: portrait)').matches; const safeDeskPositions = (isPortraitMode ? ['right: 8px; top: 4px;', 'right: 58px; top: 4px;', 'right: 8px; top: 60px;', 'left: 8px; top: 120px;', 'right: 8px; top: 120px;', 'left: 8px; bottom: 8px;', 'right: 8px; bottom: 8px;'] : ['right: 12px; top: 4px;', 'right: 68px; top: 4px;', 'right: 124px; top: 4px;', 'right: 12px; top: 58px;', 'left: 12px; top: 114px;', 'right: 12px; top: 114px;', 'left: 12px; bottom: 8px;', 'right: 12px; bottom: 8px;']).sort(() => Math.random() - 0.5); const recipesByLevel = { 1: [ { title: 'ESPRESSO PANAS', req: ['BEANS', 'WATER'] }, { title: 'KOPI MANIS', req: ['BEANS', 'SUGAR'] } ], 2: [ { title: 'KOPI SUSU', req: ['BEANS', 'WATER', 'MILK'] }, { title: 'ES AMERICANO', req: ['BEANS', 'WATER', 'ICE'] }, { title: 'KOPI GULA HANGAT', req: ['BEANS', 'WATER', 'SUGAR'] } ], 3: [ { title: 'ES LATTE KARAMEL', req: ['BEANS', 'WATER', 'MILK', 'ICE', 'CARAMEL'] }, { title: 'MACCHIATO SPESIAL', req: ['BEANS', 'WATER', 'MILK', 'SUGAR', 'CARAMEL'] } ] }; const targetRecipe = pickRandom(recipesByLevel[level] || recipesByLevel[1]); const selectedSet = new Set(); let brewing = false; const reqListHTML = targetRecipe.req.map(rId => { const item = baseIngredients.find(x => x.id === rId); return `<div>• ${item.name}</div>`; }).join(''); stage.innerHTML = `<div class="coffee-desk-scene" id="coffee-desk-scene"><div class="cm-wall-shelf shelf-top"></div><div class="cm-wall-shelf shelf-mid"></div><div class="cm-wall-shelf shelf-low"></div><div class="cm-sticky-note"><div class="cm-sticky-title">${targetRecipe.title}</div><div class="cm-sticky-grid">${reqListHTML}</div></div><div class="cm-center-machine"><div class="cm-hopper"></div><div class="cm-body-top"><div class="cm-gauge"></div><span class="cm-led-screen" id="cm-count-led">0/${targetRecipe.req.length}</span></div><div class="cm-brew-chamber"><div class="cm-steam-wand"></div><div class="cm-portafilter"></div><div class="cm-stream" id="cm-stream"></div><div class="cm-cup"><div class="cm-cup-fill" id="cm-cup-fill"></div></div></div><div class="cm-base-tray"><button class="cm-brew-trigger" id="btn-brew-now">▶ SEDUH</button></div></div></div>`; statusEl.innerText = 'Cari dan klik bahan di atas meja sesuai resep, lalu tekan SEDUH!'; const deskScene = document.getElementById('coffee-desk-scene'); baseIngredients.forEach((ing, idx) => { const itemEl = document.createElement('div'); itemEl.className = 'cm-desk-item'; itemEl.style.cssText = safeDeskPositions[idx]; itemEl.innerHTML = `${PIXEL_ART.ingIcon(ing.id, 28)}<span class="cm-desk-item-label">${ing.name}</span>`; itemEl.onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.has(ing.id)) { selectedSet.delete(ing.id); itemEl.classList.remove('selected'); } else { selectedSet.add(ing.id); itemEl.classList.add('selected'); } const ledEl = document.getElementById('cm-count-led'); if (ledEl) ledEl.innerText = `${selectedSet.size}/${targetRecipe.req.length}`; statusEl.style.color = 'var(--text-highlight)'; statusEl.innerText = `Bahan dipilih: ${selectedSet.size} dari ${targetRecipe.req.length} bahan resep.`; }; deskScene.appendChild(itemEl); }); document.getElementById('btn-brew-now').onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.size === 0) { statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Pilih bahan di atas meja terlebih dahulu!'; return; } brewing = true; playSfx('coffeePour'); statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = 'Menyeduh kopi di mesin...'; const streamEl = document.getElementById('cm-stream'); const fillEl = document.getElementById('cm-cup-fill'); if (streamEl) streamEl.classList.add('pouring'); if (fillEl) fillEl.style.height = '85%'; registerMgTimeout(() => { if (streamEl) streamEl.classList.remove('pouring'); const isExactMatch = selectedSet.size === targetRecipe.req.length && targetRecipe.req.every(reqId => selectedSet.has(reqId)); if (isExactMatch) { advanceMiniGameLevelOrWin(); } else { brewing = false; if (fillEl) fillEl.style.height = '0%'; statusEl.style.color = 'var(--color-char)'; playSfx('fail'); statusEl.innerText = 'Campuran bahan belum tepat! Cek lagi catatan resep.'; } }, 800); }; }
-        function initCockroachSmasherGame(level) { document.getElementById('mg-title').innerText = 'BASMI KECOAK'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; let stageTimeLeft = 30; const stageQuota = level === 1 ? 5 : (level === 2 ? 7 : 9); const simultaneousCount = level === 1 ? 2 : (level === 2 ? 3 : 4); let stageKills = 0; stage.innerHTML = `<div style="display:flex; justify-content:space-between; width:100%; margin-bottom:6px; font-size:var(--fs-subtitle);"><span>TERBASMI: <strong id="roach-wave-score" style="color:var(--color-scene);">0 / ${stageQuota}</strong></span><span>WAKTU: <strong id="roach-timer" style="color:var(--accent-yellow);">${stageTimeLeft}d</strong></span></div><div class="roach-arena" id="roach-arena"></div>`; statusEl.innerText = 'Ketuk kecoak-kecoak yang berkeliaran sebelum waktu habis!'; const arena = document.getElementById('roach-arena'); const speedProfiles = [ { moveMs: level === 1 ? 1200 : (level === 2 ? 950 : 720), stepTransition: '0.45s' }, { moveMs: level === 1 ? 900 : (level === 2 ? 720 : 550), stepTransition: '0.35s' }, { moveMs: level === 1 ? 700 : (level === 2 ? 550 : 420), stepTransition: '0.25s' }, { moveMs: level === 1 ? 550 : (level === 2 ? 420 : 320), stepTransition: '0.20s' } ]; function moveSingleRoach(roach) { if (mgState.finished || !arena || !roach || roach.dataset.smashed === '1') return; const maxW = Math.max(40, arena.clientWidth - 48); const maxH = Math.max(40, arena.clientHeight - 48); const rot = Math.floor(Math.random() * 8) * 45; roach.style.left = `${Math.floor(Math.random() * maxW)}px`; roach.style.top = `${Math.floor(Math.random() * maxH)}px`; roach.style.transform = `rotate(${rot}deg)`; } function spawnSingleRoach(profileIdx) { if (mgState.finished || !arena) return; const activeOnBoard = arena.querySelectorAll('.roach-target[data-smashed="0"]').length; if (stageKills + activeOnBoard >= stageQuota) return; const profile = speedProfiles[profileIdx % speedProfiles.length]; const roach = document.createElement('div'); roach.className = 'roach-target'; roach.innerHTML = PIXEL_ART.roach; roach.dataset.smashed = '0'; roach.style.transition = `top ${profile.stepTransition} steps(5), left ${profile.stepTransition} steps(5), transform 0.12s steps(2)`; const maxW = Math.max(40, arena.clientWidth - 48); const maxH = Math.max(40, arena.clientHeight - 48); roach.style.left = `${Math.floor(Math.random() * maxW)}px`; roach.style.top = `${Math.floor(Math.random() * maxH)}px`; roach.style.transform = `rotate(${Math.floor(Math.random() * 8) * 45}deg)`; const moveId = registerMgInterval(() => { moveSingleRoach(roach); }, profile.moveMs); roach.onpointerdown = (e) => { e.stopPropagation(); if (mgState.finished || roach.dataset.smashed === '1') return; playSfx('roachSplat', 0.22); roach.dataset.smashed = '1'; clearInterval(moveId); stageKills++; const splat = document.createElement('div'); splat.className = 'roach-splat'; splat.style.left = roach.style.left; splat.style.top = roach.style.top; splat.innerHTML = PIXEL_ART.splat; arena.appendChild(splat); registerMgTimeout(() => splat.remove(), 400); roach.remove(); const wEl = document.getElementById('roach-wave-score'); if (wEl) wEl.innerText = `${stageKills} / ${stageQuota}`; if (stageKills >= stageQuota) { advanceMiniGameLevelOrWin(); } else { registerMgTimeout(() => { spawnSingleRoach(Math.floor(Math.random() * speedProfiles.length)); }, 180); } }; arena.appendChild(roach); } for (let i = 0; i < simultaneousCount; i++) { spawnSingleRoach(i); } registerMgInterval(() => { if (mgState.finished) return; stageTimeLeft--; const tEl = document.getElementById('roach-timer'); if (tEl) tEl.innerText = `${Math.max(0, stageTimeLeft)}d`; if (stageTimeLeft <= 0) { if (arena) arena.innerHTML = ''; failMiniGame('Waktu habis! Kecoak berhasil kabur.'); } }, 1000); }
+        function initCoffeeMachineGame(level) { document.getElementById('mg-title').innerText = 'RACIK KOPI'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; const baseIngredients = [{ id: 'BEANS', name: 'Kopi' }, { id: 'WATER', name: 'Air' }, { id: 'MILK', name: 'Susu' }, { id: 'SUGAR', name: 'Gula' }, { id: 'ICE', name: 'Es' }, { id: 'CARAMEL', name: 'Karamel' }]; const isPortraitMode = window.matchMedia('(orientation: portrait)').matches;
+            const zoneGroups = isPortraitMode ? [
+                ['left: 136px; top: 4px;', 'right: 54px; top: 4px;'],
+                ['right: 6px; top: 4px;', 'right: 12px; top: 58px;'],
+                ['right: 46px; top: 58px;', 'right: 8px; top: 118px;'],
+                ['left: 8px; top: 118px;', 'left: 46px; top: 118px;'],
+                ['left: 8px; bottom: 8px;', 'left: 48px; bottom: 10px;'],
+                ['right: 8px; bottom: 8px;', 'right: 48px; bottom: 10px;']
+            ] : [
+                ['left: 146px; top: 4px;', 'left: 196px; top: 4px;'],
+                ['right: 76px; top: 4px;', 'right: 14px; top: 4px;'],
+                ['right: 14px; top: 56px;', 'right: 72px; top: 56px;'],
+                ['left: 14px; top: 112px;', 'left: 72px; top: 112px;'],
+                ['right: 14px; top: 112px;', 'right: 72px; top: 112px;'],
+                ['left: 16px; bottom: 8px;', 'left: 76px; bottom: 12px;', 'right: 76px; bottom: 12px;', 'right: 16px; bottom: 8px;']
+            ];
+            const safeDeskPositions = zoneGroups.map(grp => grp[Math.floor(Math.random() * grp.length)]).sort(() => Math.random() - 0.5);
+            const recipesByLevel = { 1: [ { title: 'ESPRESSO PANAS', req: ['BEANS', 'WATER'] }, { title: 'KOPI MANIS', req: ['BEANS', 'SUGAR'] } ], 2: [ { title: 'KOPI SUSU', req: ['BEANS', 'WATER', 'MILK'] }, { title: 'ES AMERICANO', req: ['BEANS', 'WATER', 'ICE'] }, { title: 'KOPI GULA HANGAT', req: ['BEANS', 'WATER', 'SUGAR'] } ], 3: [ { title: 'ES LATTE KARAMEL', req: ['BEANS', 'WATER', 'MILK', 'ICE', 'CARAMEL'] }, { title: 'MACCHIATO SPESIAL', req: ['BEANS', 'WATER', 'MILK', 'SUGAR', 'CARAMEL'] } ] }; const targetRecipe = pickRandom(recipesByLevel[level] || recipesByLevel[1]); const selectedSet = new Set(); let brewing = false; const reqListHTML = targetRecipe.req.map(rId => { const item = baseIngredients.find(x => x.id === rId); return `<div>• ${item.name}</div>`; }).join(''); stage.innerHTML = `<div class="coffee-desk-scene" id="coffee-desk-scene"><div class="cm-wall-shelf shelf-top"></div><div class="cm-wall-shelf shelf-mid"></div><div class="cm-wall-shelf shelf-low"></div><div class="cm-sticky-note"><div class="cm-sticky-title">${targetRecipe.title}</div><div class="cm-sticky-grid">${reqListHTML}</div></div><div class="cm-center-machine"><div class="cm-hopper"></div><div class="cm-body-top"><div class="cm-gauge"></div><span class="cm-led-screen" id="cm-count-led">0/${targetRecipe.req.length}</span></div><div class="cm-brew-chamber"><div class="cm-steam-wand"></div><div class="cm-portafilter"></div><div class="cm-stream" id="cm-stream"></div><div class="cm-cup-wrap"><div class="cm-cup"><div class="cm-cup-fill" id="cm-cup-fill"></div></div><div class="cm-cup-handle"></div></div></div><div class="cm-base-tray"><button class="cm-brew-trigger" id="btn-brew-now">▶ SEDUH</button></div></div></div>`; statusEl.innerText = 'Cari dan klik bahan di atas meja sesuai resep, lalu tekan SEDUH!'; const deskScene = document.getElementById('coffee-desk-scene'); baseIngredients.forEach((ing, idx) => { const itemEl = document.createElement('div'); itemEl.className = 'cm-desk-item'; itemEl.style.cssText = safeDeskPositions[idx]; itemEl.innerHTML = `${PIXEL_ART.ingIcon(ing.id, 28)}<span class="cm-desk-item-label">${ing.name}</span>`; itemEl.onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.has(ing.id)) { selectedSet.delete(ing.id); itemEl.classList.remove('selected'); } else { selectedSet.add(ing.id); itemEl.classList.add('selected'); } const ledEl = document.getElementById('cm-count-led'); if (ledEl) ledEl.innerText = `${selectedSet.size}/${targetRecipe.req.length}`; statusEl.style.color = 'var(--text-highlight)'; statusEl.innerText = `Bahan dipilih: ${selectedSet.size} dari ${targetRecipe.req.length} bahan resep.`; }; deskScene.appendChild(itemEl); }); document.getElementById('btn-brew-now').onclick = () => { if (brewing || mgState.finished) return; if (selectedSet.size === 0) { statusEl.style.color = 'var(--color-char)'; statusEl.innerText = 'Pilih bahan di atas meja terlebih dahulu!'; return; } brewing = true; playSfx('coffeePour'); statusEl.style.color = 'var(--accent-yellow)'; statusEl.innerText = 'Menyeduh kopi di mesin...'; const streamEl = document.getElementById('cm-stream'); const fillEl = document.getElementById('cm-cup-fill'); if (streamEl) streamEl.classList.add('pouring'); if (fillEl) fillEl.style.height = '85%'; registerMgTimeout(() => { if (streamEl) streamEl.classList.remove('pouring'); const isExactMatch = selectedSet.size === targetRecipe.req.length && targetRecipe.req.every(reqId => selectedSet.has(reqId)); if (isExactMatch) { advanceMiniGameLevelOrWin(); } else { brewing = false; if (fillEl) fillEl.style.height = '0%'; statusEl.style.color = 'var(--color-char)'; playSfx('fail'); statusEl.innerText = 'Campuran bahan belum tepat! Cek lagi catatan resep.'; } }, 800); }; }
+        function initCockroachSmasherGame(level) { document.getElementById('mg-title').innerText = 'BASMI KECOAK'; const stage = document.getElementById('mg-stage'); const statusEl = document.getElementById('mg-status'); statusEl.style.color = 'var(--accent-yellow)'; let stageTimeLeft = 30; const stageQuota = level === 1 ? 3 : 5; const simultaneousCount = level === 1 ? 2 : (level === 2 ? 3 : 4); let stageKills = 0; stage.innerHTML = `<div style="display:flex; justify-content:space-between; width:100%; margin-bottom:6px; font-size:var(--fs-subtitle);"><span>TERBASMI: <strong id="roach-wave-score" style="color:var(--color-scene);">0 / ${stageQuota}</strong></span><span>WAKTU: <strong id="roach-timer" style="color:var(--accent-yellow);">${stageTimeLeft}d</strong></span></div><div class="roach-arena" id="roach-arena"></div>`; statusEl.innerText = 'Ketuk kecoak-kecoak yang berkeliaran sebelum waktu habis!'; const arena = document.getElementById('roach-arena'); const speedProfiles = [ { moveMs: level === 1 ? 1200 : (level === 2 ? 950 : 720), stepTransition: '0.45s' }, { moveMs: level === 1 ? 900 : (level === 2 ? 720 : 550), stepTransition: '0.35s' }, { moveMs: level === 1 ? 700 : (level === 2 ? 550 : 420), stepTransition: '0.25s' }, { moveMs: level === 1 ? 550 : (level === 2 ? 420 : 320), stepTransition: '0.20s' } ]; function moveSingleRoach(roach) { if (mgState.finished || !arena || !roach || roach.dataset.smashed === '1') return; const maxW = Math.max(40, arena.clientWidth - 48); const maxH = Math.max(40, arena.clientHeight - 48); const rot = Math.floor(Math.random() * 8) * 45; roach.style.left = `${Math.floor(Math.random() * maxW)}px`; roach.style.top = `${Math.floor(Math.random() * maxH)}px`; roach.style.transform = `rotate(${rot}deg)`; } function spawnSingleRoach(profileIdx) { if (mgState.finished || !arena) return; const activeOnBoard = arena.querySelectorAll('.roach-target[data-smashed="0"]').length; if (stageKills + activeOnBoard >= stageQuota) return; const profile = speedProfiles[profileIdx % speedProfiles.length]; const roach = document.createElement('div'); roach.className = 'roach-target'; roach.innerHTML = PIXEL_ART.roach; roach.dataset.smashed = '0'; roach.style.transition = `top ${profile.stepTransition} steps(5), left ${profile.stepTransition} steps(5), transform 0.12s steps(2)`; const maxW = Math.max(40, arena.clientWidth - 48); const maxH = Math.max(40, arena.clientHeight - 48); roach.style.left = `${Math.floor(Math.random() * maxW)}px`; roach.style.top = `${Math.floor(Math.random() * maxH)}px`; roach.style.transform = `rotate(${Math.floor(Math.random() * 8) * 45}deg)`; const moveId = registerMgInterval(() => { moveSingleRoach(roach); }, profile.moveMs); roach.onpointerdown = (e) => { e.stopPropagation(); if (mgState.finished || roach.dataset.smashed === '1') return; playSfx('roachSplat', 0.22); roach.dataset.smashed = '1'; clearInterval(moveId); stageKills++; const splat = document.createElement('div'); splat.className = 'roach-splat'; splat.style.left = roach.style.left; splat.style.top = roach.style.top; splat.innerHTML = PIXEL_ART.splat; arena.appendChild(splat); registerMgTimeout(() => splat.remove(), 400); roach.remove(); const wEl = document.getElementById('roach-wave-score'); if (wEl) wEl.innerText = `${stageKills} / ${stageQuota}`; if (stageKills >= stageQuota) { advanceMiniGameLevelOrWin(); } else { registerMgTimeout(() => { spawnSingleRoach(Math.floor(Math.random() * speedProfiles.length)); }, 180); } }; arena.appendChild(roach); } for (let i = 0; i < simultaneousCount; i++) { spawnSingleRoach(i); } registerMgInterval(() => { if (mgState.finished) return; stageTimeLeft--; const tEl = document.getElementById('roach-timer'); if (tEl) tEl.innerText = `${Math.max(0, stageTimeLeft)}d`; if (stageTimeLeft <= 0) { if (arena) arena.innerHTML = ''; failMiniGame('Waktu habis! Kecoak berhasil kabur.'); } }, 1000); }
         function initWireMatchingGame(level) {
             document.getElementById('mg-title').innerText = 'SAMBUNG KABEL';
             const stage = document.getElementById('mg-stage');
@@ -2333,6 +2476,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 const flightDuration = isHit ? 580 : 540;
                 const throwStart = performance.now();
                 let netJiggled = false;
+                let floorDropPlayed = false;
                 function animateThrow(now) {
                     if (mgState.finished || !ballEl) return;
                     const elapsed = now - throwStart;
@@ -2357,6 +2501,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                             ballEl.style.zIndex = '3';
                             if (!netJiggled) {
                                 netJiggled = true;
+                                playSfx('paperDrop');
                                 binEl.style.transform = 'scaleX(1.07) scaleY(0.94)';
                                 if (binBackEl) binBackEl.style.transform = 'scaleX(1.07) scaleY(0.94)';
                                 registerMgTimeout(() => {
@@ -2380,6 +2525,10 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                             curY = startY + (6 - startY) * u + arc;
                             ballEl.style.zIndex = '5';
                         } else {
+                            if (!floorDropPlayed) {
+                                floorDropPlayed = true;
+                                playSfx('paperDrop');
+                            }
                             const b = (t - airRatio) / (1 - airRatio);
                             const drift = power < sweetMin ? -8 : 10;
                             curX = endX + drift * b;
