@@ -207,7 +207,9 @@
         .modal-close-x { position: absolute; right: 0; top: calc(50% - 5px); transform: translateY(-50%); background: var(--color-char); color: #fff; border: 1.5px solid #5c2f2f; width: 22px; height: 22px; display: flex; justify-content: center; align-items: center; font-size: 1rem; line-height: 1; font-weight: bold; cursor: pointer; box-shadow: 2px 2px 0 rgba(0,0,0,0.45); z-index: 101; padding: 0; border-radius: 2px; transition: transform 0.1s, box-shadow 0.1s, filter 0.1s; }
         .modal-close-x:hover { filter: brightness(1.1); }
         .modal-close-x:active { transform: translateY(-50%) translate(1px, 1px); box-shadow: none; }
-        .audio-loading-banner { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 9999; background: rgba(22, 22, 21, 0.92); border: 1.5px solid var(--accent-yellow); color: var(--accent-yellow); padding: 4px 12px; font-size: var(--fs-subtitle); letter-spacing: 1.5px; box-shadow: 3px 3px 0 rgba(0,0,0,0.6); pointer-events: none; display: inline-flex; align-items: center; white-space: nowrap; transition: opacity 0.2s ease; }
+        .modal-close-x.tutup-btn { position: static !important; top: auto !important; right: auto !important; transform: none !important; width: auto !important; min-width: 54px !important; height: auto !important; min-height: 24px !important; padding: 3px 10px !important; font-size: var(--fs-subtitle) !important; line-height: 1.1 !important; letter-spacing: 1px !important; white-space: nowrap !important; box-sizing: border-box !important; flex-shrink: 0 !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
+        .modal-close-x.tutup-btn:active { transform: translate(1px, 1px) !important; box-shadow: none !important; }
+        .audio-loading-banner { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 9999; background: rgba(22, 22, 21, 0.92); border: 1.5px solid var(--border-light); color: var(--text-normal); padding: 4px 12px; font-size: var(--fs-subtitle); letter-spacing: 1.5px; box-shadow: 3px 3px 0 rgba(0,0,0,0.6); pointer-events: none; display: inline-flex; align-items: center; white-space: nowrap; transition: opacity 0.2s ease; }
         .audio-loading-banner.hidden-banner { opacity: 0; pointer-events: none; display: none !important; }
         .loading-dots { display: inline-block; width: 18px; text-align: left; }
         .loading-dots::after { content: "."; animation: loadingDotsAnim 1.2s steps(1, end) infinite; }
@@ -233,11 +235,11 @@
         .settings-val-badge { font-size: var(--fs-small); color: var(--accent-yellow); min-width: 36px; text-align: right; font-weight: bold; }
         .settings-mute-btn { background: var(--bg-app); border: 1px solid var(--border-light); color: var(--text-highlight); width: 26px; height: 24px; padding: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; }
         .settings-mute-btn.muted { color: var(--color-char); border-color: var(--color-char); opacity: 0.75; }
-        .margin-preview-box { width: 100%; height: 54px; background: #141413; border: 1.5px solid var(--border-dark); outline: 1px solid var(--border-light); display: flex; align-items: stretch; justify-content: space-between; padding: 4px 0; position: relative; overflow: hidden; margin-top: 2px; }
-        .margin-side-zone { background: repeating-linear-gradient(45deg, rgba(214, 176, 84, 0.14) 0px, rgba(214, 176, 84, 0.14) 3px, transparent 3px, transparent 6px); border-right: 1.5px dashed var(--accent-yellow); display: flex; align-items: center; justify-content: center; color: var(--accent-yellow); font-size: 0.65rem; transition: none !important; will-change: width; flex-shrink: 0; overflow: hidden; }
+        .margin-preview-box { width: 96px; height: 54px; aspect-ratio: 16 / 9; background: #141413; border: 1.5px solid var(--border-dark); outline: 1px solid var(--border-light); display: flex; align-items: stretch; justify-content: space-between; padding: 2px 0; position: relative; overflow: hidden; margin: 2px auto 0 auto; box-sizing: border-box; }
+        .margin-side-zone { background: repeating-linear-gradient(45deg, rgba(214, 176, 84, 0.16) 0px, rgba(214, 176, 84, 0.16) 3px, transparent 3px, transparent 6px); border-right: 1px dashed var(--accent-yellow); display: flex; align-items: center; justify-content: center; color: var(--accent-yellow); font-size: 0.55rem; transition: none !important; will-change: width; flex-shrink: 0; overflow: hidden; box-sizing: border-box; }
         .margin-note-text { font-size: 0.62rem !important; color: var(--text-muted); text-align: center; line-height: 1.15; margin-top: 2px; font-style: italic; letter-spacing: 0.3px; }
-        .margin-side-zone.right { border-right: none; border-left: 1.5px dashed var(--accent-yellow); }
-        .margin-mini-game { flex: 1; margin: 0 3px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+        .margin-side-zone.right { border-right: none; border-left: 1px dashed var(--accent-yellow); }
+        .margin-mini-game { flex: 1; margin: 0; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
         .margin-mini-header { height: 11px; background: var(--bg-panel); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; padding: 0 4px; }
         .margin-mini-header::before { content: ""; width: 14px; height: 4px; background: var(--accent-yellow); display: block; }
         .margin-mini-header::after { content: ""; width: 26px; height: 4px; background: var(--color-scene); display: block; }
@@ -254,6 +256,8 @@
         .main-menu-btn:hover { filter: brightness(1.1); transform: translate(-1px, -1px); box-shadow: 4px 4px 0 rgba(0,0,0,0.6); }
         #tutorial-overlay { z-index: 2500; background: transparent !important; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; outline: none; display: none; }
         #tutorial-overlay.active { display: flex; }
+        body.tutorial-running #game-layout { padding-top: 46px !important; }
+        .tut-top-window-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 2650; padding: 8px 20px !important; pointer-events: auto; cursor: default; }
         #tutorial-overlay:not(.active), #tutorial-overlay:not(.active) * { pointer-events: none !important; }
         body.tutorial-running .in-game-modal { background: transparent !important; pointer-events: none !important; }
         body.tutorial-running #modal-preview-blocks { align-items: center !important; justify-content: center !important; padding-bottom: 86px !important; }
@@ -481,7 +485,7 @@
         .nav-arrow { width: 24px !important; height: 24px !important; }
         .page-thumb { width: 26px !important; height: 32px !important; padding: 2px 4px !important; }
         .modal-header-row { min-height: 22px !important; padding: 0 26px 8px 26px !important; margin-bottom: 10px !important; }
-        .modal-close-x { width: 20px !important; height: 20px !important; font-size: 0.9rem !important; top: calc(50% - 4px) !important; }
+        .modal-close-x:not(.tutup-btn) { width: 20px !important; height: 20px !important; font-size: 0.9rem !important; top: calc(50% - 4px) !important; }
         #modal-preview-blocks .modal-content { padding: 12px 10px !important; width: 96% !important; max-width: 96vw !important; }
         #preview-blocks-grid { gap: 8px !important; padding-top: 8px !important; align-items: flex-start !important; }
         .preview-masonry-col { gap: 8px !important; }
@@ -536,7 +540,7 @@
         .mg-stage { background: #181715; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 8px 8px; border: 3px solid var(--border-dark); outline: 1px solid var(--border-light); box-shadow: inset 0 0 18px rgba(0,0,0,0.85); padding: 10px; height: 268px; min-height: 268px; max-height: 268px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .mg-status-bar { margin-top: 10px; height: 44px; min-height: 44px; max-height: 44px; font-size: var(--fs-subtitle); color: var(--accent-yellow); text-align: center; letter-spacing: 0.5px; background: #141413; border: 1px dashed var(--border-light); padding: 4px 8px; display: flex; align-items: center; justify-content: center; line-height: 1.15; overflow: hidden; }
         .pixel-svg { shape-rendering: crispEdges; image-rendering: pixelated; display: block; }
-        .mg-stage.simon-watch-bg { background-color: #5c2222 !important; transition: background-color 0.2s ease; }
+        .mg-stage.simon-watch-bg { background-color: #2f2323 !important; transition: background-color 0.2s ease; }
         .simon-casing { background: #363532; border: 3px solid #121211; box-shadow: inset -3px -3px 0 #22211f, inset 3px 3px 0 #52504b, 4px 4px 0 rgba(0,0,0,0.6); padding: 10px 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; }
         .simon-countdown-overlay { position: absolute; inset: 0; background: rgba(18, 18, 17, 0.78); display: none; align-items: center; justify-content: center; z-index: 20; pointer-events: none; }
         .simon-countdown-overlay.active { display: flex; }
@@ -631,14 +635,14 @@
     <div id="modal-hint" class="modal-overlay in-game-modal"><div class="modal-content" style="max-width: 500px; text-align: left;"><div class="modal-header-row"><h2>HINT</h2><button class="modal-close-x" onclick="closeHint()">X</button></div><div id="hint-diagnostic-body" style="color: var(--text-normal); line-height: 1.6; max-height: 50vh; padding-right: 10px; overflow-y: auto; font-size: var(--fs-subtitle);"></div><div class="flex justify-center mt-6"><button class="retro-btn primary" onclick="closeHint()">SAYA MENGERTI (TUTUP)</button></div></div></div>
     <div id="modal-resource-empty" class="modal-overlay in-game-modal"><div class="modal-content" style="max-width: 420px;"><div class="modal-header-row"><h2 id="res-empty-title">KOPI HABIS!</h2></div><p id="res-empty-desc" class="mb-4" style="line-height: 1.45; color: var(--text-normal); font-size: var(--fs-subtitle);"></p><p class="mb-6" style="color: var(--accent-yellow); font-size: var(--fs-title); letter-spacing: 1px;">Mainkan mini game?</p><div class="flex justify-between items-center mt-2"><button class="retro-btn" id="btn-res-no" onclick="cancelPlayMiniGame()">TIDAK</button><button class="retro-btn primary" id="btn-res-yes" onclick="confirmPlayMiniGame()">YA</button></div></div></div>
     <div id="modal-minigame" class="modal-overlay in-game-modal"><div class="modal-content"><div class="modal-header-row"><h2 id="mg-title">MINI GAME</h2><button class="modal-close-x" onclick="abortMiniGame()" title="Tutup">X</button></div><div class="mg-HeaderMeta"><div class="mg-level-pips" id="mg-level-pips"><span class="mg-pip active">LV.1</span><span class="mg-pip">LV.2</span><span class="mg-pip">LV.3</span></div><span class="mg-badge" id="mg-reward-badge">HADIAH: +1 KOPI</span></div><div class="mg-stage" id="mg-stage"></div><div class="mg-status-bar" id="mg-status">Siapkan dirimu...</div></div></div>
-    <div id="modal-main-settings" class="modal-overlay" style="z-index: 2600;"><div class="modal-content" style="max-width: 400px;"><div class="modal-header-row"><h2>SETTINGS</h2><button class="modal-close-x" onclick="closeMainMenuSettings()">X</button></div><div class="settings-group-box"><div class="settings-row"><span class="settings-row-label">🎵 MUSIC</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="mm-btn-music-mute" onclick="toggleAudioMute('music')" title="Mute/Unmute Music">🔊</button><input type="range" class="retro-range" id="mm-slider-music" min="0" max="100" value="70" oninput="updateAudioVolume('music', this.value)"><span class="settings-val-badge" id="mm-val-music">70%</span></div></div><div class="settings-row"><span class="settings-row-label">🔊 SOUND</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="mm-btn-sound-mute" onclick="toggleAudioMute('sound')" title="Mute/Unmute Sound">🔊</button><input type="range" class="retro-range" id="mm-slider-sound" min="0" max="100" value="80" oninput="updateAudioVolume('sound', this.value)"><span class="settings-val-badge" id="mm-val-sound">80%</span></div></div><div style="border-top: 1px dashed var(--border-light); margin-top: 2px; padding-top: 6px; display: flex; flex-direction: column; gap: 5px;"><div class="settings-row"><span class="settings-row-label">↔ MARGIN</span><div class="settings-ctrl-wrap"><input type="range" class="retro-range" id="mm-slider-margin" min="0" max="100" value="0" oninput="updateSideMargin(this.value)"><span class="settings-val-badge" id="mm-val-margin">0%</span></div></div><div class="margin-preview-box" title="Ilustrasi Margin Kiri & Kanan Layout Game"><div class="margin-side-zone left" id="margin-viz-left" style="width: 4%;"><span>◄►</span></div><div class="margin-mini-game"><div class="margin-mini-header"></div><div class="margin-mini-cols"><div class="margin-mini-col"></div><div class="margin-mini-col paper"></div><div class="margin-mini-col"></div></div></div><div class="margin-side-zone right" id="margin-viz-right" style="width: 4%;"><span>◄►</span></div></div><div class="margin-note-text">* Hanya berlaku untuk mode landscape (tidak untuk handphone)</div></div></div><div class="settings-group-box" style="margin-bottom: 14px;"><div class="settings-row" style="margin-bottom: 4px;"><span class="settings-row-label" style="color: var(--accent-yellow);">★ CREDIT</span></div><div class="credit-box-area" id="main-settings-credit-text">Game Design: ShailaSRC 
+    <div id="modal-main-settings" class="modal-overlay" style="z-index: 2600;"><div class="modal-content" style="max-width: 400px;"><div class="modal-header-row"><h2>SETTINGS</h2><button class="modal-close-x" onclick="closeMainMenuSettings()">X</button></div><div class="settings-group-box"><div class="settings-row"><span class="settings-row-label">🎵 MUSIC</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="mm-btn-music-mute" onclick="toggleAudioMute('music')" title="Mute/Unmute Music">🔊</button><input type="range" class="retro-range" id="mm-slider-music" min="0" max="100" value="70" oninput="updateAudioVolume('music', this.value)"><span class="settings-val-badge" id="mm-val-music">70%</span></div></div><div class="settings-row"><span class="settings-row-label">🔊 SOUND</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="mm-btn-sound-mute" onclick="toggleAudioMute('sound')" title="Mute/Unmute Sound">🔊</button><input type="range" class="retro-range" id="mm-slider-sound" min="0" max="100" value="80" oninput="updateAudioVolume('sound', this.value)"><span class="settings-val-badge" id="mm-val-sound">80%</span></div></div><div style="border-top: 1px dashed var(--border-light); margin-top: 2px; padding-top: 6px; display: flex; flex-direction: column; gap: 5px;"><div class="settings-row"><span class="settings-row-label">↔ MARGIN</span><div class="settings-ctrl-wrap"><input type="range" class="retro-range" id="mm-slider-margin" min="0" max="100" value="0" oninput="updateSideMargin(this.value)"><span class="settings-val-badge" id="mm-val-margin">0%</span></div></div><div class="margin-preview-box" title="Ilustrasi Margin Kiri & Kanan Layout Game"><div class="margin-side-zone left" id="margin-viz-left" style="width: 0.8%;"><span></span></div><div class="margin-mini-game"><div class="margin-mini-header"></div><div class="margin-mini-cols"><div class="margin-mini-col"></div><div class="margin-mini-col paper"></div><div class="margin-mini-col"></div></div></div><div class="margin-side-zone right" id="margin-viz-right" style="width: 0.8%;"><span></span></div></div><div class="margin-note-text">* Hanya berlaku untuk mode landscape (tidak untuk handphone)</div></div></div><div class="settings-group-box" style="margin-bottom: 14px;"><div class="settings-row" style="margin-bottom: 4px;"><span class="settings-row-label" style="color: var(--accent-yellow);">★ CREDIT</span></div><div class="credit-box-area" id="main-settings-credit-text">Game Design: ShailaSRC 
 Music: [ゲームのじかん] by [Make a field Music]
 Source: DOVA-SYNDROME (<a href="https://dova-s.jp/" target="_blank" rel="noopener noreferrer">https://dova-s.jp/</a>)
 Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener noreferrer">https://www.zapsplat.com</a></div></div><div class="flex justify-center"><button class="retro-btn primary" onclick="closeMainMenuSettings()">SIMPAN & TUTUP</button></div></div></div>
-    <div id="modal-start" class="modal-overlay"><div class="modal-content" style="max-width: 380px;"><img id="profile-logo-icon" class="profile-logo-icon" alt="Logo Icon"><h1>PROFIL EDITOR</h1><div id="ingame-audio-settings" class="settings-group-box hidden" style="padding: 8px 10px; margin-bottom: 10px;"><div style="font-size: var(--fs-small); color: var(--accent-yellow); letter-spacing: 1px; border-bottom: 1px dashed var(--border-light); padding-bottom: 3px; margin-bottom: 2px; font-weight: bold;">PENGATURAN AUDIO</div><div class="settings-row"><span class="settings-row-label">🎵 MUSIC</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="ig-btn-music-mute" onclick="toggleAudioMute('music')" title="Mute/Unmute Music">🔊</button><input type="range" class="retro-range" id="ig-slider-music" min="0" max="100" value="70" oninput="updateAudioVolume('music', this.value)"><span class="settings-val-badge" id="ig-val-music">70%</span></div></div><div class="settings-row"><span class="settings-row-label">🔊 SOUND</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="ig-btn-sound-mute" onclick="toggleAudioMute('sound')" title="Mute/Unmute Sound">🔊</button><input type="range" class="retro-range" id="ig-slider-sound" min="0" max="100" value="80" oninput="updateAudioVolume('sound', this.value)"><span class="settings-val-badge" id="ig-val-sound">80%</span></div></div></div><p id="profile-desc-text" class="mb-4" style="color: var(--text-muted); font-size: var(--fs-text);">Setiap cerita memiliki masalah. Tugasmu memastikan setiap bagian memiliki alasan yang logis. Waktu terus berjalan!</p><input type="text" id="player-name" class="retro-input" placeholder="MASUKKAN NAMA" maxlength="10"><div id="profile-stats" class="mb-6 hidden border p-3 text-left" style="color: var(--text-normal); border-color: var(--border-light);"><div class="grid grid-cols-2 gap-2" style="font-size: var(--fs-text);"><span id="stat-day" class="hidden">1</span><div>Total Script:</div><div id="stat-cases" class="text-right" style="color: var(--text-highlight);">0</div><div>Durasi Bermain:</div><div id="stat-duration" class="text-right" style="color: var(--text-highlight);">00m 00d</div><div>Mini Game:</div><div id="stat-minigames" class="text-right" style="color: var(--text-highlight);">0x</div><div>Skor:</div><div id="stat-score" class="text-right" style="color: var(--accent-yellow); font-weight: bold;">0</div></div></div><div class="profile-action-row mt-2" id="profile-btn-row"><button class="retro-btn danger hidden" id="btn-end-game-now" onclick="endGameFromProfile()">SUDAHI</button><button class="retro-btn" id="btn-profile-menu" onclick="returnToMenuFromProfile()">MAIN MENU</button><button class="retro-btn primary" id="btn-start-game" onclick="startGame()">MULAI KERJA</button></div></div></div>
+    <div id="modal-start" class="modal-overlay"><div class="modal-content" style="max-width: 380px;"><img id="profile-logo-icon" class="profile-logo-icon" alt="Logo Icon"><h1>PROFIL EDITOR</h1><div id="ingame-audio-settings" class="settings-group-box hidden" style="padding: 8px 10px; margin-bottom: 10px;"><div style="font-size: var(--fs-small); color: var(--accent-yellow); letter-spacing: 1px; border-bottom: 1px dashed var(--border-light); padding-bottom: 3px; margin-bottom: 2px; font-weight: bold;">PENGATURAN AUDIO & TAMPILAN</div><div class="settings-row"><span class="settings-row-label">🎵 MUSIC</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="ig-btn-music-mute" onclick="toggleAudioMute('music')" title="Mute/Unmute Music">🔊</button><input type="range" class="retro-range" id="ig-slider-music" min="0" max="100" value="70" oninput="updateAudioVolume('music', this.value)"><span class="settings-val-badge" id="ig-val-music">70%</span></div></div><div class="settings-row"><span class="settings-row-label">🔊 SOUND</span><div class="settings-ctrl-wrap"><button class="settings-mute-btn" id="ig-btn-sound-mute" onclick="toggleAudioMute('sound')" title="Mute/Unmute Sound">🔊</button><input type="range" class="retro-range" id="ig-slider-sound" min="0" max="100" value="80" oninput="updateAudioVolume('sound', this.value)"><span class="settings-val-badge" id="ig-val-sound">80%</span></div></div><div style="border-top: 1px dashed var(--border-light); margin-top: 2px; padding-top: 6px; display: flex; flex-direction: column; gap: 5px;"><div class="settings-row"><span class="settings-row-label">↔ MARGIN</span><div class="settings-ctrl-wrap"><input type="range" class="retro-range" id="ig-slider-margin" min="0" max="100" value="0" oninput="updateSideMargin(this.value)"><span class="settings-val-badge" id="ig-val-margin">0%</span></div></div><div class="margin-preview-box" title="Ilustrasi Margin Kiri & Kanan Layout Game (16:9)"><div class="margin-side-zone left" id="ig-margin-viz-left" style="width: 0.8%;"><span></span></div><div class="margin-mini-game"><div class="margin-mini-header"></div><div class="margin-mini-cols"><div class="margin-mini-col"></div><div class="margin-mini-col paper"></div><div class="margin-mini-col"></div></div></div><div class="margin-side-zone right" id="ig-margin-viz-right" style="width: 0.8%;"><span></span></div></div><div class="margin-note-text">* Hanya berlaku untuk mode landscape (tidak untuk handphone)</div></div></div><p id="profile-desc-text" class="mb-4" style="color: var(--text-muted); font-size: var(--fs-text);">Setiap cerita memiliki masalah. Tugasmu memastikan setiap bagian memiliki alasan yang logis. Waktu terus berjalan!</p><input type="text" id="player-name" class="retro-input" placeholder="MASUKKAN NAMA" maxlength="10"><div id="profile-stats" class="mb-6 hidden border p-3 text-left" style="color: var(--text-normal); border-color: var(--border-light);"><div class="grid grid-cols-2 gap-2" style="font-size: var(--fs-text);"><span id="stat-day" class="hidden">1</span><div>Total Script:</div><div id="stat-cases" class="text-right" style="color: var(--text-highlight);">0</div><div>Durasi Bermain:</div><div id="stat-duration" class="text-right" style="color: var(--text-highlight);">00m 00d</div><div>Mini Game:</div><div id="stat-minigames" class="text-right" style="color: var(--text-highlight);">0x</div><div>Skor:</div><div id="stat-score" class="text-right" style="color: var(--accent-yellow); font-weight: bold;">0</div></div></div><div class="profile-action-row mt-2" id="profile-btn-row"><button class="retro-btn danger hidden" id="btn-end-game-now" onclick="endGameFromProfile()">SUDAHI</button><button class="retro-btn" id="btn-profile-menu" onclick="returnToMenuFromProfile()">MAIN MENU</button><button class="retro-btn primary" id="btn-start-game" onclick="startGame()">MULAI KERJA</button></div></div></div>
     <div id="modal-gameover" class="modal-overlay"><div class="modal-content" style="max-width: 550px; padding: 18px 22px;"><h1 id="go-title" style="color: var(--color-char);">GAME OVER</h1><div class="ending-img-container"><img id="go-img" alt="Ending Illustration" style="display:none;"><div id="go-img-fallback" class="ending-fallback-text" style="display:none;">[ ILUSTRASI ENDING BELUM TERSEDIA ]</div></div><div id="go-ending-name" class="ending-badge-title">BURNOUT</div><p id="go-epilog" style="margin: 0 0 12px 0; font-size: var(--fs-text); line-height: 1.3; color: var(--text-normal); font-style: italic;"></p><div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-light); padding: 12px; margin-bottom: 14px; text-align: left;"><div style="color: var(--text-highlight); font-size: var(--fs-subtitle); margin-bottom: 8px; text-align: center; border-bottom: 1px dashed var(--border-light); padding-bottom: 4px;">PLAYER: <span id="go-player" style="color: var(--accent-yellow);"></span></div><table class="hs-table" style="margin-bottom:0;"><tr><th>SKOR AKHIR</th><td id="go-score" style="text-align: right; color: var(--accent-yellow); font-weight: bold;">0</td></tr><tr><th>DURASI BERMAIN</th><td id="go-duration" style="text-align: right; color: var(--text-highlight);">00m 00d</td></tr><tr><th>MINI GAME</th><td id="go-minigames" style="text-align: right; color: var(--text-highlight);">0x</td></tr><tr class="hidden"><th>LEVEL</th><td id="go-level">0</td></tr><tr><th>TOTAL SCRIPT</th><td id="go-jobs" style="text-align: right; color: var(--text-highlight);">0</td></tr></table></div><p id="go-rank-msg" style="font-size: var(--fs-small); color: var(--color-scene); margin-top: -6px; margin-bottom: 12px; text-align: center; font-weight: bold;"></p><div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;"><button class="retro-btn" onclick="showHighscores()">HIGHSCORE</button><button class="retro-btn" onclick="returnToMenu()">MAIN MENU</button><button class="retro-btn primary" onclick="restartGame()">PLAY AGAIN</button></div></div></div>
-    <div id="modal-highscore" class="modal-overlay"><div class="hs-window-frame"><div class="hs-window-bar"><span class="hs-window-title"><img id="hs-logo-icon" class="hs-logo-icon" alt=""><span id="hs-trophy-fallback">🏆 </span>LEADERBOARD — TOP 100 EDITORS</span><button class="modal-close-x" style="position: static; transform: none; width: 24px; height: 24px;" onclick="closeHighscores()">X</button></div><div class="hs-window-body"><div class="hs-content-wrapper"><div id="hs-top3-container" class="hs-top3-box"></div><div class="hs-list-container" id="hs-others-wrapper"><div class="hs-section-divider"><span>PERINGKAT #4 — #100</span></div><table class="hs-table" id="hs-table-body" style="margin-bottom: 0;"><tr><th>RANK</th><th>NAMA</th><th>TOTAL SCRIPT</th><th>DURASI</th><th>MINI GAME</th><th style="text-align:right;">SKOR</th></tr></table></div></div></div></div></div>
-    <div id="tutorial-overlay" class="modal-overlay" onclick="handleTutorialOverlayClick(event)"><div class="tutorial-spotlight" id="tutorial-spotlight"></div><div class="tutorial-spotlight-secondary" id="tutorial-spotlight-2"></div><div class="tutorial-dialog" id="tutorial-dialog"><div class="tutorial-arrow" id="tutorial-arrow"></div><div class="tut-header-bar"><span class="tut-step-badge" id="tut-step-badge">1 / 17</span><div class="tut-header-controls"><button class="tut-icon-btn" id="btn-tut-prev" onclick="event.stopPropagation(); prevTutorialStep()" title="Sebelumnya">◄</button><button class="tut-icon-btn primary" id="btn-tut-next" onclick="event.stopPropagation(); nextTutorialStep()" title="Selanjutnya">►</button><button class="tut-icon-btn exit" onclick="event.stopPropagation(); endTutorial()" title="Keluar Tutorial">✕</button></div></div><div class="tutorial-dialog-text" id="tutorial-text">Teks Tutorial</div><div id="tutorial-example-container" class="tut-example-box"></div><span id="tut-tap-prompt" class="hidden"></span></div></div>
+    <div id="modal-highscore" class="modal-overlay"><div class="hs-window-frame"><div class="hs-window-bar"><span class="hs-window-title"><img id="hs-logo-icon" class="hs-logo-icon" alt=""><span id="hs-trophy-fallback">🏆 </span>LEADERBOARD — TOP 100 EDITORS</span><button class="modal-close-x tutup-btn" onclick="closeHighscores()">TUTUP</button></div><div class="hs-window-body"><div class="hs-content-wrapper"><div id="hs-top3-container" class="hs-top3-box"></div><div class="hs-list-container" id="hs-others-wrapper"><div class="hs-section-divider"><span>PERINGKAT #4 — #100</span></div><table class="hs-table" id="hs-table-body" style="margin-bottom: 0;"><tr><th>RANK</th><th>NAMA</th><th>TOTAL SCRIPT</th><th>DURASI</th><th>MINI GAME</th><th style="text-align:right;">SKOR</th></tr></table></div></div></div></div></div>
+    <div id="tutorial-overlay" class="modal-overlay" onclick="handleTutorialOverlayClick(event)"><div class="hs-window-bar tut-top-window-bar" onclick="event.stopPropagation()"><span class="hs-window-title">TUTORIAL</span><button class="modal-close-x tutup-btn" onclick="event.stopPropagation(); endTutorial()" title="Tutup Tutorial">TUTUP</button></div><div class="tutorial-spotlight" id="tutorial-spotlight"></div><div class="tutorial-spotlight-secondary" id="tutorial-spotlight-2"></div><div class="tutorial-dialog" id="tutorial-dialog"><div class="tutorial-arrow" id="tutorial-arrow"></div><div class="tut-header-bar"><span class="tut-step-badge" id="tut-step-badge">1 / 17</span><div class="tut-header-controls"><button class="tut-icon-btn" id="btn-tut-prev" onclick="event.stopPropagation(); prevTutorialStep()" title="Sebelumnya">◄</button><button class="tut-icon-btn primary" id="btn-tut-next" onclick="event.stopPropagation(); nextTutorialStep()" title="Selanjutnya">►</button></div></div><div class="tutorial-dialog-text" id="tutorial-text">Teks Tutorial</div><div id="tutorial-example-container" class="tut-example-box"></div><span id="tut-tap-prompt" class="hidden"></span></div></div>
     <script>
         const _memStore = {};
         const _safeLS = {
@@ -1563,11 +1567,14 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     this.markAllAudioReady();
                 }
             },
+            hideLoadingBannerWhenMusicAudible() {
+                if (!this.bgm || this.bgm.paused) return;
+                const banner = document.getElementById('audio-loading-banner');
+                if (banner) banner.classList.add('hidden-banner');
+            },
             markAllAudioReady() {
                 if (this.allAudioReady) return;
                 this.allAudioReady = true;
-                const banner = document.getElementById('audio-loading-banner');
-                if (banner) banner.classList.add('hidden-banner');
                 this.syncVolumes();
                 this.ensureBgmPlaying();
             },
@@ -1578,6 +1585,15 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 this.bgm = this.loadSmartAudio('music', AUDIO_ASSETS.music, true, () => {
                     this.musicReady = true;
                     this.checkAllAudioReady();
+                    this.ensureBgmPlaying();
+                });
+                this.bgm.addEventListener('playing', () => {
+                    if (!this.bgm.paused) this.hideLoadingBannerWhenMusicAudible();
+                });
+                this.bgm.addEventListener('timeupdate', () => {
+                    if (!this.bgm.paused && this.bgm.currentTime > 0.02) {
+                        this.hideLoadingBannerWhenMusicAudible();
+                    }
                 });
                 this.bgm.addEventListener('ended', () => {
                     if (this.getMusicVolume() > 0) {
@@ -1685,7 +1701,10 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     this.bgmPlayPending = true;
                     const p = this.bgm.play();
                     if (p && typeof p.then === 'function') {
-                        p.then(() => { this.bgmPlayPending = false; }).catch(() => { this.bgmPlayPending = false; });
+                        p.then(() => {
+                            this.bgmPlayPending = false;
+                            this.hideLoadingBannerWhenMusicAudible();
+                        }).catch(() => { this.bgmPlayPending = false; });
                     } else {
                         this.bgmPlayPending = false;
                     }
@@ -1700,8 +1719,9 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 if (key === 'shortTone') {
                     scale *= 0.32;
                 }
-                const sVol = Math.max(0, Math.min(1, baseVol * scale));
-                if (sVol <= 0) return;
+                const rawTargetVol = Math.max(0, baseVol * scale);
+                const sVol = Math.max(0, Math.min(1, rawTargetVol));
+                if (rawTargetVol <= 0) return;
                 const now = performance.now();
                 if (key === 'shortTone') {
                     if (now - this.lastShortToneAt < 35) return;
@@ -1714,7 +1734,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         const src = ac.createBufferSource();
                         src.buffer = webBuf.buffer;
                         const gain = ac.createGain();
-                        gain.gain.value = sVol;
+                        gain.gain.value = Math.min(3.5, rawTargetVol);
                         src.connect(gain);
                         gain.connect(ac.destination);
                         const dur = webBuf.buffer.duration || 0;
@@ -1891,16 +1911,27 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             AudioEngine.syncVolumes();
         }
         function syncSideMarginDOM(marginPct, updateSliderVal = false) {
-            const marginSlider = document.getElementById('mm-slider-margin');
-            const marginValEl = document.getElementById('mm-val-margin');
-            const vizLeft = document.getElementById('margin-viz-left');
-            const vizRight = document.getElementById('margin-viz-right');
-            if (updateSliderVal && marginSlider) marginSlider.value = marginPct;
-            if (marginValEl) marginValEl.textContent = `${marginPct}%`;
-            const vizWidthPct = 4 + (marginPct * 0.22);
-            if (vizLeft) vizLeft.style.width = `${vizWidthPct}%`;
-            if (vizRight) vizRight.style.width = `${vizWidthPct}%`;
-            document.documentElement.style.setProperty('--game-side-margin', `calc(8px + ${(marginPct * 0.12).toFixed(2)}vw)`);
+            const vwMargin = marginPct * 0.12;
+            // 1:1 proportional representation on the 16:9 preview box: ~0.8% base (8px on typical landscape viewport) + 0..12% per side
+            const vizWidthPct = (0.8 + vwMargin).toFixed(2);
+            const arrowText = marginPct >= 22 ? '◄►' : '';
+            ['mm-slider-margin', 'ig-slider-margin'].forEach(id => {
+                const slider = document.getElementById(id);
+                if (slider && (updateSliderVal || Number(slider.value) !== marginPct)) slider.value = marginPct;
+            });
+            ['mm-val-margin', 'ig-val-margin'].forEach(id => {
+                const valEl = document.getElementById(id);
+                if (valEl) valEl.textContent = `${marginPct}%`;
+            });
+            ['margin-viz-left', 'ig-margin-viz-left', 'margin-viz-right', 'ig-margin-viz-right'].forEach(id => {
+                const vizEl = document.getElementById(id);
+                if (vizEl) {
+                    vizEl.style.width = `${vizWidthPct}%`;
+                    const sp = vizEl.querySelector('span');
+                    if (sp) sp.textContent = arrowText;
+                }
+            });
+            document.documentElement.style.setProperty('--game-side-margin', `calc(8px + ${vwMargin.toFixed(2)}vw)`);
         }
         function updateSideMargin(val) {
             const marginPct = Math.max(0, Math.min(100, parseInt(val, 10) || 0));
@@ -2561,7 +2592,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                             ballEl.style.zIndex = '3';
                             if (!netJiggled) {
                                 netJiggled = true;
-                                playSfx('paperDrop', 1, 3.0);
+                                playSfx('paperDrop', 3.2, 3.0);
                                 binEl.style.transform = 'scaleX(1.07) scaleY(0.94)';
                                 if (binBackEl) binBackEl.style.transform = 'scaleX(1.07) scaleY(0.94)';
                                 registerMgTimeout(() => {
@@ -2587,7 +2618,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         } else {
                             if (!floorDropPlayed) {
                                 floorDropPlayed = true;
-                                playSfx('paperDrop', 1, 3.0);
+                                playSfx('paperDrop', 3.2, 3.0);
                             }
                             const b = (t - airRatio) / (1 - airRatio);
                             const drift = power < sweetMin ? -8 : 10;
