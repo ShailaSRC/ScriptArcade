@@ -656,7 +656,17 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         try { firebase.initializeApp(firebaseConfig); firebaseDB = firebase.database(); } catch (e) { console.error("Firebase Init Error:", e); }
         let ASSET_CONFIG = { logos: { main: "assets/logo/logo-main.webp", wordmark: "assets/logo/logo-wordmark.webp", icon: "assets/logo/logo-icon.webp" }, clients: { client1: { normal: "assets/avatars/client1-normal.webp", angry: "assets/avatars/client1-angry.webp" }, client2: { normal: "assets/avatars/client2-normal.webp", angry: "assets/avatars/client2-angry.webp" }, client3: { normal: "assets/avatars/client3-normal.webp", angry: "assets/avatars/client3-angry.webp" }, client4: { normal: "assets/avatars/client4-normal.webp", angry: "assets/avatars/client4-angry.webp" } }, endings: { INDUSTRY_STAR: "assets/endings/industry-star.webp", CLIENT_MAGNET: "assets/endings/client-magnet.webp", ESTABLISHED_EDITOR: "assets/endings/established-editor.webp", FREELANCE_SURVIVOR: "assets/endings/freelance-survivor.webp", BURNOUT: "assets/endings/burnout.webp" } };
         const resolvedImageCache = {};
-        function loadSmartImage(imgEl, basePath, onSuccessCallback, onFailCallback) { if (!imgEl || !basePath || basePath.trim() === "") { if (onFailCallback) onFailCallback(); return; } if (resolvedImageCache[basePath]) { imgEl.onerror = null; if (imgEl.getAttribute('data-loaded-src') !== resolvedImageCache[basePath]) { imgEl.setAttribute('data-loaded-src', resolvedImageCache[basePath]); imgEl.src = resolvedImageCache[basePath]; } imgEl.style.display = 'block'; if (onSuccessCallback) onSuccessCallback(); return; } const normalized = basePath.replace(/^\/?(ScriptArcade\/)?/i, ''); const rawCandidates = [normalized, `/ScriptArcade/${normalized}`, `ScriptArcade/${normalized}`]; if (normalized.includes('wordmark')) { const spaced = normalized.replace('wordmark', 'word mark'); rawCandidates.splice(1, 0, spaced); rawCandidates.push(`/ScriptArcade/${spaced}`, `ScriptArcade/${spaced}`); } const candidates = rawCandidates.filter((v, i, a) => v && a.indexOf(v) === i); let attempt = 0; function tryNext() { if (attempt >= candidates.length) { if (onFailCallback) onFailCallback(); return; } const testUrl = candidates[attempt]; const probe = new Image(); probe.onload = function() { resolvedImageCache[basePath] = testUrl; imgEl.onerror = null; imgEl.setAttribute('data-loaded-src', testUrl); imgEl.src = testUrl; imgEl.style.display = 'block'; if (onSuccessCallback) onSuccessCallback(); }; probe.onerror = function() { attempt++; tryNext(); }; probe.src = testUrl; } tryNext(); }
+        const GITHUB_ASSET_BASES = [
+            "https://shailasrc.github.io/ScriptArcade/",
+            "https://cdn.jsdelivr.net/gh/ShailaSRC/ScriptArcade@main/",
+            "https://raw.githubusercontent.com/ShailaSRC/ScriptArcade/main/"
+        ];
+        function isDirectRepoHost() {
+            const h = (window.location && window.location.hostname) ? window.location.hostname : "";
+            const p = (window.location && window.location.pathname) ? window.location.pathname : "";
+            return h.endsWith(".github.io") || h === "localhost" || h === "127.0.0.1" || p.indexOf("ScriptArcade") !== -1;
+        }
+        function loadSmartImage(imgEl, basePath, onSuccessCallback, onFailCallback) { if (!imgEl || !basePath || basePath.trim() === "") { if (onFailCallback) onFailCallback(); return; } if (resolvedImageCache[basePath]) { imgEl.onerror = null; if (imgEl.getAttribute('data-loaded-src') !== resolvedImageCache[basePath]) { imgEl.setAttribute('data-loaded-src', resolvedImageCache[basePath]); imgEl.src = resolvedImageCache[basePath]; } imgEl.style.display = 'block'; if (onSuccessCallback) onSuccessCallback(); return; } const normalized = basePath.replace(/^\/?(ScriptArcade\/)?/i, ''); const variants = [normalized]; if (normalized.includes('wordmark')) { variants.push(normalized.replace('wordmark', 'word mark')); } const localPaths = []; const remotePaths = []; variants.forEach(v => { localPaths.push(v, `/ScriptArcade/${v}`, `ScriptArcade/${v}`); GITHUB_ASSET_BASES.forEach(base => remotePaths.push(`${base}${v}`)); }); const rawCandidates = isDirectRepoHost() ? [...localPaths, ...remotePaths] : [...remotePaths, ...localPaths]; const candidates = rawCandidates.filter((v, i, a) => v && a.indexOf(v) === i); let attempt = 0; function tryNext() { if (attempt >= candidates.length) { if (onFailCallback) onFailCallback(); return; } const testUrl = candidates[attempt]; const probe = new Image(); probe.onload = function() { resolvedImageCache[basePath] = testUrl; imgEl.onerror = null; imgEl.setAttribute('data-loaded-src', testUrl); imgEl.src = testUrl; imgEl.style.display = 'block'; if (onSuccessCallback) onSuccessCallback(); }; probe.onerror = function() { attempt++; tryNext(); }; probe.src = testUrl; } tryNext(); }
         function initBrandLogos() {
             if (!ASSET_CONFIG.logos) return;
             const mainLogoImg = document.getElementById('main-menu-logo-img');
@@ -1449,7 +1459,9 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         nameVariants.push(`welder ${num}`, `welder%20${num}`);
                     }
                 }
-                const dirs = ['assets/audio/', '/ScriptArcade/assets/audio/', 'ScriptArcade/assets/audio/'];
+                const localDirs = ['assets/audio/', '/ScriptArcade/assets/audio/', 'ScriptArcade/assets/audio/'];
+                const remoteDirs = GITHUB_ASSET_BASES.map(b => `${b}assets/audio/`);
+                const dirs = isDirectRepoHost() ? [...localDirs, ...remoteDirs] : [...remoteDirs, ...localDirs];
                 const list = [];
                 dirs.forEach(d => {
                     nameVariants.forEach(nv => {
@@ -1532,7 +1544,10 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     if (typeof onReady === 'function') onReady(audio);
                 };
                 const tryNext = () => {
-                    if (idx >= candidates.length) return;
+                    if (idx >= candidates.length) {
+                        if (key === 'music') this.hideLoadingBanner();
+                        return;
+                    }
                     const testUrl = candidates[idx++];
                     settled = false;
                     audio.oncanplay = () => markReady(testUrl);
@@ -1581,6 +1596,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     if (coreReadyCount >= 2) this.loadRemainingAudio();
                 };
                 this.bgm = this.loadSmartAudio('music', AUDIO_ASSETS.music, true, () => {
+                    this.hideLoadingBanner();
                     this.syncVolumes();
                     this.ensureBgmPlaying();
                     checkCoreReady();
@@ -1652,7 +1668,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 }
                 if (this.timerLoop) {
                     this.timerLoop.volume = sVol;
-                    if (this.timerLoop.paused) {
+                    if (sVol === 0 && !this.timerLoop.paused) {
                         this.timerLoop.pause();
                     }
                 }
@@ -1666,6 +1682,27 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     this.stopWebTimerLoop();
                 } else if (this.dangerLoopRequested) {
                     this.refreshTimerLoopPlayback();
+                }
+            },
+            ensureBgmPlaying() {
+                if (!this.bgm) this.init();
+                const mVol = this.getMusicVolume();
+                if (!this.bgm || mVol <= 0) return;
+                this.bgm.volume = mVol;
+                if (this.bgm.paused && !this.bgmPlayPending) {
+                    this.bgmPlayPending = true;
+                    const p = this.bgm.play();
+                    if (p && typeof p.then === 'function') {
+                        p.then(() => {
+                            this.bgmPlayPending = false;
+                            this.hideLoadingBanner();
+                        }).catch(() => {
+                            this.bgmPlayPending = false;
+                            this.hideLoadingBanner();
+                        });
+                    } else {
+                        this.bgmPlayPending = false;
+                    }
                 }
             },
             playSfx(key, volScale = 1, seekSec = null) {
@@ -1920,8 +1957,9 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             playSfx('shortTone');
         }
         function openMainMenuSettings() {
-            applyAppSettingsUI();
-            document.getElementById('modal-main-settings').classList.add('active');
+            try { applyAppSettingsUI(); } catch (e) { console.error(e); }
+            const modal = document.getElementById('modal-main-settings');
+            if (modal) modal.classList.add('active');
         }
         function closeMainMenuSettings() {
             document.getElementById('modal-main-settings').classList.remove('active');
