@@ -654,9 +654,9 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         const firebaseConfig = { apiKey: "AIzaSyDMlXJcxMw2k2zsBGV2i2H3PtixfDNSiTw", authDomain: "scriptarcade-1367a.firebaseapp.com", databaseURL: "https://scriptarcade-1367a-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "scriptarcade-1367a", storageBucket: "scriptarcade-1367a.firebasestorage.app", messagingSenderId: "740803610887", appId: "1:740803610887:web:3112cffc5781d24f1ddda2", measurementId: "G-2E7ER9X3L3" };
         let firebaseDB = null;
         try { firebase.initializeApp(firebaseConfig); firebaseDB = firebase.database(); } catch (e) { console.error("Firebase Init Error:", e); }
-        let ASSET_CONFIG = { logos: { main: "logo/logo-main.webp", wordmark: "logo/logo-wordmark.webp", icon: "logo/logo-icon.webp" }, clients: { client1: { normal: "assets/avatars/client1-normal.webp", angry: "assets/avatars/client1-angry.webp" }, client2: { normal: "assets/avatars/client2-normal.webp", angry: "assets/avatars/client2-angry.webp" }, client3: { normal: "assets/avatars/client3-normal.webp", angry: "assets/avatars/client3-angry.webp" }, client4: { normal: "assets/avatars/client4-normal.webp", angry: "assets/avatars/client4-angry.webp" } }, endings: { INDUSTRY_STAR: "assets/endings/industry-star.webp", CLIENT_MAGNET: "assets/endings/client-magnet.webp", ESTABLISHED_EDITOR: "assets/endings/established-editor.webp", FREELANCE_SURVIVOR: "assets/endings/freelance-survivor.webp", BURNOUT: "assets/endings/burnout.webp" } };
+        let ASSET_CONFIG = { logos: { main: "assets/logo/logo-main.webp", wordmark: "assets/logo/logo-wordmark.webp", icon: "assets/logo/logo-icon.webp" }, clients: { client1: { normal: "assets/avatars/client1-normal.webp", angry: "assets/avatars/client1-angry.webp" }, client2: { normal: "assets/avatars/client2-normal.webp", angry: "assets/avatars/client2-angry.webp" }, client3: { normal: "assets/avatars/client3-normal.webp", angry: "assets/avatars/client3-angry.webp" }, client4: { normal: "assets/avatars/client4-normal.webp", angry: "assets/avatars/client4-angry.webp" } }, endings: { INDUSTRY_STAR: "assets/endings/industry-star.webp", CLIENT_MAGNET: "assets/endings/client-magnet.webp", ESTABLISHED_EDITOR: "assets/endings/established-editor.webp", FREELANCE_SURVIVOR: "assets/endings/freelance-survivor.webp", BURNOUT: "assets/endings/burnout.webp" } };
         const resolvedImageCache = {};
-        function loadSmartImage(imgEl, basePath, onSuccessCallback, onFailCallback) { if (!imgEl || !basePath || basePath.trim() === "") { if (onFailCallback) onFailCallback(); return; } if (resolvedImageCache[basePath]) { imgEl.onerror = null; if (imgEl.getAttribute('data-loaded-src') !== resolvedImageCache[basePath]) { imgEl.setAttribute('data-loaded-src', resolvedImageCache[basePath]); imgEl.src = resolvedImageCache[basePath]; } imgEl.style.display = 'block'; if (onSuccessCallback) onSuccessCallback(); return; } const cleanPath = basePath.replace(/\.(webp|png|jpg|jpeg)$/i, ''); const cleanBaseName = cleanPath.split('/').pop(); const spacedName = cleanBaseName.replace('wordmark', 'word mark'); const candidates = [basePath, `${cleanPath}.webp`, `logo/${cleanBaseName}.webp`, `logo/${spacedName}.webp`, `assets/logo/${cleanBaseName}.webp`, `assets/${cleanBaseName}.webp`, `${cleanBaseName}.webp`, `${cleanPath}.png`, `${cleanPath}.jpg`].filter((v, i, a) => v && a.indexOf(v) === i); let attempt = 0; function tryNext() { if (attempt >= candidates.length) { if (onFailCallback) onFailCallback(); return; } const testUrl = candidates[attempt]; const probe = new Image(); probe.onload = function() { resolvedImageCache[basePath] = testUrl; imgEl.onerror = null; imgEl.setAttribute('data-loaded-src', testUrl); imgEl.src = testUrl; imgEl.style.display = 'block'; if (onSuccessCallback) onSuccessCallback(); }; probe.onerror = function() { attempt++; tryNext(); }; probe.src = testUrl; } tryNext(); }
+        function loadSmartImage(imgEl, basePath, onSuccessCallback, onFailCallback) { if (!imgEl || !basePath || basePath.trim() === "") { if (onFailCallback) onFailCallback(); return; } if (resolvedImageCache[basePath]) { imgEl.onerror = null; if (imgEl.getAttribute('data-loaded-src') !== resolvedImageCache[basePath]) { imgEl.setAttribute('data-loaded-src', resolvedImageCache[basePath]); imgEl.src = resolvedImageCache[basePath]; } imgEl.style.display = 'block'; if (onSuccessCallback) onSuccessCallback(); return; } const normalized = basePath.replace(/^\/?(ScriptArcade\/)?/i, ''); const rawCandidates = [normalized, `/ScriptArcade/${normalized}`, `ScriptArcade/${normalized}`]; if (normalized.includes('wordmark')) { const spaced = normalized.replace('wordmark', 'word mark'); rawCandidates.splice(1, 0, spaced); rawCandidates.push(`/ScriptArcade/${spaced}`, `ScriptArcade/${spaced}`); } const candidates = rawCandidates.filter((v, i, a) => v && a.indexOf(v) === i); let attempt = 0; function tryNext() { if (attempt >= candidates.length) { if (onFailCallback) onFailCallback(); return; } const testUrl = candidates[attempt]; const probe = new Image(); probe.onload = function() { resolvedImageCache[basePath] = testUrl; imgEl.onerror = null; imgEl.setAttribute('data-loaded-src', testUrl); imgEl.src = testUrl; imgEl.style.display = 'block'; if (onSuccessCallback) onSuccessCallback(); }; probe.onerror = function() { attempt++; tryNext(); }; probe.src = testUrl; } tryNext(); }
         function initBrandLogos() {
             if (!ASSET_CONFIG.logos) return;
             const mainLogoImg = document.getElementById('main-menu-logo-img');
@@ -1032,7 +1032,6 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             return copy;
         }
         async function syncFromFirebase() {
-            // Gunakan storyTemplates fleksibel yang telah diperkaya agar opsi SCENE HEADING, ACTION, DIALOGUE, dan TRANSITION selalu leluasa.
             return;
         }
         const endingCatalog = [ { id: 'INDUSTRY_STAR', title: 'INDUSTRY STAR', epilog: 'Keahlian dan kecepatanmu menjadikanmu editor legendaris di industri perfilman.', getImg: () => ASSET_CONFIG.endings.INDUSTRY_STAR, check: (s) => s.totalScore >= 1000 && s.day >= 10  }, { id: 'CLIENT_MAGNET', title: 'CLIENT MAGNET', epilog: 'Naskahmu selalu rapi tanpa cela sehingga klien besar terus berdatangan.', getImg: () => ASSET_CONFIG.endings.CLIENT_MAGNET, check: (s) => s.casesCompleted >= 15 && s.mistakes < 5  }, { id: 'ESTABLISHED_EDITOR', title: 'ESTABLISHED EDITOR', epilog: 'Sebuah studio ternama mengontrakmu secara eksklusif berkat kinerjamu yang stabil.', getImg: () => ASSET_CONFIG.endings.ESTABLISHED_EDITOR, check: (s) => s.totalScore >= 500 && s.day >= 5  }, { id: 'FREELANCE_SURVIVOR', title: 'FREELANCE SURVIVOR', epilog: 'Kamu bertahan dari proyek ke proyek dengan penghasilan yang cukup untuk kopi harianmu.', getImg: () => ASSET_CONFIG.endings.FREELANCE_SURVIVOR, check: (s) => s.day >= 3  }, { id: 'BURNOUT', title: 'BURNOUT', epilog: 'Tumpukan revisi dan tekanan deadline membuatmu kelelahan hingga harus rehat panjang.', getImg: () => ASSET_CONFIG.endings.BURNOUT, check: (s) => s.mistakes >= 5 || s.day < 3  } ];
@@ -1137,7 +1136,6 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             const transitions = allValidObjs.filter(b => b.type === 'TRANSITION');
             const useEndTrans = transitions.length > 0 && (Boolean(explicitTrans) || bible.formatId === 'FADE_OUT' || bible.formatId === 'CUT_TO');
 
-            // Susun 1 rangkaian dasar sepanjang totalSlots untuk menentukan blok yang di-lock di kertas
             const basePlan = new Array(totalSlots).fill(null);
             basePlan[0] = headings[0] || allValidObjs[0];
             const bodySlotsCount = useEndTrans ? (totalSlots - 2) : (totalSlots - 1);
@@ -1148,7 +1146,6 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 basePlan[totalSlots - 1] = transitions[0];
             }
 
-            // Blok terkunci hanya muncul secara acak di atas level/hari 2 (day > 2, misal hari 3, 4, 7, dsb.)
             let lockCount = 0;
             if (day > 2) {
                 const streak = gameState.lockStreak || 0;
@@ -1170,7 +1167,6 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 gameState.noLockStreak = 0;
             }
 
-            // Pilih indeks slot yang dikunci secara acak (bisa Scene Heading, Action, Dialogue, atau Transition)
             const candidateSlotIndices = [];
             for (let s = 0; s < totalSlots; s++) candidateSlotIndices.push(s);
             let lockedIndices = [];
@@ -1188,16 +1184,13 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 }
             });
 
-            // Kumpulkan blok yang masuk ke inventory secara bertahap sesuai Hari agar tidak overwhelming
             const selectedValidMap = new Map();
             basePlan.filter(Boolean).forEach(b => selectedValidMap.set(b.id, b));
 
-            // Jika slot terakhir belum dikunci dan transisi bebas (tidak ditentukan di brief), sediakan kedua opsi transisi (FADE OUT. & CUT TO:)
             if (useEndTrans && !lockedSlots[totalSlots - 1] && !explicitTrans) {
                 transitions.forEach(t => selectedValidMap.set(t.id, t));
             }
 
-            // Tambahkan opsi blok valid ekstra secara bertahap sesuai Hari (Hari 1: +0, Hari 2-3: +1, Hari 4-5: +2, Hari 6+: semua opsi valid)
             const remainingValid = allValidObjs.filter(b => !selectedValidMap.has(b.id));
             let extraValidQuota = 0;
             if (day === 1) extraValidQuota = 0;
@@ -1208,10 +1201,8 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             const shuffledExtraValid = [...remainingValid].sort(() => Math.random() - 0.5).slice(0, extraValidQuota);
             shuffledExtraValid.forEach(b => selectedValidMap.set(b.id, b));
 
-            // Tambahkan blok pengecoh (distractor) secara bertahap (Hari 1-3: 1 pengecoh, Hari 4+: 2 pengecoh)
             let maxDistractors = day <= 3 ? 1 : Math.min(2, distractorPool.length);
             if (explicitTrans) {
-                // Pastikan transisi pengecoh ikut masuk jika brief meminta transisi spesifik dan slot terakhir tidak dikunci
                 const transDist = distractorPool.find(d => d.type === 'TRANSITION');
                 const otherDist = distractorPool.filter(d => d.type !== 'TRANSITION').sort(() => Math.random() - 0.5);
                 const chosenDist = (!lockedSlots[totalSlots - 1] && transDist)
@@ -1397,23 +1388,23 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         function returnToMenu() { closeInGameModals(); closeModal('modal-gameover'); closeModal('modal-start'); if (timerState.interval) { clearInterval(timerState.interval); timerState.interval = null; } timerState.isPaused = false; timerState.pausedTimeLeft = 0; gameState.isGameActive = false; gameState.lastTickTime = 0; document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; }
         function returnToMenuFromProfile() { saveData(); closeInGameModals(); closeModal('modal-gameover'); closeModal('modal-start'); document.getElementById("game-layout").style.display = "none"; document.getElementById("main-menu").classList.add("active"); document.getElementById("main-menu").style.display = "flex"; }
         const AUDIO_ASSETS = {
-            music: "music.mp3",
+            music: "assets/audio/music.mp3",
             sfx: {
-                alert: "zapsplat_multimedia_game_retro_musical_alert_001",
-                alert2: "zapsplat_multimedia_game_retro_musical_alert_002",
-                ascend: "zapsplat_multimedia_game_retro_musical_ascend_advance_002",
-                fail: "zapsplat_multimedia_game_retro_musical_descend_fail_negative",
-                mgComplete: "zapsplat_multimedia_game_retro_musical_level_complete_002",
-                levelComplete: "zapsplat_multimedia_game_retro_musical_level_complete_009",
-                shortTone: "zapsplat_multimedia_game_retro_musical_short_tone_001",
-                success: "zapsplat_multimedia_game_retro_musical_success_005",
-                timerLoop: "zapsplat_multimedia_game_retro_musical_timer_loop_003",
-                roachSplat: "zapsplat_animals_insects_worm_drop_002_18114.mp3",
-                coffeePour: "zapsplat_food_drink_water_pour_from_one_plastic_disposable_cup_in_another_fast_003_84124",
-                paperDrop: "zapsplat_foley_paper_sheets_a4_several_drop_001_82996",
-                countdown: "countdown.mp3",
-                weld1: "welding 1.mp3",
-                weld2: "welding 2.mp3"
+                alert: "assets/audio/zapsplat_multimedia_game_retro_musical_alert_001.mp3",
+                alert2: "assets/audio/zapsplat_multimedia_game_retro_musical_alert_002.mp3",
+                ascend: "assets/audio/zapsplat_multimedia_game_retro_musical_ascend_advance_002.mp3",
+                fail: "assets/audio/zapsplat_multimedia_game_retro_musical_descend_fail_negative.mp3",
+                mgComplete: "assets/audio/zapsplat_multimedia_game_retro_musical_level_complete_002.mp3",
+                levelComplete: "assets/audio/zapsplat_multimedia_game_retro_musical_level_complete_009.mp3",
+                shortTone: "assets/audio/zapsplat_multimedia_game_retro_musical_short_tone_001.mp3",
+                success: "assets/audio/zapsplat_multimedia_game_retro_musical_success_005.mp3",
+                timerLoop: "assets/audio/zapsplat_multimedia_game_retro_musical_timer_loop_003.mp3",
+                roachSplat: "assets/audio/zapsplat_animals_insects_worm_drop_002_18114.mp3",
+                coffeePour: "assets/audio/zapsplat_food_drink_water_pour_from_one_plastic_disposable_cup_in_another_fast_003_84124.mp3",
+                paperDrop: "assets/audio/zapsplat_foley_paper_sheets_a4_several_drop_001_82996.mp3",
+                countdown: "assets/audio/countdown.mp3",
+                weld1: "assets/audio/welding 1.mp3",
+                weld2: "assets/audio/welding 2.mp3"
             }
         };
         let appSettings = { musicVol: 70, soundVol: 80, musicMuted: false, soundMuted: false, sideMarginPct: 0 };
@@ -1447,31 +1438,23 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 return this.ctx;
             },
             getCandidateUrls(rawName) {
-                const clean = String(rawName || '').replace(/\.(mp3|wav|ogg)$/i, '');
-                const hasExt = /\.(mp3|wav|ogg)$/i.test(String(rawName || ''));
-                const list = [];
-                if (hasExt) list.push(rawName);
-                const nameVariants = [clean];
-                if (clean.includes(' ')) {
-                    nameVariants.push(clean.replace(/ /g, '%20'));
-                    nameVariants.push(clean.replace(/ /g, '_'));
-                    nameVariants.push(clean.replace(/ /g, '-'));
-                    nameVariants.push(clean.replace(/ /g, ''));
+                const baseName = String(rawName || '').replace(/^\/?(ScriptArcade\/)?(assets\/audio\/)?/i, '').replace(/\.(mp3|wav|ogg)$/i, '');
+                const nameVariants = [baseName];
+                if (baseName.includes(' ')) {
+                    nameVariants.push(baseName.replace(/ /g, '%20'));
                 }
-                if (clean.startsWith('welding')) {
-                    const num = clean.replace(/[^0-9]/g, '');
+                if (baseName.startsWith('welding')) {
+                    const num = baseName.replace(/[^0-9]/g, '');
                     if (num) {
-                        nameVariants.push(`welder ${num}`, `welder%20${num}`, `welder_${num}`, `welder${num}`);
+                        nameVariants.push(`welder ${num}`, `welder%20${num}`);
                     }
                 }
-                const dirs = ['', 'audio/', 'sfx/', 'music/', 'sounds/', 'sound/', 'assets/audio/', 'assets/sfx/', 'assets/music/', 'assets/'];
-                const exts = ['.mp3', '.wav', '.ogg'];
+                const dirs = ['assets/audio/', '/ScriptArcade/assets/audio/', 'ScriptArcade/assets/audio/'];
+                const list = [];
                 dirs.forEach(d => {
                     nameVariants.forEach(nv => {
-                        exts.forEach(ext => {
-                            const u = `${d}${nv}${ext}`;
-                            if (!list.includes(u)) list.push(u);
-                        });
+                        const u = `${d}${nv}.mp3`;
+                        if (!list.includes(u)) list.push(u);
                     });
                 });
                 return list;
@@ -1669,7 +1652,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 }
                 if (this.timerLoop) {
                     this.timerLoop.volume = sVol;
-                    if (sVol === 0 && !this.timerLoop.paused) {
+                    if (this.timerLoop.paused) {
                         this.timerLoop.pause();
                     }
                 }
@@ -1683,24 +1666,6 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     this.stopWebTimerLoop();
                 } else if (this.dangerLoopRequested) {
                     this.refreshTimerLoopPlayback();
-                }
-            },
-            ensureBgmPlaying() {
-                if (!this.bgm) this.init();
-                const mVol = this.getMusicVolume();
-                if (!this.bgm || mVol <= 0) return;
-                this.bgm.volume = mVol;
-                if (this.bgm.paused && !this.bgmPlayPending) {
-                    this.bgmPlayPending = true;
-                    const p = this.bgm.play();
-                    if (p && typeof p.then === 'function') {
-                        p.then(() => {
-                            this.bgmPlayPending = false;
-                            this.hideLoadingBanner();
-                        }).catch(() => { this.bgmPlayPending = false; });
-                    } else {
-                        this.bgmPlayPending = false;
-                    }
                 }
             },
             playSfx(key, volScale = 1, seekSec = null) {
@@ -1903,7 +1868,6 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         }
         function syncSideMarginDOM(marginPct, updateSliderVal = false) {
             const vwMargin = marginPct * 0.12;
-            // 1:1 proportional representation on the 16:9 preview box: ~0.8% base (8px on typical landscape viewport) + 0..12% per side
             const vizWidthPct = (0.8 + vwMargin).toFixed(2);
             const arrowText = marginPct >= 22 ? '◄►' : '';
             ['mm-slider-margin', 'ig-slider-margin'].forEach(id => {
