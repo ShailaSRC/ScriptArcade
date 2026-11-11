@@ -622,7 +622,7 @@
 </head>
 <body>
     <div id="audio-loading-banner" class="audio-loading-banner">MEMUAT MUSIC<span class="loading-dots"></span></div>
-    <div id="main-menu" class="modal-overlay active" style="display: flex;"><div class="settings-btn main-menu-settings-btn" id="btn-main-menu-settings" onclick="openMainMenuSettings()" title="Pengaturan"><span class="mm-settings-icon">⚙</span><span class="mm-settings-label">SETTING</span></div><div class="main-menu-card"><div class="main-menu-title"><img id="main-menu-logo-img" class="main-menu-logo-img" alt=""><span id="main-menu-title-text">SCRIPT ARCADE</span></div><div class="main-menu-subtitle">SCRIPT EDITING ON ARCADE DESK</div><div class="main-menu-buttons"><button class="retro-btn primary main-menu-btn" onclick="openStartModal()">▶ PLAY</button><button class="retro-btn main-menu-btn" onclick="showHighscores()">★ HIGHSCORE</button><button class="retro-btn main-menu-btn" onclick="startTutorial()">? TUTORIAL</button></div></div></div>
+    <div id="main-menu" class="modal-overlay active" style="display: flex;"><div class="settings-btn main-menu-settings-btn" id="btn-main-menu-settings" onclick="openMainMenuSettings()" title="Pengaturan"><span class="mm-settings-icon">⚙</span><span class="mm-settings-label">SETTING</span></div><div class="main-menu-card"><div class="main-menu-title"><img id="main-menu-logo-img" class="main-menu-logo-img" fetchpriority="high" decoding="async" alt=""><span id="main-menu-title-text">SCRIPT ARCADE</span></div><div class="main-menu-subtitle">SCRIPT EDITING ON ARCADE DESK</div><div class="main-menu-buttons"><button class="retro-btn primary main-menu-btn" onclick="openStartModal()">▶ PLAY</button><button class="retro-btn main-menu-btn" onclick="showHighscores()">★ HIGHSCORE</button><button class="retro-btn main-menu-btn" onclick="startTutorial()">? TUTORIAL</button></div></div></div>
     <div id="game-layout" style="display: none;">
     <header id="game-header"><div class="header-left"><div class="settings-btn" id="btn-settings" onclick="showProfile()" title="Profil & Progress">⚙</div><div class="title-area"><h1><img id="header-wordmark-img" class="header-wordmark-img" alt=""><span id="header-title-text">SCRIPT ARCADE</span></h1><div class="day-text" id="level-display">SCRIPT #01</div></div></div><div class="header-center"><div class="avatar-wrapper"><div class="client-avatar" id="client-avatar-box"><img id="client-avatar-img" alt="Client Icon" style="display:none;"><svg id="client-avatar-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/><circle cx="9" cy="9" r="1.5" fill="#3b3a36"/><circle cx="15" cy="9" r="1.5" fill="#3b3a36"/><path id="svg-mouth" d="M8 8.5h2M14 8.5h2M10.5 12h3" stroke="#3b3a36" stroke-width="1.5"/></svg></div><div class="avatar-title">CLIENT BRIEF</div></div><div class="client-brief-wrapper" id="client-brief-box"><div class="client-brief-box"><div class="brief-content" id="client-brief-content"></div></div><div class="deadline-area"><div class="timer-wrapper"><span class="timer-label">DEADLINE</span><div class="progress-bar-container"><div id="progress-bar"></div><div class="coffee-boost-bar" id="coffee-boost-bar"></div></div><span class="time-text" id="ui-time">02:30</span></div><div class="coffee-area" id="ui-coffee"></div></div></div></div><div class="header-right"><button id="btn-reset" class="retro-btn" onclick="clearBoard()" title="Kembalikan semua blok ke inventory"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg><span class="hide-mobile">RESET</span></button><button id="btn-periksa" class="retro-btn primary" onclick="checkScript()">SUBMIT</button></div></header>
     <div id="main-area">
@@ -657,13 +657,10 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         let ASSET_CONFIG = { logos: { main: "logo/logo-main.webp", wordmark: "logo/logo-wordmark.webp", icon: "logo/logo-icon.webp" }, clients: { client1: { normal: "assets/avatars/client1-normal.webp", angry: "assets/avatars/client1-angry.webp" }, client2: { normal: "assets/avatars/client2-normal.webp", angry: "assets/avatars/client2-angry.webp" }, client3: { normal: "assets/avatars/client3-normal.webp", angry: "assets/avatars/client3-angry.webp" }, client4: { normal: "assets/avatars/client4-normal.webp", angry: "assets/avatars/client4-angry.webp" } }, endings: { INDUSTRY_STAR: "assets/endings/industry-star.webp", CLIENT_MAGNET: "assets/endings/client-magnet.webp", ESTABLISHED_EDITOR: "assets/endings/established-editor.webp", FREELANCE_SURVIVOR: "assets/endings/freelance-survivor.webp", BURNOUT: "assets/endings/burnout.webp" } };
         const resolvedImageCache = {};
         function loadSmartImage(imgEl, basePath, onSuccessCallback, onFailCallback) { if (!imgEl || !basePath || basePath.trim() === "") { if (onFailCallback) onFailCallback(); return; } if (resolvedImageCache[basePath]) { imgEl.onerror = null; if (imgEl.getAttribute('data-loaded-src') !== resolvedImageCache[basePath]) { imgEl.setAttribute('data-loaded-src', resolvedImageCache[basePath]); imgEl.src = resolvedImageCache[basePath]; } imgEl.style.display = 'block'; if (onSuccessCallback) onSuccessCallback(); return; } const cleanPath = basePath.replace(/\.(webp|png|jpg|jpeg)$/i, ''); const cleanBaseName = cleanPath.split('/').pop(); const spacedName = cleanBaseName.replace('wordmark', 'word mark'); const candidates = [basePath, `${cleanPath}.webp`, `logo/${cleanBaseName}.webp`, `logo/${spacedName}.webp`, `assets/logo/${cleanBaseName}.webp`, `assets/${cleanBaseName}.webp`, `${cleanBaseName}.webp`, `${cleanPath}.png`, `${cleanPath}.jpg`].filter((v, i, a) => v && a.indexOf(v) === i); let attempt = 0; function tryNext() { if (attempt >= candidates.length) { if (onFailCallback) onFailCallback(); return; } const testUrl = candidates[attempt]; const probe = new Image(); probe.onload = function() { resolvedImageCache[basePath] = testUrl; imgEl.onerror = null; imgEl.setAttribute('data-loaded-src', testUrl); imgEl.src = testUrl; imgEl.style.display = 'block'; if (onSuccessCallback) onSuccessCallback(); }; probe.onerror = function() { attempt++; tryNext(); }; probe.src = testUrl; } tryNext(); }
-        function initBrandLogos() {
-            if (!ASSET_CONFIG.logos) return;
-            const mainLogoImg = document.getElementById('main-menu-logo-img');
-            const mainTitleText = document.getElementById('main-menu-title-text');
-            if (mainLogoImg && ASSET_CONFIG.logos.main) {
-                loadSmartImage(mainLogoImg, ASSET_CONFIG.logos.main, () => { mainLogoImg.style.display = 'block'; if (mainTitleText) mainTitleText.style.display = 'none'; }, () => { mainLogoImg.style.display = 'none'; if (mainTitleText) mainTitleText.style.display = 'inline'; });
-            }
+        let _secondaryLogosLoaded = false;
+        function loadSecondaryBrandLogos() {
+            if (_secondaryLogosLoaded || !ASSET_CONFIG.logos) return;
+            _secondaryLogosLoaded = true;
             const wordmarkImg = document.getElementById('header-wordmark-img');
             const headerTitleText = document.getElementById('header-title-text');
             if (wordmarkImg && ASSET_CONFIG.logos.wordmark) {
@@ -681,7 +678,76 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 }
             }
         }
-        function preloadGameAssets() { const urls = []; Object.values(ASSET_CONFIG.clients).forEach(c => { if (c.normal) urls.push(c.normal); if (c.angry) urls.push(c.angry); }); Object.values(ASSET_CONFIG.endings).forEach(u => { if (u) urls.push(u); }); urls.forEach(basePath => { const dummy = document.createElement('img'); loadSmartImage(dummy, basePath); }); }
+        function initBrandLogos() {
+            if (!ASSET_CONFIG.logos) {
+                AudioEngine.startCoreAudio();
+                return;
+            }
+            const mainLogoImg = document.getElementById('main-menu-logo-img');
+            const mainTitleText = document.getElementById('main-menu-title-text');
+            let coreAudioTriggered = false;
+            const onMainLogoSettled = () => {
+                if (coreAudioTriggered) return;
+                coreAudioTriggered = true;
+                // Stage 2: Immediately after Main Menu logo settles, focus ONLY on music.mp3 & short_tone_001
+                AudioEngine.startCoreAudio();
+                loadSecondaryBrandLogos();
+            };
+            // Fallback timer in case logo takes > 250ms so audio never waits too long
+            setTimeout(onMainLogoSettled, 250);
+            if (mainLogoImg && ASSET_CONFIG.logos.main) {
+                loadSmartImage(
+                    mainLogoImg,
+                    ASSET_CONFIG.logos.main,
+                    () => {
+                        mainLogoImg.style.display = 'block';
+                        if (mainTitleText) mainTitleText.style.display = 'none';
+                        onMainLogoSettled();
+                    },
+                    () => {
+                        mainLogoImg.style.display = 'none';
+                        if (mainTitleText) mainTitleText.style.display = 'inline';
+                        onMainLogoSettled();
+                    }
+                );
+            } else {
+                onMainLogoSettled();
+            }
+        }
+        let _gameAssetsPreloadStarted = false;
+        function preloadGameAssets() {
+            if (_gameAssetsPreloadStarted) return;
+            _gameAssetsPreloadStarted = true;
+            // Stage 3b: Load Client Avatars one by one first
+            const clientUrls = [];
+            Object.values(ASSET_CONFIG.clients || {}).forEach(c => {
+                if (c && c.normal) clientUrls.push(c.normal);
+                if (c && c.angry) clientUrls.push(c.angry);
+            });
+            // Stage 4 (VERY LAST): Load Ending images one by one only after client avatars finish
+            const endingUrls = [];
+            Object.values(ASSET_CONFIG.endings || {}).forEach(u => {
+                if (u) endingUrls.push(u);
+            });
+            let cIdx = 0;
+            const loadNextClient = () => {
+                if (cIdx >= clientUrls.length) {
+                    setTimeout(loadNextEnding, 200);
+                    return;
+                }
+                const dummy = document.createElement('img');
+                const path = clientUrls[cIdx++];
+                loadSmartImage(dummy, path, () => setTimeout(loadNextClient, 40), () => setTimeout(loadNextClient, 40));
+            };
+            let eIdx = 0;
+            const loadNextEnding = () => {
+                if (eIdx >= endingUrls.length) return;
+                const dummy = document.createElement('img');
+                const path = endingUrls[eIdx++];
+                loadSmartImage(dummy, path, () => setTimeout(loadNextEnding, 80), () => setTimeout(loadNextEnding, 80));
+            };
+            loadNextClient();
+        }
         function syncHeaderOverlayOffset() { const header = document.getElementById('game-header'); if (header && header.offsetParent !== null) { const rect = header.getBoundingClientRect(); if (rect.bottom > 0) { document.documentElement.style.setProperty('--header-overlay-offset', `${Math.ceil(rect.bottom + 4)}px`); } } }
         window.addEventListener('resize', syncHeaderOverlayOffset);
         let clientAngryTimeout = null;
@@ -1417,9 +1483,11 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             sfxPoolIdx: {},
             sfxBuffers: {},
             resolvedUrls: {},
+            workingDir: null,
             unlocked: false,
             lastShortToneAt: 0,
             lastWeldIdx: 0,
+            webAudioKeys: { timerLoop: true, paperDrop: true, weld1: true, weld2: true },
             getAudioContext() {
                 if (!this.ctx) {
                     const AC = window.AudioContext || window.webkitAudioContext;
@@ -1427,7 +1495,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         try { this.ctx = new AC(); } catch (e) {}
                     }
                 }
-                if (this.ctx && this.ctx.state === 'suspended') {
+                if (this.ctx && this.ctx.state === 'suspended' && this.unlocked) {
                     this.ctx.resume().catch(() => {});
                 }
                 return this.ctx;
@@ -1436,27 +1504,47 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 const clean = String(rawName || '').replace(/\.(mp3|wav|ogg)$/i, '');
                 const hasExt = /\.(mp3|wav|ogg)$/i.test(String(rawName || ''));
                 const list = [];
-                if (hasExt) list.push(rawName);
-                const nameVariants = [clean];
+                const pushUnique = (u) => { if (u && !list.includes(u)) list.push(u); };
+
+                const baseDirs = ['', 'audio/', 'sfx/', 'music/', 'sounds/', 'sound/', 'assets/audio/', 'assets/sfx/', 'assets/music/', 'assets/'];
+                const dirs = (this.workingDir !== null && baseDirs.includes(this.workingDir))
+                    ? [this.workingDir, ...baseDirs.filter(d => d !== this.workingDir)]
+                    : baseDirs;
+
+                if (hasExt && this.workingDir !== null) {
+                    pushUnique(`${this.workingDir}${rawName}`);
+                }
+                if (hasExt) pushUnique(rawName);
+
+                const primaryNames = [clean];
                 if (clean.includes(' ')) {
-                    nameVariants.push(clean.replace(/ /g, '%20'));
-                    nameVariants.push(clean.replace(/ /g, '_'));
-                    nameVariants.push(clean.replace(/ /g, '-'));
-                    nameVariants.push(clean.replace(/ /g, ''));
+                    primaryNames.push(clean.replace(/ /g, '%20'));
+                    primaryNames.push(clean.replace(/ /g, '_'));
+                    primaryNames.push(clean.replace(/ /g, '-'));
+                    primaryNames.push(clean.replace(/ /g, ''));
                 }
                 if (clean.startsWith('welding')) {
                     const num = clean.replace(/[^0-9]/g, '');
                     if (num) {
-                        nameVariants.push(`welder ${num}`, `welder%20${num}`, `welder_${num}`, `welder${num}`);
+                        primaryNames.push(`welder ${num}`, `welder%20${num}`, `welder_${num}`, `welder${num}`);
                     }
                 }
-                const dirs = ['', 'audio/', 'sfx/', 'music/', 'sounds/', 'sound/', 'assets/audio/', 'assets/sfx/', 'assets/music/', 'assets/'];
-                const exts = ['.mp3', '.wav', '.ogg'];
+
+                // Pass 1: Check .mp3 across all folders first for the exact/primary name before any fallback extensions
                 dirs.forEach(d => {
-                    nameVariants.forEach(nv => {
-                        exts.forEach(ext => {
-                            const u = `${d}${nv}${ext}`;
-                            if (!list.includes(u)) list.push(u);
+                    pushUnique(`${d}${clean}.mp3`);
+                });
+                dirs.forEach(d => {
+                    primaryNames.forEach(nv => {
+                        pushUnique(`${d}${nv}.mp3`);
+                    });
+                });
+
+                // Pass 2: Fallback extensions (.wav, .ogg) only if .mp3 was not found anywhere
+                ['.wav', '.ogg'].forEach(ext => {
+                    dirs.forEach(d => {
+                        primaryNames.forEach(nv => {
+                            pushUnique(`${d}${nv}${ext}`);
                         });
                     });
                 });
@@ -1488,7 +1576,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 };
             },
             decodeSfxIntoWebAudio(key, url) {
-                if (this.sfxBuffers[key]) return;
+                if (!this.webAudioKeys[key] || this.sfxBuffers[key] || !url) return;
                 const ac = this.getAudioContext();
                 if (!ac || typeof fetch !== 'function') return;
                 fetch(url)
@@ -1503,18 +1591,30 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     })
                     .catch(() => {});
             },
-            buildSfxPool(key, url) {
-                if (this.sfxPools[key]) return;
-                const pool = [];
-                for (let i = 0; i < 4; i++) {
-                    const a = new Audio();
-                    a.preload = 'auto';
-                    a.src = url;
-                    try { a.load(); } catch (e) {}
-                    pool.push(a);
+            getOrCreatePoolAudio(key) {
+                const baseAudio = this.sfxCache[key];
+                const url = this.resolvedUrls[key] || (baseAudio ? baseAudio.src : '');
+                if (!url) return baseAudio || null;
+                if (baseAudio && (baseAudio.paused || baseAudio.ended)) {
+                    return baseAudio;
                 }
-                this.sfxPools[key] = pool;
-                this.sfxPoolIdx[key] = 0;
+                if (!this.sfxPools[key]) {
+                    this.sfxPools[key] = [];
+                    this.sfxPoolIdx[key] = 0;
+                }
+                const pool = this.sfxPools[key];
+                for (let i = 0; i < pool.length; i++) {
+                    if (pool[i].paused || pool[i].ended) return pool[i];
+                }
+                if (pool.length < 2) {
+                    const clone = new Audio(url);
+                    clone.preload = 'auto';
+                    pool.push(clone);
+                    return clone;
+                }
+                const idx = (this.sfxPoolIdx[key] || 0) % pool.length;
+                this.sfxPoolIdx[key] = idx + 1;
+                return pool[idx];
             },
             loadSmartAudio(key, rawName, isLoop = false, onReady = null) {
                 const candidates = this.getCandidateUrls(rawName);
@@ -1527,9 +1627,17 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     if (settled) return;
                     settled = true;
                     this.resolvedUrls[key] = resolvedUrl;
+                    const slashIdx = resolvedUrl.lastIndexOf('/');
+                    if (slashIdx !== -1 && this.workingDir === null) {
+                        this.workingDir = resolvedUrl.slice(0, slashIdx + 1);
+                    } else if (slashIdx === -1 && this.workingDir === null) {
+                        this.workingDir = '';
+                    }
+                    audio.oncanplay = null;
+                    audio.onloadeddata = null;
+                    audio.onloadedmetadata = null;
                     audio.onerror = null;
-                    if (key !== 'music') {
-                        if (!isLoop) this.buildSfxPool(key, resolvedUrl);
+                    if (this.unlocked && this.webAudioKeys[key]) {
                         this.decodeSfxIntoWebAudio(key, resolvedUrl);
                     }
                     if (typeof onReady === 'function') onReady(audio);
@@ -1559,30 +1667,73 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
             bgmPlayPending: false,
             countdownAudio: null,
             musicReady: false,
+            shortToneReady: false,
+            coreAudioStarted: false,
+            remainingSfxStarted: false,
             sfxLoadedCount: 0,
             sfxTotalCount: 0,
             allAudioReady: false,
-            checkAllAudioReady() {
-                if (this.allAudioReady) return;
-                if (this.musicReady && this.sfxLoadedCount >= Math.min(3, this.sfxTotalCount)) {
-                    this.markAllAudioReady();
+            hideLoadingBannerWhenMusicAudible() {
+                const banner = document.getElementById('audio-loading-banner');
+                if (!banner) return;
+                if (this.getMusicVolume() <= 0 && this.musicReady) {
+                    banner.classList.add('hidden-banner');
+                    return;
+                }
+                if (this.bgm && !this.bgm.paused) {
+                    banner.classList.add('hidden-banner');
                 }
             },
-            hideLoadingBannerWhenMusicAudible() {
-                if (!this.bgm || this.bgm.paused) return;
-                const banner = document.getElementById('audio-loading-banner');
-                if (banner) banner.classList.add('hidden-banner');
+            checkAllAudioReady() {
+                if (this.musicReady && this.shortToneReady) {
+                    this.markAllAudioReady();
+                    this.startRemainingSfx();
+                }
             },
             markAllAudioReady() {
                 if (this.allAudioReady) return;
                 this.allAudioReady = true;
                 this.syncVolumes();
                 this.ensureBgmPlaying();
+                this.hideLoadingBannerWhenMusicAudible();
             },
-            init() {
-                if (this.bgm) return;
+            ensureSfxLoaded(key) {
+                if (key === 'timerLoop') {
+                    if (!this.timerLoop) {
+                        this.timerLoop = this.loadSmartAudio('timerLoop', AUDIO_ASSETS.sfx.timerLoop, true, (a) => {
+                            this.sfxLoadedCount++;
+                            a.addEventListener('timeupdate', () => {
+                                if (a.duration && a.currentTime >= a.duration - 0.11) {
+                                    try { a.currentTime = 0.02; } catch (e) {}
+                                }
+                            });
+                        });
+                    }
+                    return this.timerLoop;
+                }
+                if (key === 'countdown' && !this.countdownAudio) {
+                    this.countdownAudio = this.loadSmartAudio('countdown', AUDIO_ASSETS.sfx.countdown, true, () => {
+                        this.syncVolumes();
+                    });
+                }
+                if (!this.sfxCache[key] && AUDIO_ASSETS.sfx[key]) {
+                    this.sfxCache[key] = this.loadSmartAudio(key, AUDIO_ASSETS.sfx[key], false, () => {
+                        this.sfxLoadedCount++;
+                        if (key === 'shortTone') {
+                            this.shortToneReady = true;
+                            this.checkAllAudioReady();
+                        }
+                    });
+                }
+                return this.sfxCache[key];
+            },
+            startCoreAudio() {
+                if (this.coreAudioStarted) return;
+                this.coreAudioStarted = true;
                 const sfxKeys = Object.keys(AUDIO_ASSETS.sfx);
                 this.sfxTotalCount = sfxKeys.length;
+
+                // Focus ONLY on music.mp3 and short_tone_001 right after the Main Menu logo
                 this.bgm = this.loadSmartAudio('music', AUDIO_ASSETS.music, true, () => {
                     this.musicReady = true;
                     this.checkAllAudioReady();
@@ -1592,7 +1743,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     if (!this.bgm.paused) this.hideLoadingBannerWhenMusicAudible();
                 });
                 this.bgm.addEventListener('timeupdate', () => {
-                    if (!this.bgm.paused && this.bgm.currentTime > 0.02) {
+                    if (!this.bgm.paused && this.bgm.currentTime > 0.01) {
                         this.hideLoadingBannerWhenMusicAudible();
                     }
                 });
@@ -1602,44 +1753,53 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         this.ensureBgmPlaying();
                     }
                 });
-                this.timerLoop = this.loadSmartAudio('timerLoop', AUDIO_ASSETS.sfx.timerLoop, true, (a) => {
-                    this.sfxLoadedCount++;
-                    a.addEventListener('timeupdate', () => {
-                        if (a.duration && a.currentTime >= a.duration - 0.11) {
-                            try { a.currentTime = 0.02; } catch (e) {}
-                        }
-                    });
-                    this.checkAllAudioReady();
-                });
-                this.countdownAudio = this.loadSmartAudio('countdown', AUDIO_ASSETS.sfx.countdown, true, () => {
-                    this.syncVolumes();
-                });
-                sfxKeys.forEach(k => {
-                    if (k === 'timerLoop') return;
-                    this.sfxCache[k] = this.loadSmartAudio(k, AUDIO_ASSETS.sfx[k], false, () => {
-                        this.sfxLoadedCount++;
-                        this.checkAllAudioReady();
-                    });
-                });
+
+                this.ensureSfxLoaded('shortTone');
+
+                // Fallback in case either music.mp3 or shortTone takes > 900ms so remaining SFX still queue cleanly
                 setTimeout(() => {
                     this.markAllAudioReady();
-                }, 3200);
+                    this.startRemainingSfx();
+                }, 900);
+            },
+            startRemainingSfx() {
+                if (this.remainingSfxStarted) return;
+                this.remainingSfxStarted = true;
+                const otherKeys = Object.keys(AUDIO_ASSETS.sfx).filter(k => k !== 'shortTone');
+                let idx = 0;
+                const loadNextSfx = () => {
+                    if (idx >= otherKeys.length) {
+                        // Only after all audio files have been queued/loaded, start preloading client avatars and (lastly) ending images
+                        if (typeof preloadGameAssets === 'function') {
+                            setTimeout(preloadGameAssets, 150);
+                        }
+                        return;
+                    }
+                    const key = otherKeys[idx++];
+                    this.ensureSfxLoaded(key);
+                    setTimeout(loadNextSfx, 55);
+                };
+                setTimeout(loadNextSfx, 80);
+            },
+            init() {
+                if (this.listenerAttached) return;
+                this.listenerAttached = true;
+
                 const unlockHandler = () => {
                     this.unlocked = true;
                     const ac = this.getAudioContext();
                     if (ac && ac.state !== 'running') {
                         ac.resume().catch(() => {});
                     }
-                    if (this.allAudioReady) {
-                        this.ensureBgmPlaying();
-                    }
-                    Object.keys(this.resolvedUrls).forEach(k => {
-                        if (k !== 'music' && !this.sfxBuffers[k]) {
+                    // Always call ensureBgmPlaying inside the user gesture so browser unlocks BGM immediately
+                    this.ensureBgmPlaying();
+                    Object.keys(this.webAudioKeys).forEach(k => {
+                        if (this.resolvedUrls[k] && !this.sfxBuffers[k]) {
                             this.decodeSfxIntoWebAudio(k, this.resolvedUrls[k]);
                         }
                     });
                 };
-                ['click', 'pointerdown', 'pointermove', 'touchstart', 'touchend', 'keydown'].forEach(ev => {
+                ['click', 'pointerdown', 'touchstart', 'touchend', 'keydown'].forEach(ev => {
                     window.addEventListener(ev, unlockHandler, { passive: true, capture: true });
                 });
                 document.addEventListener('visibilitychange', () => {
@@ -1648,7 +1808,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     }
                 });
                 setInterval(() => {
-                    if (this.allAudioReady && !document.hidden && this.getMusicVolume() > 0 && this.bgm && this.bgm.paused) {
+                    if (!document.hidden && this.getMusicVolume() > 0 && this.bgm && this.bgm.paused && this.unlocked) {
                         this.ensureBgmPlaying();
                     }
                 }, 1000);
@@ -1668,6 +1828,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                     this.bgm.volume = mVol;
                     if (mVol === 0 && !this.bgm.paused) {
                         this.bgm.pause();
+                        this.hideLoadingBannerWhenMusicAudible();
                     } else if (mVol > 0 && this.unlocked && this.bgm.paused) {
                         this.ensureBgmPlaying();
                     }
@@ -1694,9 +1855,12 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 }
             },
             ensureBgmPlaying() {
-                if (!this.bgm) this.init();
+                if (!this.coreAudioStarted) this.startCoreAudio();
                 const mVol = this.getMusicVolume();
-                if (!this.bgm || mVol <= 0) return;
+                if (!this.bgm || mVol <= 0) {
+                    this.hideLoadingBannerWhenMusicAudible();
+                    return;
+                }
                 this.bgm.volume = mVol;
                 if (this.bgm.paused && !this.bgmPlayPending) {
                     this.bgmPlayPending = true;
@@ -1712,8 +1876,8 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 }
             },
             playSfx(key, volScale = 1, seekSec = null) {
-                if (!this.bgm) this.init();
-                if (!this.allAudioReady) return;
+                if (!this.coreAudioStarted) this.startCoreAudio();
+                this.ensureSfxLoaded(key);
                 this.ensureBgmPlaying();
                 const baseVol = this.getSfxVolume();
                 let scale = (typeof volScale === 'number' && !isNaN(volScale)) ? volScale : 1;
@@ -1727,6 +1891,9 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 if (key === 'shortTone') {
                     if (now - this.lastShortToneAt < 35) return;
                     this.lastShortToneAt = now;
+                }
+                if (this.webAudioKeys[key] && this.resolvedUrls[key] && !this.sfxBuffers[key]) {
+                    this.decodeSfxIntoWebAudio(key, this.resolvedUrls[key]);
                 }
                 const webBuf = this.sfxBuffers[key];
                 const ac = this.getAudioContext();
@@ -1746,30 +1913,15 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         return;
                     } catch (e) {}
                 }
-                const pool = this.sfxPools[key];
-                if (pool && pool.length > 0) {
+                const targetAudio = this.getOrCreatePoolAudio(key);
+                if (targetAudio) {
                     try {
-                        const idx = (this.sfxPoolIdx[key] || 0) % pool.length;
-                        this.sfxPoolIdx[key] = idx + 1;
-                        const a = pool[idx];
-                        a.volume = sVol;
+                        targetAudio.volume = sVol;
                         const targetTime = (typeof seekSec === 'number' && seekSec > 0)
-                            ? ((a.duration && a.duration > seekSec + 0.12) ? seekSec : 0)
+                            ? ((targetAudio.duration && targetAudio.duration > seekSec + 0.12) ? seekSec : 0)
                             : 0;
-                        try { a.currentTime = targetTime; } catch (e) {}
-                        a.play().catch(() => {});
-                        return;
-                    } catch (e) {}
-                }
-                const baseAudio = this.sfxCache[key];
-                if (baseAudio) {
-                    try {
-                        baseAudio.volume = sVol;
-                        const targetTime = (typeof seekSec === 'number' && seekSec > 0)
-                            ? ((baseAudio.duration && baseAudio.duration > seekSec + 0.12) ? seekSec : 0)
-                            : 0;
-                        try { baseAudio.currentTime = targetTime; } catch (e) {}
-                        baseAudio.play().catch(() => {});
+                        try { targetAudio.currentTime = targetTime; } catch (e) {}
+                        targetAudio.play().catch(() => {});
                     } catch (e) {}
                 }
             },
@@ -1802,6 +1954,9 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                         try { this.timerLoop.currentTime = 0; } catch (e) {}
                     }
                     return;
+                }
+                if (this.resolvedUrls['timerLoop'] && !this.sfxBuffers['timerLoop']) {
+                    this.decodeSfxIntoWebAudio('timerLoop', this.resolvedUrls['timerLoop']);
                 }
                 const webBuf = this.sfxBuffers['timerLoop'];
                 const ac = this.getAudioContext();
@@ -1865,7 +2020,6 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
         function playSfx(key, volScale = 1, seekSec = null) {
             AudioEngine.playSfx(key, volScale, seekSec);
         }
-        AudioEngine.init();
         function loadAppSettings() {
             try {
                 const saved = JSON.parse(_safeLS.getItem('sa_app_settings'));
@@ -3706,7 +3860,7 @@ Sound effects: <a href="https://www.zapsplat.com" target="_blank" rel="noopener 
                 playSfx('shortTone');
             }
         }, true);
-        window.onload = function() { loadAppSettings(); initBrandLogos(); updateClientAvatarState(); preloadGameAssets(); syncFromFirebase(); };
+        loadAppSettings(); initBrandLogos(); window.onload = function() { updateClientAvatarState(); syncFromFirebase(); };
     </script>
 </body>
 </html>
